@@ -39,9 +39,9 @@
 ## 5. 验证计划与结论
 
 - 必跑 AC 列表：TBD
-- [相关实验](../../../04-experiments/)：TBD
+- [相关实验](../../04-experiments/)：TBD
 - 通过 / 失败 / 未测试：全部未测试
-- [工程决策](../../../06-engineering-decisions/)：TBD
+- [工程决策](../../06-engineering-decisions/)：TBD
 - 产品实现 Issue / PR：TBD
 
 ## 6. 更新记录

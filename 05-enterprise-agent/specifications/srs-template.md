@@ -60,8 +60,8 @@
 
 - 场景研究：TBD
 - [框架实现方案](../implementation-profiles/)：TBD
-- [实验与评测](../../../04-experiments/)：TBD
-- [工程决策](../../../06-engineering-decisions/)：TBD
+- [实验与评测](../../04-experiments/)：TBD
+- [工程决策](../../06-engineering-decisions/)：TBD
 - 产品 Issue / PR：TBD
 
 ## 8. 修订记录
