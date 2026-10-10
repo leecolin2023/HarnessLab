@@ -18,6 +18,11 @@
 
 - [Build vs Reuse 审计（2026-10-10）](./build-vs-reuse-audit-2026-10.md)：已核实上游源码/API/版本与许可；推荐 RAGFlow 为第一候选；银行制度语料实测尚未执行。
 
+## 正式集成入口
+
+- [RAGFlow MCP × DSH V0.1 集成 Runbook](../implementation-profiles/deepseek-harness/policy-knowledge-ragflow-mcp-v0.1.md)：原版 RAGFlow、原生 MCP Server、DSH 官方 MCP Client；源码零修改，先验证端到端工具调用。
+- [DSH 可选 Cordis overlay](../implementation-profiles/deepseek-harness/ragflow-mcp.cordis.yml)：仅本地单用户 POC，须结合权限及部署边界使用。
+
 ## 1. 用户问题和查询类型
 
 | 类型 | 例子（均为虚构示例，非真实制度结论） | 必须有的证据 | 候选路径 |
