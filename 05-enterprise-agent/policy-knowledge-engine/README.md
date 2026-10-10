@@ -13,6 +13,11 @@
 
 候选技术：Agentic Retrieval + Hierarchical Retrieval + GraphRAG；**三者是需要对照实验的候选检索策略，而非一开始都必须自建/启用的架构前提**。
 
+
+## 第一轮技术选型审计
+
+- [Build vs Reuse 审计（2026-10-10）](./build-vs-reuse-audit-2026-10.md)：已核实上游源码/API/版本与许可；推荐 RAGFlow 为第一候选；银行制度语料实测尚未执行。
+
 ## 1. 用户问题和查询类型
 
 | 类型 | 例子（均为虚构示例，非真实制度结论） | 必须有的证据 | 候选路径 |
