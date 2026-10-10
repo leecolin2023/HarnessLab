@@ -7,6 +7,7 @@
 - [离线部署](./offline-deployment/)：无公网环境、安装升级、数据隔离、依赖治理。
 - [Office 能力](./office-capabilities/)：文件读取/定位/修改、格式保真、验证与交付。
 - [银行 Skills](./banking-skills/)：金融业务规则、证据溯源、权限、审查与可复核性。
+- [制度知识引擎](./policy-knowledge-engine/)：条款级检索、跨制度关系与全库归纳，当前为研究讨论 Draft。
 
 这些目录是**场景探索与能力研究**，不是正式的产品需求基线。
 
