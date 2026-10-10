@@ -21,6 +21,13 @@
 | **Microsoft GraphRAG** | Local / Global / DRIFT；社区报告 Map-Reduce 全局主题分析 | [Global 源码设计/说明](https://github.com/microsoft/graphrag/blob/main/docs/query/global_search.md)、[query overview](https://github.com/microsoft/graphrag/blob/main/docs/query/overview.md)、[MIT License](https://github.com/microsoft/graphrag/blob/main/LICENSE) | Global 是**主题/社区摘要**，不是逐条全库核验；索引成本、增量更新与中文本地模型需量化 |
 | **FastGPT / MaxKB** | 国内语言与部署生态较友好，适合作为低门槛功能对照 | [FastGPT](https://github.com/labring/FastGPT)、[MaxKB](https://github.com/1Panel-dev/MaxKB) | 与 DSH 编排/UI 重复度较高；FastGPT 采用附条件开源许可，[LICENSE](https://github.com/labring/FastGPT/blob/main/LICENSE)，MaxKB 为 GPLv3，需法务评估组合/分发场景 |
 
+### v0.27.2 源码中的具体风险与测试
+
+源码：[rag/nlp/search.py@v0.27.2](https://github.com/infiniflow/ragflow/blob/v0.27.2/rag/nlp/search.py) 中：
+- `build_fusion_expr()` 实际组合 lexical 与 dense 权重，证实不是仅提供界面上的 Hybrid 开关。
+- `Dealer._prune_deleted_chunks()` 通过数据库检查文档是否存在以剔除删除后残留的搜索 chunk；但 `_existing_doc_ids()` 采用 **120 秒 TTL** 的文档存在性缓存（仅基于源码观察，**不据此断言已存在可利用越权漏洞**）。
+- 因此加入实验：**先查询使文档存在性缓存升温 → 删除/禁用文件或撤销用户授权 → 在 0/1/30/121 秒反复检索**，验证正文/引用/Graph/摘要/缓存均不泄露；区分“删除文档残留缓存”和“真正的用户 ACL 决策缓存”，两者不是一个测试。
+
 ### RAGFlow 具体可复用接口
 
 官方检索 API：`POST /api/v1/retrieval`；参数包含 `question`、`dataset_ids`、`document_ids`、`metadata_condition`、`rerank_id`、`keyword`、`use_kg`、`include_knowledge_compilation` 等。
