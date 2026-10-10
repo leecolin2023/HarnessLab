@@ -1,0 +1,15 @@
+# IntraMate / DSH Cordis overlay for the official RAGFlow v0.27.2 MCP Server.
+# This is a standalone, opt-in overlay, NOT a complete desktop cordis.patch.yml.
+# For a local single-developer proof of concept only.
+# Start official RAGFlow MCP server separately and bind it to loopback.
+# DO NOT expose self-host mode on an untrusted network:
+# it uses the server's API key rather than authenticating each connecting user.
+- insert:
+    - id: mcp-policy-ragflow
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: ragflow
+        transport: streamable-http
+        url: http://127.0.0.1:9382/mcp
+        toolCallTimeoutMs: 120000
+        failOnStartupError: false
