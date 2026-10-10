@@ -6,6 +6,7 @@
 
 ## 仓库边界
 
+- **00-common-questions**：以面试与工程常见问题为入口，通过简答、追问与复盘链接到原有研究；不复制 01–06 的深度材料。
 - **HarnessLab**：机制研究、源码定位、对照实验、企业需求规格、框架实现方案以及工程决策记录。
 - **dsh-intramate**：基于 DeepSeek Harness 的具体产品源码、实现、构建、测试和发布。
 - **[AgentGuide](https://github.com/adongwanai/AgentGuide)**：学习资源与技术图谱参考，不将资源列表视为已完成的学习成果。
@@ -14,6 +15,7 @@
 
 | 分类 | 核心问题 | 内容 |
 | --- | --- | --- |
+| [00 · 常见问题与面试讨论](./00-common-questions/) | 如何简洁回答技术问题，并追问到机制与实践？ | 面试题、后端开发（通用 / Python / Java）、LeetCode 算法题；原 01–06 同步索引 |
 | [01 · Agent 核心机制](./01-agent-mechanisms/) | Agent 为什么能完成任务？ | Agent Loop、Tool Calling、Context Engineering |
 | [02 · DeepSeek Harness 源码](./02-deepseek-harness/) | DSH 如何实现这些机制？ | Architecture、Cordis、Agent Runtime、Desktop、插件体系 |
 | [03 · Harness 横向比较](./03-harness-comparison/) | 为什么其他框架设计不同？ | Claude Code、Codex、OpenCode、Pi |
@@ -43,6 +45,7 @@
 **编号约定**：
 
 1. 一级目录的两位数字是**稳定的知识分类位置**，不是任务优先级、学习进度或实施先后约束。
+   `00-common-questions` 是独立的问答导航，其内部 01–06 是到同名研究主题的映射，07–08 是扩充的后端和算法主题。
 2. 子主题按语义命名，原则上不编号；正式需求文件则使用**独立、稳定的需求 ID**。
 3. 仅学习顺序改变时，更新 README 导航即可，**不批量重命名目录**。
 4. 分类边界确实变化时，可使用 `git mv`，同步核对相对链接和产品仓库引用。
