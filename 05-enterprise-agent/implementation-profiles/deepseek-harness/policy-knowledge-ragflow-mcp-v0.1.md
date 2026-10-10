@@ -26,7 +26,7 @@ DSH 原生支持 Cordis MCP 配置，工具自动注册并进入 DSH 权限和�
 
 ## 1. 环境与安全前提
 
-- 优先同一开发机器：Windows 的 WSL2 + Docker Desktop，或 Linux x86-64 + Docker。推荐起点至少 4 CPU / 16 GiB RAM / 50 GiB 磁盘，视索引规模及本地模型增加资源。CPU 不代表本地 LLM 有足够性能。
+- 优先同一开发机器：Windows 的 WSL2 + Docker Desktop，或 Linux x86-64 + Docker。**4 CPU / 16 GiB RAM / 50 GiB 空闲磁盘出自 [RAGFlow v0.27.2 官方 README](https://github.com/infiniflow/ragflow/blob/v0.27.2/README.md#prerequisites) 的通用部署前置条件，并非本项目数百份制度的实测资源需求，也不是模型本地推理的容量测算。** CPU 不代表本地 LLM 有足够性能；后续需按实际制度数量、页数、扫描比例、索引策略、模型部署位置、并发进行分阶段资源测量。
 - 在封闭/授权环境处理银行制度；只上传已获授权文件到**本地/内网** RAGFlow，不上传真实制度到公共 GitHub、公共演示服务或模型 API。
 - 首轮只允许一个可信开发者、一份专用低权限 RAGFlow 凭据和限定的制度 Dataset；**官方 v0.27.2 MCP self-host mode 以服务端凭据代表所有客户端**。即使模型遵循提示指定 Dataset，也不能作为安全边界。
 - 正式多用户阶段必须先证明身份→知识库→文档→检索→缓存→MCP→Session 的隔离；无法证明则不开放多用户。v0.27.2 的 Compose 注释提示 **host mode + streamable-http 尚不支持**，与 DSH 当前所支持的 Streamable HTTP 形成约束；不得默认使用 host mode 解决权限。
