@@ -1,8 +1,8 @@
 # HarnessLab
 
-**Agent Harness Engineering Lab · 智能体运行框架工程学习与实践实验室**
+**Enterprise AI Platform & Agent Engineering Lab · 企业 AI 平台与智能体工程学习实验室**
 
-> 以 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 为当前主要研究对象，通过源码追踪、机制复现、跨框架比较和真实任务评测，为企业内网 Agent 产品（目前为 [dsh-intramate](https://github.com/leecolin2023/dsh-intramate)）提供有证据的技术依据。具体框架可更换，稳定需求不依附于某个框架。
+> 当前优先研究**企业级模型服务平台**：算力资源管理、模型部署发布、API 鉴权治理、性能压测和生产运行保障；保留已有 Agent Harness 的机制研究与实验，优先复用成熟平台，不自研推理引擎。
 
 ## 仓库边界
 
@@ -22,6 +22,7 @@
 | [04 · 实验与评测](./04-experiments/) | 实际行为与性能能否验证？ | Tool Calling、长程任务、Benchmarks |
 | [05 · 企业 Agent 场景与规格](./05-enterprise-agent/) | 企业内网需要什么？如何跨框架实现？ | 业务场景、[需求规格 SRS](./05-enterprise-agent/specifications/)、[框架实现方案](./05-enterprise-agent/implementation-profiles/) |
 | [06 · 工程决策](./06-engineering-decisions/) | 哪些能力该复用、适配或自建？ | Build vs Reuse、IntraMate 集成决策 |
+| **[07 · 模型服务平台](./07-model-service-platform/)** | **如何可靠地向内部系统提供模型服务？** | **算力资源、发布、网关与鉴权、压测、运行保障** |
 
 ## 需求与框架解耦
 
@@ -38,7 +39,7 @@
 
 ## 推荐学习顺序（可随时改变）
 
-默认建议：**核心机制 → DSH 实现 → 横向比较 → 实验验证 → 企业场景 → 工程决策**。
+当前优先：**07 模型服务 → 04 OCR 工程实验**；原有 Agent 研究仍可以按 **01 → 02 → 03 → 04 → 05 → 06** 学习。
 
 这只是初始导航，不是强制阶段门禁。可以从真实问题进入任意模块，需求澄清与实验也可以并行迭代。
 
@@ -62,3 +63,8 @@
 - **产品交付**：实际实现与发布在对应产品仓库，不将建议或设计稿标记为已交付。
 
 当前状态：**研究入口与规格模板已初始化，不代表实验、需求批准或产品实现已经完成。**
+
+
+## 当前实验入口
+
+- [EXP-MS-001：PaddleOCR 3.7 / PP-OCRv6 的 CPU 模型服务](./04-experiments/model-service/ocr-serving-ppocrv6/)：FastAPI、SK 鉴权、Docker、压测和恢复；**实验代码待在目标服务器运行验证**。
