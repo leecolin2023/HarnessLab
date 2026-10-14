@@ -13,7 +13,7 @@
 先安装官方 Docker Engine / Compose，确保 `uname -m` 返回 `x86_64`，不要对公网开放识别端口。
 
 ```bash
-git clone https://github.com/leecolin2023/HarnessLab.git
+git clone --depth 1 --branch feat/model-service-platform-ppocrv6 https://github.com/leecolin2023/HarnessLab.git
 cd HarnessLab/04-experiments/model-service/ocr-serving-ppocrv6
 cp .env.example .env
 python3 -c 'import secrets; print(secrets.token_urlsafe(32))'
