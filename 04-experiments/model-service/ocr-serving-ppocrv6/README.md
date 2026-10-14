@@ -34,8 +34,10 @@ docker compose logs -f --tail=100
 curl -sS http://127.0.0.1:8008/health/live
 curl -sS http://127.0.0.1:8008/health/ready
 # 先在宿主机安装 Pillow 后生成公开合成测试图片
-python3 -m pip install --user Pillow
-python3 tools/make_sample.py
+sudo apt-get install -y python3-venv
+python3 -m venv .venv
+.venv/bin/python -m pip install Pillow
+.venv/bin/python tools/make_sample.py
 set -a; . ./.env; set +a
 curl -sS -H "Authorization: Bearer $MODEL_API_KEY" -F "file=@sample.png" http://127.0.0.1:8008/v1/ocr
 curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer wrong" -F "file=@sample.png" http://127.0.0.1:8008/v1/ocr
