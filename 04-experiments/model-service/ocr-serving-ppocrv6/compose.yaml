@@ -1,0 +1,22 @@
+services:
+  ocr:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PADDLEX_HOME: /models
+      OCR_PROFILE: ${OCR_PROFILE:-small}
+      OCR_CPU_THREADS: ${OCR_CPU_THREADS:-2}
+    ports:
+      - "127.0.0.1:8008:8008"
+    volumes:
+      - ./models:/models
+    mem_limit: 8g
+    cpus: "3.0"
+    healthcheck:
+      test: ["CMD","curl","-fsS","http://127.0.0.1:8008/health/ready"]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+      start_period: 300s
