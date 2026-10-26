@@ -1,0 +1,1016 @@
+{
+  "source_repo": "leecolin2023/ingest2md",
+  "source_commit": "a24457fa3479b5410c8dc93fa66cffbe4fd98fee",
+  "target": "harness",
+  "count": 168,
+  "files": [
+    {
+      "source_path": "output-Refinement/20261016__Agent 意图识别怎么做？面试必会的 4 种方案.md",
+      "target_path": "materials/agent-runtime/20261016__Agent 意图识别怎么做？面试必会的 4 种方案/refinement.md",
+      "source_sha256": "cbe4c981a6fbf64988c08959ca7c517a951dbeb4993a4e63deba404dd2942acf",
+      "target_sha256": "81fadf70e70e8826c4d92e79c8ce85fee63b56896bb453fff76f2a620842db38"
+    },
+    {
+      "source_path": "output-Refinement/20261016__万联易达 Agent 一面｜项目深挖，全是落地踩坑问题 北京万联易达集团 Agent 岗位一面复盘。面试官深挖.md",
+      "target_path": "materials/agent-runtime/20261016__万联易达 Agent 一面｜项目深挖，全是落地踩坑问题 北京万联易达集团 Agent 岗位一面复盘。面试官深挖/refinement.md",
+      "source_sha256": "b8ecef46bfb543a0edf2467213515ba7889c49ae7bceb9f410544f8a5a15aa00",
+      "target_sha256": "b0bcdad0e0a5bf39bfc19c73d480471a018c543ac08e4eb65880b7b211bf7bbd"
+    },
+    {
+      "source_path": "output-Refinement/20261016__什么是Jev意图识别？ #ai #ai应用开发 #大模型开发 #懂王ai.md",
+      "target_path": "materials/model-platform/20261016__什么是Jev意图识别？ #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
+      "source_sha256": "0f7732caf134d6d47196d4966711344f1f92388326a6daad3a0b1720127262c0",
+      "target_sha256": "3096777fd98a1064481f7c650e59a7ebb54ddf8f85ffa36a707f059d79aa3a7d"
+    },
+    {
+      "source_path": "output-Refinement/20261016__大厂面试压迫感！小米Java Agent岗，连环拷问..., 小米自研后端 Java 面试，意向 Agent 开发。典型大厂风格.md",
+      "target_path": "materials/agent-runtime/20261016__大厂面试压迫感！小米Java Agent岗，连环拷问..., 小米自研后端 Java 面试，意向 Agent 开发。典型大厂风格/refinement.md",
+      "source_sha256": "9f782a8d0847b35695bd446bbf55c94f8dd53fe4e308b7e73c4042466292111e",
+      "target_sha256": "9d878dbd2ce8ea993bc6c6b5d5dca7152504b0d69e2a583f95025b899fe97a70"
+    },
+    {
+      "source_path": "output-Refinement/20261016__字节AI面试：Agent意图路由怎么设计？ #人工智能 #AI #AI新星计划 #程序员 #Agent.md",
+      "target_path": "materials/agent-runtime/20261016__字节AI面试：Agent意图路由怎么设计？ #人工智能 #AI #AI新星计划 #程序员 #Agent/refinement.md",
+      "source_sha256": "b8cfbb165298ad5835f500715ead0563393b0cca2721a7d42f9e2e3a89e387cb",
+      "target_sha256": "c6dcddeb46e07474f418f2908630c63be510ea21d4f696c41ebd78f8924f6f09"
+    },
+    {
+      "source_path": "output-Refinement/20261016__小米自研Java面经｜Agent岗位面试,场景连环追问(2) 小米后端面试实录，投递 Agent 开发方向。大厂面试压.md",
+      "target_path": "materials/agent-runtime/20261016__小米自研Java面经｜Agent岗位面试,场景连环追问(2) 小米后端面试实录，投递 Agent 开发方向。大厂面试压/refinement.md",
+      "source_sha256": "c12edf17cb13414256fb7a1427b8fbdec6567d3427320b52b340de5ac4b58e92",
+      "target_sha256": "82ff46038473e034e3f35c18fe9c1f02a493bf6a0bfbe1d0c04bc8dc14d07473"
+    },
+    {
+      "source_path": "output-Refinement/20261016__怎么设计Agent的Human-in-the-loop 三分钟带你搞懂，在 Agent 的执行过程中，如何设置一些需要人来做决定的.md",
+      "target_path": "materials/agent-runtime/20261016__怎么设计Agent的Human-in-the-loop 三分钟带你搞懂，在 Agent 的执行过程中，如何设置一些需要人来做决定的/refinement.md",
+      "source_sha256": "b0fda84e692ae5550479316dfec8e96d3cbc40057b125087ff8d8a91fa68918c",
+      "target_sha256": "6ad98b141fbcb2a51f8c6a0ab80a4fb6d2014adcfe943a4b4a7463cab4abdda7"
+    },
+    {
+      "source_path": "output-Refinement/20261016__拿到50W+ Agent 开发 offer，一面上篇复盘 北京大厂 Agent 开发岗，一面上篇！围绕 Agent 业务 + Java 工程化深.md",
+      "target_path": "materials/agent-runtime/20261016__拿到50W+ Agent 开发 offer，一面上篇复盘 北京大厂 Agent 开发岗，一面上篇！围绕 Agent 业务 + Java 工程化深/refinement.md",
+      "source_sha256": "bb255b55bd11987f8d9584a0a76e25f3fe5ab9d3e4e7467e70ffafcf4881f0e0",
+      "target_sha256": "2a49058eeb8443c89be06b73336d2b751fa16138a7398fecc3f24329ccb86600"
+    },
+    {
+      "source_path": "output-Refinement/20261016__金融Agent面试有感_;之前项目烂尾,现在重新探索和规 金融自研 AI Agent 岗位，上一个候选人把项目做烂。.md",
+      "target_path": "materials/agent-runtime/20261016__金融Agent面试有感_;之前项目烂尾,现在重新探索和规 金融自研 AI Agent 岗位，上一个候选人把项目做烂。/refinement.md",
+      "source_sha256": "979bee389172f8c1d5b0dd9e10b95ccf38db2cbf2398fa991ae69c4ab9b8ee22",
+      "target_sha256": "961ff0c5b654ac2e07a1d22fe3064307e6308eef80f8d663dbf2e0692e917e55"
+    },
+    {
+      "source_path": "output-Refinement/20261016__面AI Agent通关，Java老底子帮了我大忙 Agent 流程、调优全部聊透，结尾突出来三道 Java 八股。感慨：不会.md",
+      "target_path": "materials/agent-runtime/20261016__面AI Agent通关，Java老底子帮了我大忙 Agent 流程、调优全部聊透，结尾突出来三道 Java 八股。感慨：不会/refinement.md",
+      "source_sha256": "f8c46151d5843662bb357156fa63f7c7c3223ec899adddfcea903289e20a2f63",
+      "target_sha256": "cc75c1b339d3a46174544549e4075c57632dcc9aa0c21921a360737896ce4c5e"
+    },
+    {
+      "source_path": "output-Refinement/20261016__面试官只要敢问你意图识别，按我这么说，20k到手！ #ai #ai应用开发 #大模型开发 #懂王ai.md",
+      "target_path": "materials/model-platform/20261016__面试官只要敢问你意图识别，按我这么说，20k到手！ #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
+      "source_sha256": "6385f2f9aa62f87a840fec8df93d17895a625de7faea334a984d49b83f6e1c02",
+      "target_sha256": "27c41194dad64aeda5139d0c3d084f1cc6acb53cc5c43dcff93bfe784dcb9a4a"
+    },
+    {
+      "source_path": "output-Refinement/20261017__王自如聊AI意图识别 想要提高AI在模糊输入和意图识别指令方面的准确性，一是可以先调用轻量级模型API.md",
+      "target_path": "materials/agent-runtime/20261017__王自如聊AI意图识别 想要提高AI在模糊输入和意图识别指令方面的准确性，一是可以先调用轻量级模型API/refinement.md",
+      "source_sha256": "895ee2fea6b7a93f79edcd2e9f075405be1b43bd1f12c2b21ec857aa3bc7cf74",
+      "target_sha256": "40f907badfc37956ebf85b45c6d4924d9dca014c2d6028cf7e1dc596988df4bc"
+    },
+    {
+      "source_path": "output-Refinement/20261022__AI 的_思考程度_拧到最高，到底多干了什么 #大模型 #思考模式.md",
+      "target_path": "materials/model-platform/20261022__AI 的_思考程度_拧到最高，到底多干了什么 #大模型 #思考模式/refinement.md",
+      "source_sha256": "21a5b6792b40f7cd41a3145a683a64710e26cfcd761141dd39f417b4f8dcebc1",
+      "target_sha256": "f11a20040a217ccd61acffd04d0d3659f59b01e43908ad05828c67692691e39c"
+    },
+    {
+      "source_path": "output-Refinement/20261022__Agent的高并发？ #高并发 #Agent开发 #程序员 #大模型 #面试.md",
+      "target_path": "materials/model-platform/20261022__Agent的高并发？ #高并发 #Agent开发 #程序员 #大模型 #面试/refinement.md",
+      "source_sha256": "7244a20daf2a0ab2f7d4b17a1e50a5798c70dcbcbdc75631ffee499801be8bf1",
+      "target_sha256": "8d2623e62bdd86193bab8846aa334b7012082029dfa118f57c1a00a882fa74c5"
+    },
+    {
+      "source_path": "output-Refinement/20261022__Vibe知识大赏 _ 大模型推理引擎vLLM 是什么？ 为什么同一张 GPU 能多扛几倍请求？大模型推理引擎vLLM是什.md",
+      "target_path": "materials/model-platform/20261022__Vibe知识大赏 _ 大模型推理引擎vLLM 是什么？ 为什么同一张 GPU 能多扛几倍请求？大模型推理引擎vLLM是什/refinement.md",
+      "source_sha256": "6513ea077cf4cd6a6ffb71e10ecf673edc23d82d9645f711554707de86f1799d",
+      "target_sha256": "8bed2975cfbc3ed05b7e0bd218159f6ebb9db41c30680d2bf731ef46e173b070"
+    },
+    {
+      "source_path": "output-Refinement/20261022__一个人、两周、数百美元，如何训出登顶 Hugging Face 的模型 _ 对谈研究员逯雨鑫.md",
+      "target_path": "materials/model-platform/20261022__一个人、两周、数百美元，如何训出登顶 Hugging Face 的模型 _ 对谈研究员逯雨鑫/refinement.md",
+      "source_sha256": "a2752170b2bc9161e18815020bc23e9fb2ee753cc202036b80f88e99a35a06b7",
+      "target_sha256": "1759db79e7d53fc18cd97e538cde0ef386dd1e45528408478bc7ab5ff89468d7"
+    },
+    {
+      "source_path": "output-Refinement/20261022__什么是大模型的推理引擎 同一个模型，换一个引擎，为什么能处理更多请求？从预填充和解码讲起，用.md",
+      "target_path": "materials/model-platform/20261022__什么是大模型的推理引擎 同一个模型，换一个引擎，为什么能处理更多请求？从预填充和解码讲起，用/refinement.md",
+      "source_sha256": "bc246e3636ee139ee6fcf056004037c74769d45e66dc02c534ceff6127c5076c",
+      "target_sha256": "950a5acc6b102e6c7c0621a187f46f70c2bcc65042f875da650666eeeae34fe3"
+    },
+    {
+      "source_path": "output-Refinement/20261022__大语言模型本地部署，token无限免费 想在自己的电脑或服务器上运行大语言模型，到底该选哪种方案？.md",
+      "target_path": "materials/model-platform/20261022__大语言模型本地部署，token无限免费 想在自己的电脑或服务器上运行大语言模型，到底该选哪种方案？/refinement.md",
+      "source_sha256": "29d5decac4efcd3a00d1451cf4a4d7e3b8d0893162b7d34ee349512fdbefebae",
+      "target_sha256": "cbaf2269a9173a5c1dd45ca169954de9b627ad3661e6a6fc82abd81715d00ec1"
+    },
+    {
+      "source_path": "output-Refinement/20261022__我们的Agent项目体系其实是被友商吊打的，他们可以做到100_不撞简历，我们做不到！#ai #ai应用开发 #大.md",
+      "target_path": "materials/ai-career/20261022__我们的Agent项目体系其实是被友商吊打的，他们可以做到100_不撞简历，我们做不到！#ai #ai应用开发 #大/refinement.md",
+      "source_sha256": "a1b11fefa2a8c661c641ef97e11386fd226cf6b3082b7ecc770713c434c74ef4",
+      "target_sha256": "dda2b057f37b4c4ea50c5304a9d21768715f0bcbfe7c8e8d849bb1fc6598c9b2"
+    },
+    {
+      "source_path": "output-Refinement/20261023__为什么 Agent 时代需要一个新的 API ？ DeepSeek V4 Pro 正式版支持 Responses API 了，它和 Chat Completions API 到底.md",
+      "target_path": "materials/agent-runtime/20261023__为什么 Agent 时代需要一个新的 API ？ DeepSeek V4 Pro 正式版支持 Responses API 了，它和 Chat Completions API 到底/refinement.md",
+      "source_sha256": "cf4438e6be18bd09f77293d936072627a16a115830be6977d26c5b1af6ad19cc",
+      "target_sha256": "cf4438e6be18bd09f77293d936072627a16a115830be6977d26c5b1af6ad19cc"
+    },
+    {
+      "source_path": "output-Refinement/20261023__只要面试官敢问本体论，那就不好意思了。 #ai #ai应用开发 #大模型开发 #懂王ai.md",
+      "target_path": "materials/model-platform/20261023__只要面试官敢问本体论，那就不好意思了。 #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
+      "source_sha256": "f72cfeccad071617b4c841edee335fcc6e831a3d93eb5a01f570b804194c73aa",
+      "target_sha256": "f72cfeccad071617b4c841edee335fcc6e831a3d93eb5a01f570b804194c73aa"
+    },
+    {
+      "source_path": "output-Refinement/20261023__微调和Rag的区别，面试必问！必须学！ #ai #ai应用开发 #大模型开发 #懂王ai.md",
+      "target_path": "materials/rag/20261023__微调和Rag的区别，面试必问！必须学！ #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
+      "source_sha256": "8513cd91848897279a78ec0b0493dc8dc4ed3e06780d5130015e6af7bd0cc26a",
+      "target_sha256": "8513cd91848897279a78ec0b0493dc8dc4ed3e06780d5130015e6af7bd0cc26a"
+    },
+    {
+      "source_path": "output-Refinement/20261023__评测集对Agent面试非常重要！没有之一。 #ai #ai应用开发 #大模型开发 #懂王ai.md",
+      "target_path": "materials/model-platform/20261023__评测集对Agent面试非常重要！没有之一。 #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
+      "source_sha256": "6c239eaf120399ef23a11434c9d53b6c7675fc3e2e35f1042f145fa7143428ad",
+      "target_sha256": "6c239eaf120399ef23a11434c9d53b6c7675fc3e2e35f1042f145fa7143428ad"
+    },
+    {
+      "source_path": "output-Refinement/20261024__面试官问你Rag如何保证100_准确，千万注意这就是陷阱！ #ai #ai应用开发 #大模型开发 #懂王ai.md",
+      "target_path": "materials/rag/20261024__面试官问你Rag如何保证100_准确，千万注意这就是陷阱！ #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
+      "source_sha256": "de7594f1448ed183889cd0e4ac7efb98ae6de3ba4d2e79c978b7dbae90a9b0db",
+      "target_sha256": "de7594f1448ed183889cd0e4ac7efb98ae6de3ba4d2e79c978b7dbae90a9b0db"
+    },
+    {
+      "source_path": "output-Refinement/20261025__RAG检索阶段，BM25和向量检索为什么互补？#rag #ai大模型 #人工智能 #计算机.md",
+      "target_path": "materials/rag/20261025__RAG检索阶段，BM25和向量检索为什么互补？#rag #ai大模型 #人工智能 #计算机/refinement.md",
+      "source_sha256": "1863abf24c6698a5246705c4e9c49e99f5864edde3e58ee37877f2b335bef0a0",
+      "target_sha256": "1863abf24c6698a5246705c4e9c49e99f5864edde3e58ee37877f2b335bef0a0"
+    },
+    {
+      "source_path": "output-Refinement/20261025__【快问快答】字节 RAG 面经夺命十连问 #AI大模型 #大模型面试 #RAG #Agent #程序员.md",
+      "target_path": "materials/rag/20261025__【快问快答】字节 RAG 面经夺命十连问 #AI大模型 #大模型面试 #RAG #Agent #程序员/refinement.md",
+      "source_sha256": "90437288efa96e654f35e79898a852cbe4b7e2bedf4847501e88cece589d2628",
+      "target_sha256": "90437288efa96e654f35e79898a852cbe4b7e2bedf4847501e88cece589d2628"
+    },
+    {
+      "source_path": "output-Refinement/20261025__为什么搜索、RAG、Agent 至今离不开 BM25？三个直觉一次讲透 #BM25 #RAG #向量检索 #AIAgent #大模型.md",
+      "target_path": "materials/rag/20261025__为什么搜索、RAG、Agent 至今离不开 BM25？三个直觉一次讲透 #BM25 #RAG #向量检索 #AIAgent #大模型/refinement.md",
+      "source_sha256": "5f10b3de76cac507264d97f93a13efdd60b651a4c560c48a067d5806f4e7bbbc",
+      "target_sha256": "5f10b3de76cac507264d97f93a13efdd60b651a4c560c48a067d5806f4e7bbbc"
+    },
+    {
+      "source_path": "output-Refinement/20261025__搞不懂BM25，你的RAG检索可能白做了！ #我在抖音学ai #rag知识库 #ai #混合检索 #向量检索.md",
+      "target_path": "materials/rag/20261025__搞不懂BM25，你的RAG检索可能白做了！ #我在抖音学ai #rag知识库 #ai #混合检索 #向量检索/refinement.md",
+      "source_sha256": "6e1acf5872a173ff3becdff3bd5d16d029015142be95e33b7ec7f90ebb8e6fd7",
+      "target_sha256": "6e1acf5872a173ff3becdff3bd5d16d029015142be95e33b7ec7f90ebb8e6fd7"
+    },
+    {
+      "source_path": "output-Refinement/20261025__混合检索中，BM25 和向量检索到底怎么配合？ #rag #aiagent#openai #人工智能 #知识库.md",
+      "target_path": "materials/rag/20261025__混合检索中，BM25 和向量检索到底怎么配合？ #rag #aiagent#openai #人工智能 #知识库/refinement.md",
+      "source_sha256": "e95e00113b00400fb510bb6328cfb8a5a150d504b2eaa1b6e30b8aa2f087e003",
+      "target_sha256": "e95e00113b00400fb510bb6328cfb8a5a150d504b2eaa1b6e30b8aa2f087e003"
+    },
+    {
+      "source_path": "output-Refinement/20261025__面试必考题BM25+向量检索为啥要混合检索？召回条数怎么配？ #大模型面试 #RAG #人工智能 #大模型 #ai.md",
+      "target_path": "materials/rag/20261025__面试必考题BM25+向量检索为啥要混合检索？召回条数怎么配？ #大模型面试 #RAG #人工智能 #大模型 #ai/refinement.md",
+      "source_sha256": "56d5c6186270b228610431972663d0eb90e82eb37a82d412106003305c268b83",
+      "target_sha256": "56d5c6186270b228610431972663d0eb90e82eb37a82d412106003305c268b83"
+    },
+    {
+      "source_path": "output-Refinement/README.md",
+      "target_path": "materials/_migration/output-Refinement-README.md",
+      "source_sha256": "1e7e00509d16a0ebe79ef155025ae2169708c8985edd44d006b2e79742142514",
+      "target_sha256": "e62a111a7db0631c95194cd30cf61ab43347ddae7f683e260cb1ff54aa1913b6"
+    },
+    {
+      "source_path": "output-Learning/20261025__01 第一次直播答疑回放__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__01 第一次直播答疑回放/deep-read.md",
+      "source_sha256": "497f7326322773750195910c81d71cce9c32b42f059f2a6d08b6f003d8513841",
+      "target_sha256": "497f7326322773750195910c81d71cce9c32b42f059f2a6d08b6f003d8513841"
+    },
+    {
+      "source_path": "output-Learning/20261025__01 第一次直播答疑回放__Learning.md",
+      "target_path": "materials/ai-career/20261025__01 第一次直播答疑回放/learning.md",
+      "source_sha256": "0f09dd2cd6d5a3784dcbc6e0b8bb4749a6d8bfffe45d11d826851a0796504823",
+      "target_sha256": "0f09dd2cd6d5a3784dcbc6e0b8bb4749a6d8bfffe45d11d826851a0796504823"
+    },
+    {
+      "source_path": "output-Learning/20261025__01 面试最重要的就是吹_ev__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__01 面试最重要的就是吹_ev/deep-read.md",
+      "source_sha256": "3b583a94a99c1ee8448741d3988f1501e25090a1e39378f0f22f213bb83e75cf",
+      "target_sha256": "3b583a94a99c1ee8448741d3988f1501e25090a1e39378f0f22f213bb83e75cf"
+    },
+    {
+      "source_path": "output-Learning/20261025__01 面试最重要的就是吹_ev__Learning.md",
+      "target_path": "materials/ai-career/20261025__01 面试最重要的就是吹_ev/learning.md",
+      "source_sha256": "a05501eda8d830e87d113e5dcdb44241f9e3a0344a278efd629fb27e97b06e3b",
+      "target_sha256": "a05501eda8d830e87d113e5dcdb44241f9e3a0344a278efd629fb27e97b06e3b"
+    },
+    {
+      "source_path": "output-Learning/20261025__02 直播梳理LLM原理01__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__02 直播梳理LLM原理01/deep-read.md",
+      "source_sha256": "7af4f17d5f3c30fe59aba97451cfec6aac1418ee949d52613dc50ac5f17cd53b",
+      "target_sha256": "7af4f17d5f3c30fe59aba97451cfec6aac1418ee949d52613dc50ac5f17cd53b"
+    },
+    {
+      "source_path": "output-Learning/20261025__02 直播梳理LLM原理01__Learning.md",
+      "target_path": "materials/model-platform/20261025__02 直播梳理LLM原理01/learning.md",
+      "source_sha256": "3549292c745d2a3ae8c8c84427465ea9c9b50c9ad0cdc3b2016815feae301f1b",
+      "target_sha256": "3549292c745d2a3ae8c8c84427465ea9c9b50c9ad0cdc3b2016815feae301f1b"
+    },
+    {
+      "source_path": "output-Learning/20261025__03 如何向面试官介绍我们的8个项目_ev__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__03 如何向面试官介绍我们的8个项目_ev/deep-read.md",
+      "source_sha256": "7526145eb0bd8f3556c3a33cf97276d0de80fafe76d76c4d84645ded058bd6d3",
+      "target_sha256": "7526145eb0bd8f3556c3a33cf97276d0de80fafe76d76c4d84645ded058bd6d3"
+    },
+    {
+      "source_path": "output-Learning/20261025__03 如何向面试官介绍我们的8个项目_ev__Learning.md",
+      "target_path": "materials/ai-career/20261025__03 如何向面试官介绍我们的8个项目_ev/learning.md",
+      "source_sha256": "c29f073d560f817cface3eabdae21e86a320c2ab72ae665eee0468b6b1269723",
+      "target_sha256": "c29f073d560f817cface3eabdae21e86a320c2ab72ae665eee0468b6b1269723"
+    },
+    {
+      "source_path": "output-Learning/20261025__03 直播-LLM原理02__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__03 直播-LLM原理02/deep-read.md",
+      "source_sha256": "1b43bbb2a1f6d00e34b5ec7a39d3531ee85370a91ccdad0f841ec4d4981434bc",
+      "target_sha256": "1b43bbb2a1f6d00e34b5ec7a39d3531ee85370a91ccdad0f841ec4d4981434bc"
+    },
+    {
+      "source_path": "output-Learning/20261025__03 直播-LLM原理02__Learning.md",
+      "target_path": "materials/model-platform/20261025__03 直播-LLM原理02/learning.md",
+      "source_sha256": "65846faea90f720d6d6ff799c847ab4b07aa1509397688bf38084aa0c0f1f597",
+      "target_sha256": "65846faea90f720d6d6ff799c847ab4b07aa1509397688bf38084aa0c0f1f597"
+    },
+    {
+      "source_path": "output-Learning/20261025__04 客户系统的Rag到底怎么建？_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__04 客户系统的Rag到底怎么建？_ev/deep-read.md",
+      "source_sha256": "0953a24f8cb69613334d31039892398413a056abdd4caf328b498a587cdea2a2",
+      "target_sha256": "0953a24f8cb69613334d31039892398413a056abdd4caf328b498a587cdea2a2"
+    },
+    {
+      "source_path": "output-Learning/20261025__04 客户系统的Rag到底怎么建？_ev__Learning.md",
+      "target_path": "materials/rag/20261025__04 客户系统的Rag到底怎么建？_ev/learning.md",
+      "source_sha256": "fed5e5cdfb24213db408d70e3ee5b1c583f24d11e49c12295098e1601213ca3d",
+      "target_sha256": "fed5e5cdfb24213db408d70e3ee5b1c583f24d11e49c12295098e1601213ca3d"
+    },
+    {
+      "source_path": "output-Learning/20261025__04 直播-LLM原理-03__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__04 直播-LLM原理-03/deep-read.md",
+      "source_sha256": "20f9c1d27d7ce177252872df1730c123f7cc82f31b9a67425a7824f535f7cef3",
+      "target_sha256": "20f9c1d27d7ce177252872df1730c123f7cc82f31b9a67425a7824f535f7cef3"
+    },
+    {
+      "source_path": "output-Learning/20261025__04 直播-LLM原理-03__Learning.md",
+      "target_path": "materials/model-platform/20261025__04 直播-LLM原理-03/learning.md",
+      "source_sha256": "af090867563bf88bcaa8b2d101ab6858c9a2eb01c6e345a96f9a64ed929fb646",
+      "target_sha256": "af090867563bf88bcaa8b2d101ab6858c9a2eb01c6e345a96f9a64ed929fb646"
+    },
+    {
+      "source_path": "output-Learning/20261025__05 用户的查询流程解析_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__05 用户的查询流程解析_ev/deep-read.md",
+      "source_sha256": "3962f1492150027d81e3558eeee377edc7a5b7607e49d44cd42f19ae335036ba",
+      "target_sha256": "3962f1492150027d81e3558eeee377edc7a5b7607e49d44cd42f19ae335036ba"
+    },
+    {
+      "source_path": "output-Learning/20261025__05 用户的查询流程解析_ev__Learning.md",
+      "target_path": "materials/rag/20261025__05 用户的查询流程解析_ev/learning.md",
+      "source_sha256": "ac217a307809c18933d0e5003588615213743381b757d265c7a05864fd5fa525",
+      "target_sha256": "ac217a307809c18933d0e5003588615213743381b757d265c7a05864fd5fa525"
+    },
+    {
+      "source_path": "output-Learning/20261025__05 重学langchain01__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261025__05 重学langchain01/deep-read.md",
+      "source_sha256": "e3345565343b5ce42f66eaa387ff017b121eeffb5628dad6df98ce6a255b2ae9",
+      "target_sha256": "e3345565343b5ce42f66eaa387ff017b121eeffb5628dad6df98ce6a255b2ae9"
+    },
+    {
+      "source_path": "output-Learning/20261025__05 重学langchain01__Learning.md",
+      "target_path": "materials/agent-runtime/20261025__05 重学langchain01/learning.md",
+      "source_sha256": "7c89fde7a6331e6c343e7d53f601d64cf18e18c2a0032bcdb214ae76f7f83dd0",
+      "target_sha256": "7c89fde7a6331e6c343e7d53f601d64cf18e18c2a0032bcdb214ae76f7f83dd0"
+    },
+    {
+      "source_path": "output-Learning/20261025__06 用postgre + pgvector实现稠密稀疏向量_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__06 用postgre + pgvector实现稠密稀疏向量_ev/deep-read.md",
+      "source_sha256": "5e61ae7c573a3e9e4854076f45ce2d63b6a6cbe66552007fb6721010220088e5",
+      "target_sha256": "5e61ae7c573a3e9e4854076f45ce2d63b6a6cbe66552007fb6721010220088e5"
+    },
+    {
+      "source_path": "output-Learning/20261025__06 用postgre + pgvector实现稠密稀疏向量_ev__Learning.md",
+      "target_path": "materials/rag/20261025__06 用postgre + pgvector实现稠密稀疏向量_ev/learning.md",
+      "source_sha256": "4f16ee3280b78729ae86f35d9b0dd10342e6849e3ed4e0ed980848696ce0f549",
+      "target_sha256": "4f16ee3280b78729ae86f35d9b0dd10342e6849e3ed4e0ed980848696ce0f549"
+    },
+    {
+      "source_path": "output-Learning/20261025__06 重学langchain02__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261025__06 重学langchain02/deep-read.md",
+      "source_sha256": "85dd7f979ae3355c27594244cb7b04ade89c4caecf307151869896245f189761",
+      "target_sha256": "85dd7f979ae3355c27594244cb7b04ade89c4caecf307151869896245f189761"
+    },
+    {
+      "source_path": "output-Learning/20261025__06 重学langchain02__Learning.md",
+      "target_path": "materials/agent-runtime/20261025__06 重学langchain02/learning.md",
+      "source_sha256": "42d59c407b04cb8523013487c7078396717eb8455e6bfde87f4ca9de89a9efb3",
+      "target_sha256": "42d59c407b04cb8523013487c7078396717eb8455e6bfde87f4ca9de89a9efb3"
+    },
+    {
+      "source_path": "output-Learning/20261025__07 1.19看看行情__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__07 1.19看看行情/deep-read.md",
+      "source_sha256": "76cd6e35316514120c2b67edabfabfb00adb87d30a2a34bde7a8d70cdfec4fd5",
+      "target_sha256": "76cd6e35316514120c2b67edabfabfb00adb87d30a2a34bde7a8d70cdfec4fd5"
+    },
+    {
+      "source_path": "output-Learning/20261025__07 1.19看看行情__Learning.md",
+      "target_path": "materials/ai-career/20261025__07 1.19看看行情/learning.md",
+      "source_sha256": "3fb500c3a9226069ade7726e9f44a27e7ef49617f24b974bc88434546c62f8c4",
+      "target_sha256": "3fb500c3a9226069ade7726e9f44a27e7ef49617f24b974bc88434546c62f8c4"
+    },
+    {
+      "source_path": "output-Learning/20261025__07 Topk N Rerank_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__07 Topk N Rerank_ev/deep-read.md",
+      "source_sha256": "3be840ccff9b034576179e3c6a9937d281a2cbf45f6d64d4e8963507835f3c6e",
+      "target_sha256": "3be840ccff9b034576179e3c6a9937d281a2cbf45f6d64d4e8963507835f3c6e"
+    },
+    {
+      "source_path": "output-Learning/20261025__07 Topk N Rerank_ev__Learning.md",
+      "target_path": "materials/rag/20261025__07 Topk N Rerank_ev/learning.md",
+      "source_sha256": "32bd28ca60bee44e0d9c67650c8d712aa35288a6c529e50bb5736e9c6f92e963",
+      "target_sha256": "32bd28ca60bee44e0d9c67650c8d712aa35288a6c529e50bb5736e9c6f92e963"
+    },
+    {
+      "source_path": "output-Learning/20261025__08 1.19看看行情__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__08 1.19看看行情/deep-read.md",
+      "source_sha256": "79c3192411cb593a8a1365f4c97b600f42f4d9d89ec47127ec72f2683cc4cb26",
+      "target_sha256": "79c3192411cb593a8a1365f4c97b600f42f4d9d89ec47127ec72f2683cc4cb26"
+    },
+    {
+      "source_path": "output-Learning/20261025__08 1.19看看行情__Learning.md",
+      "target_path": "materials/ai-career/20261025__08 1.19看看行情/learning.md",
+      "source_sha256": "1d8121aa2408a5e0cd1f9c5b1ba00a067c78fcea628dbd58536fcc60be01b608",
+      "target_sha256": "1d8121aa2408a5e0cd1f9c5b1ba00a067c78fcea628dbd58536fcc60be01b608"
+    },
+    {
+      "source_path": "output-Learning/20261025__08 为啥项目一定要Rerank_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__08 为啥项目一定要Rerank_ev/deep-read.md",
+      "source_sha256": "e7a4d97a07a77bcffc9b07a56e49a4cb5b963acfe9ba583df3a532acc233c344",
+      "target_sha256": "e7a4d97a07a77bcffc9b07a56e49a4cb5b963acfe9ba583df3a532acc233c344"
+    },
+    {
+      "source_path": "output-Learning/20261025__08 为啥项目一定要Rerank_ev__Learning.md",
+      "target_path": "materials/rag/20261025__08 为啥项目一定要Rerank_ev/learning.md",
+      "source_sha256": "53341ee5785671626231bbe1c8577fb77b51941c73168c7dade13a02e5313e12",
+      "target_sha256": "53341ee5785671626231bbe1c8577fb77b51941c73168c7dade13a02e5313e12"
+    },
+    {
+      "source_path": "output-Learning/20261025__09 1.27回放 什么是Skills__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261025__09 1.27回放 什么是Skills/deep-read.md",
+      "source_sha256": "bf2364331c41051ea41ada06e72a645af0bb91c160bc332fcaa96947e0419121",
+      "target_sha256": "bf2364331c41051ea41ada06e72a645af0bb91c160bc332fcaa96947e0419121"
+    },
+    {
+      "source_path": "output-Learning/20261025__09 1.27回放 什么是Skills__Learning.md",
+      "target_path": "materials/agent-runtime/20261025__09 1.27回放 什么是Skills/learning.md",
+      "source_sha256": "da2b26c2a4b913fb8fca3249365bd2f6310b802369695f93f8a121a3fdcd88a7",
+      "target_sha256": "da2b26c2a4b913fb8fca3249365bd2f6310b802369695f93f8a121a3fdcd88a7"
+    },
+    {
+      "source_path": "output-Learning/20261025__09 需不需要降维和量化_ev__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__09 需不需要降维和量化_ev/deep-read.md",
+      "source_sha256": "c457ae1723e9d3a3e7af59ade33ec6046f6137c7177ac9ded7c8e26bf3da6b4f",
+      "target_sha256": "c457ae1723e9d3a3e7af59ade33ec6046f6137c7177ac9ded7c8e26bf3da6b4f"
+    },
+    {
+      "source_path": "output-Learning/20261025__09 需不需要降维和量化_ev__Learning.md",
+      "target_path": "materials/model-platform/20261025__09 需不需要降维和量化_ev/learning.md",
+      "source_sha256": "697e5b7f08b0cdd384dcac7b66a7d4c0cbc5cb249c69d70e5b0c0ec639dbfdbf",
+      "target_sha256": "697e5b7f08b0cdd384dcac7b66a7d4c0cbc5cb249c69d70e5b0c0ec639dbfdbf"
+    },
+    {
+      "source_path": "output-Learning/20261025__10 知识库的数据频繁变动怎么办？_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__10 知识库的数据频繁变动怎么办？_ev/deep-read.md",
+      "source_sha256": "5a4ed225e677ca8b62e3c3551bda6ea2a579fa2932e7580d436ac8a4d40e45c6",
+      "target_sha256": "5a4ed225e677ca8b62e3c3551bda6ea2a579fa2932e7580d436ac8a4d40e45c6"
+    },
+    {
+      "source_path": "output-Learning/20261025__10 知识库的数据频繁变动怎么办？_ev__Learning.md",
+      "target_path": "materials/rag/20261025__10 知识库的数据频繁变动怎么办？_ev/learning.md",
+      "source_sha256": "7231016205034cac24cb108abe363f440d3f5059bdf08dc37ebfd5669ce43223",
+      "target_sha256": "7231016205034cac24cb108abe363f440d3f5059bdf08dc37ebfd5669ce43223"
+    },
+    {
+      "source_path": "output-Learning/20261025__11 客服遇到高并发怎么办？_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__11 客服遇到高并发怎么办？_ev/deep-read.md",
+      "source_sha256": "8f602a77f53cff654cbb13fb1d6317b8b3b14218422e177f300ce6b913571a56",
+      "target_sha256": "8f602a77f53cff654cbb13fb1d6317b8b3b14218422e177f300ce6b913571a56"
+    },
+    {
+      "source_path": "output-Learning/20261025__11 客服遇到高并发怎么办？_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__11 客服遇到高并发怎么办？_ev/learning.md",
+      "source_sha256": "1fd90c8c77d0c49ced7605a89788dde54d901328ff583bb63053b49c8c6457b0",
+      "target_sha256": "1fd90c8c77d0c49ced7605a89788dde54d901328ff583bb63053b49c8c6457b0"
+    },
+    {
+      "source_path": "output-Learning/20261025__12 如何提升召回率？_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__12 如何提升召回率？_ev/deep-read.md",
+      "source_sha256": "bfddd733b1b2424da3754fafd158181dd5b75fc87b294a86c083ecb4525c727d",
+      "target_sha256": "bfddd733b1b2424da3754fafd158181dd5b75fc87b294a86c083ecb4525c727d"
+    },
+    {
+      "source_path": "output-Learning/20261025__12 如何提升召回率？_ev__Learning.md",
+      "target_path": "materials/rag/20261025__12 如何提升召回率？_ev/learning.md",
+      "source_sha256": "8e9e52d9dbde2c5fb2b7637dd7d69f8021add98c532927bb1eafa41a3f954324",
+      "target_sha256": "8e9e52d9dbde2c5fb2b7637dd7d69f8021add98c532927bb1eafa41a3f954324"
+    },
+    {
+      "source_path": "output-Learning/20261025__13 如何统计召回率和准确率_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__13 如何统计召回率和准确率_ev/deep-read.md",
+      "source_sha256": "ae650360db8b51885919c9f40f04d7e05e99c9b0ad96f3e6487b3ebf52c4f0bc",
+      "target_sha256": "ae650360db8b51885919c9f40f04d7e05e99c9b0ad96f3e6487b3ebf52c4f0bc"
+    },
+    {
+      "source_path": "output-Learning/20261025__13 如何统计召回率和准确率_ev__Learning.md",
+      "target_path": "materials/rag/20261025__13 如何统计召回率和准确率_ev/learning.md",
+      "source_sha256": "a0a406c7f73b3f72b22845eba93db8549e6a78775860a8106a5e291c492a60a2",
+      "target_sha256": "a0a406c7f73b3f72b22845eba93db8549e6a78775860a8106a5e291c492a60a2"
+    },
+    {
+      "source_path": "output-Learning/20261025__14 客服系统如何返回多模态的数据？_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__14 客服系统如何返回多模态的数据？_ev/deep-read.md",
+      "source_sha256": "48029b520283739b6ee6f3f879abba73c0c7ba32c305930d82cb99ac8a332ce1",
+      "target_sha256": "48029b520283739b6ee6f3f879abba73c0c7ba32c305930d82cb99ac8a332ce1"
+    },
+    {
+      "source_path": "output-Learning/20261025__14 客服系统如何返回多模态的数据？_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__14 客服系统如何返回多模态的数据？_ev/learning.md",
+      "source_sha256": "f26220f88cbc864dcbc7f0bb30ef201d537fcdae1c4348a01bdac1b4a9165264",
+      "target_sha256": "f26220f88cbc864dcbc7f0bb30ef201d537fcdae1c4348a01bdac1b4a9165264"
+    },
+    {
+      "source_path": "output-Learning/20261025__15 LLM性能优化 01_ev__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__15 LLM性能优化 01_ev/deep-read.md",
+      "source_sha256": "deca9bc4a9b60e2f0a8509dda90d92a35d19209b13bfd0e8805f415b0e42d9b1",
+      "target_sha256": "deca9bc4a9b60e2f0a8509dda90d92a35d19209b13bfd0e8805f415b0e42d9b1"
+    },
+    {
+      "source_path": "output-Learning/20261025__15 LLM性能优化 01_ev__Learning.md",
+      "target_path": "materials/model-platform/20261025__15 LLM性能优化 01_ev/learning.md",
+      "source_sha256": "c21697bec168566c1d5bffe4628ee3630d1b2cd56823a202e5903f6e71e21939",
+      "target_sha256": "c21697bec168566c1d5bffe4628ee3630d1b2cd56823a202e5903f6e71e21939"
+    },
+    {
+      "source_path": "output-Learning/20261025__16 LLM性能优化 02_ev__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__16 LLM性能优化 02_ev/deep-read.md",
+      "source_sha256": "97f45caac0723bc16f1d6116e4fea021b9485916f2180e6928e0381f082411c1",
+      "target_sha256": "97f45caac0723bc16f1d6116e4fea021b9485916f2180e6928e0381f082411c1"
+    },
+    {
+      "source_path": "output-Learning/20261025__16 LLM性能优化 02_ev__Learning.md",
+      "target_path": "materials/model-platform/20261025__16 LLM性能优化 02_ev/learning.md",
+      "source_sha256": "07ce98fa7a319f1691b8b4518e4d20fdbc3d3cd62e3ae7e62125fe85240f2481",
+      "target_sha256": "07ce98fa7a319f1691b8b4518e4d20fdbc3d3cd62e3ae7e62125fe85240f2481"
+    },
+    {
+      "source_path": "output-Learning/20261025__17 RTC语音链路优化_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__17 RTC语音链路优化_ev/deep-read.md",
+      "source_sha256": "674005381ccb254537acd8b70f6455009d1d7e7ea56e5a49f2671d48658fdeb8",
+      "target_sha256": "674005381ccb254537acd8b70f6455009d1d7e7ea56e5a49f2671d48658fdeb8"
+    },
+    {
+      "source_path": "output-Learning/20261025__17 RTC语音链路优化_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__17 RTC语音链路优化_ev/learning.md",
+      "source_sha256": "a2c88b6d5810f268ea4b11b22c6892448bb31d2c8d6d78f0df5d61c45b1aef30",
+      "target_sha256": "a2c88b6d5810f268ea4b11b22c6892448bb31d2c8d6d78f0df5d61c45b1aef30"
+    },
+    {
+      "source_path": "output-Learning/20261025__18 评测集1_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__18 评测集1_ev/deep-read.md",
+      "source_sha256": "977114c0d59b4e239ca3a7d6f4b7c915928119789b6ecdf3cc691cbe7c03ad93",
+      "target_sha256": "977114c0d59b4e239ca3a7d6f4b7c915928119789b6ecdf3cc691cbe7c03ad93"
+    },
+    {
+      "source_path": "output-Learning/20261025__18 评测集1_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__18 评测集1_ev/learning.md",
+      "source_sha256": "5ddc9d676fef80f7cf9d21272b223a65539cb24fae7b42a3f8bcad5510edde3a",
+      "target_sha256": "5ddc9d676fef80f7cf9d21272b223a65539cb24fae7b42a3f8bcad5510edde3a"
+    },
+    {
+      "source_path": "output-Learning/20261025__19 评测集2_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__19 评测集2_ev/deep-read.md",
+      "source_sha256": "a3029e3121e4a8948dd9e1149007315def48d741f95421b72dff3a5880526c4a",
+      "target_sha256": "a3029e3121e4a8948dd9e1149007315def48d741f95421b72dff3a5880526c4a"
+    },
+    {
+      "source_path": "output-Learning/20261025__19 评测集2_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__19 评测集2_ev/learning.md",
+      "source_sha256": "43cf129b3770c1497f7c485d42810a277556214ddcf9389e228500bdb2524408",
+      "target_sha256": "43cf129b3770c1497f7c485d42810a277556214ddcf9389e228500bdb2524408"
+    },
+    {
+      "source_path": "output-Learning/20261025__2.25 武汉18k 教授__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__2.25 武汉18k 教授/deep-read.md",
+      "source_sha256": "06af4e9f6b03223ac2429d802e7a6d0251900efa918f52be29d9175e53d42c31",
+      "target_sha256": "06af4e9f6b03223ac2429d802e7a6d0251900efa918f52be29d9175e53d42c31"
+    },
+    {
+      "source_path": "output-Learning/20261025__2.25 武汉18k 教授__Learning.md",
+      "target_path": "materials/ai-career/20261025__2.25 武汉18k 教授/learning.md",
+      "source_sha256": "7f79251d159969008eefce3f7a84e2a556f7f36c302327a8d804986485fe0e03",
+      "target_sha256": "7f79251d159969008eefce3f7a84e2a556f7f36c302327a8d804986485fe0e03"
+    },
+    {
+      "source_path": "output-Learning/20261025__2.25 武汉25k 电商头部 - Trim__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__2.25 武汉25k 电商头部 - Trim/deep-read.md",
+      "source_sha256": "23aa6f0af9cf96bd2bd85fdb8274dd1671530270703690aec48c16adcacaac48",
+      "target_sha256": "23aa6f0af9cf96bd2bd85fdb8274dd1671530270703690aec48c16adcacaac48"
+    },
+    {
+      "source_path": "output-Learning/20261025__2.25 武汉25k 电商头部 - Trim__Learning.md",
+      "target_path": "materials/ai-career/20261025__2.25 武汉25k 电商头部 - Trim/learning.md",
+      "source_sha256": "0e5fd5d67b0c4e4efeeb3cf98e519502f9c6d224796a423656c2de878094b3f3",
+      "target_sha256": "0e5fd5d67b0c4e4efeeb3cf98e519502f9c6d224796a423656c2de878094b3f3"
+    },
+    {
+      "source_path": "output-Learning/20261025__2.26 武汉边缘面试官18k__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__2.26 武汉边缘面试官18k/deep-read.md",
+      "source_sha256": "f8628a6ddae3ec8bab825f98edfc0aebf0883a1c740cd764af3e0707ee0ad160",
+      "target_sha256": "f8628a6ddae3ec8bab825f98edfc0aebf0883a1c740cd764af3e0707ee0ad160"
+    },
+    {
+      "source_path": "output-Learning/20261025__2.26 武汉边缘面试官18k__Learning.md",
+      "target_path": "materials/ai-career/20261025__2.26 武汉边缘面试官18k/learning.md",
+      "source_sha256": "a57d58a33feef089476b7d95c78daa4775ae5afcd7ded17530aea9cd52ac6a37",
+      "target_sha256": "a57d58a33feef089476b7d95c78daa4775ae5afcd7ded17530aea9cd52ac6a37"
+    },
+    {
+      "source_path": "output-Learning/20261025__20 评测集3_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__20 评测集3_ev/deep-read.md",
+      "source_sha256": "1a41fc00c5d53f95141f90da7bf1e24d40c78ff78d3607eae080683e96a32a34",
+      "target_sha256": "1a41fc00c5d53f95141f90da7bf1e24d40c78ff78d3607eae080683e96a32a34"
+    },
+    {
+      "source_path": "output-Learning/20261025__20 评测集3_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__20 评测集3_ev/learning.md",
+      "source_sha256": "d58494f2f7104c650da9173af8c14548c370f7a33a657ce3fe0a2af7f14e812e",
+      "target_sha256": "d58494f2f7104c650da9173af8c14548c370f7a33a657ce3fe0a2af7f14e812e"
+    },
+    {
+      "source_path": "output-Learning/20261025__21 评测集4_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__21 评测集4_ev/deep-read.md",
+      "source_sha256": "5b39a315da5429ed93eb50cc4a7eda39dd82a95b3ff6e6bc5c179863a316bfe7",
+      "target_sha256": "5b39a315da5429ed93eb50cc4a7eda39dd82a95b3ff6e6bc5c179863a316bfe7"
+    },
+    {
+      "source_path": "output-Learning/20261025__21 评测集4_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__21 评测集4_ev/learning.md",
+      "source_sha256": "77c38caa12c8e716b67278adac0a25cd7ba1b7cb968a397f7ef56b36671db438",
+      "target_sha256": "77c38caa12c8e716b67278adac0a25cd7ba1b7cb968a397f7ef56b36671db438"
+    },
+    {
+      "source_path": "output-Learning/20261025__22 数据中台1_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__22 数据中台1_ev/deep-read.md",
+      "source_sha256": "58861dd68cbd7a08c8f71b26f5dd6e73e7aa2fdc8925714aaaec37f771f18932",
+      "target_sha256": "58861dd68cbd7a08c8f71b26f5dd6e73e7aa2fdc8925714aaaec37f771f18932"
+    },
+    {
+      "source_path": "output-Learning/20261025__22 数据中台1_ev__Learning.md",
+      "target_path": "materials/rag/20261025__22 数据中台1_ev/learning.md",
+      "source_sha256": "1b9dfc76b46881e2f9965b0c96eb642c71da408bc7d56a1d67610983c22f1a04",
+      "target_sha256": "1b9dfc76b46881e2f9965b0c96eb642c71da408bc7d56a1d67610983c22f1a04"
+    },
+    {
+      "source_path": "output-Learning/20261025__23 数据中台2_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__23 数据中台2_ev/deep-read.md",
+      "source_sha256": "156c5ebd812abf05748376fd9ad686cb4af93a198aa1a8bff199b2a1719c8d8a",
+      "target_sha256": "156c5ebd812abf05748376fd9ad686cb4af93a198aa1a8bff199b2a1719c8d8a"
+    },
+    {
+      "source_path": "output-Learning/20261025__23 数据中台2_ev__Learning.md",
+      "target_path": "materials/rag/20261025__23 数据中台2_ev/learning.md",
+      "source_sha256": "a6c689c8fba0433550d38fad459dd607aef248a9641f6ed15f414bf68c06f6f7",
+      "target_sha256": "a6c689c8fba0433550d38fad459dd607aef248a9641f6ed15f414bf68c06f6f7"
+    },
+    {
+      "source_path": "output-Learning/20261025__24 数据中台3_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__24 数据中台3_ev/deep-read.md",
+      "source_sha256": "fe4ea6656fde327de1c975c3550e6284e3e7da26e040a74ab9c189641e2158b6",
+      "target_sha256": "fe4ea6656fde327de1c975c3550e6284e3e7da26e040a74ab9c189641e2158b6"
+    },
+    {
+      "source_path": "output-Learning/20261025__24 数据中台3_ev__Learning.md",
+      "target_path": "materials/rag/20261025__24 数据中台3_ev/learning.md",
+      "source_sha256": "32f5df8a301cbf81a4f09b018e703831de52a12562e1f020fe291038aa364515",
+      "target_sha256": "32f5df8a301cbf81a4f09b018e703831de52a12562e1f020fe291038aa364515"
+    },
+    {
+      "source_path": "output-Learning/20261025__25 数据中台4_ev__DeepRead.md",
+      "target_path": "materials/rag/20261025__25 数据中台4_ev/deep-read.md",
+      "source_sha256": "fa6999bf21005a0c215b6c7dca437def675ccd5b302ef6e1340344c40b2f63c0",
+      "target_sha256": "fa6999bf21005a0c215b6c7dca437def675ccd5b302ef6e1340344c40b2f63c0"
+    },
+    {
+      "source_path": "output-Learning/20261025__25 数据中台4_ev__Learning.md",
+      "target_path": "materials/rag/20261025__25 数据中台4_ev/learning.md",
+      "source_sha256": "e9028b98c741cfdf79ff57baad8938d8381497b8788b455346f16a825d0c2008",
+      "target_sha256": "e9028b98c741cfdf79ff57baad8938d8381497b8788b455346f16a825d0c2008"
+    },
+    {
+      "source_path": "output-Learning/20261025__27 直播切片项目2_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__27 直播切片项目2_ev/deep-read.md",
+      "source_sha256": "fe8278206f3125937f88845684f98bf6c2049713dc0add7ff1f96982da5bb23b",
+      "target_sha256": "fe8278206f3125937f88845684f98bf6c2049713dc0add7ff1f96982da5bb23b"
+    },
+    {
+      "source_path": "output-Learning/20261025__27 直播切片项目2_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__27 直播切片项目2_ev/learning.md",
+      "source_sha256": "ebe4a1d3b164c13aa2375329a9392367af5d22c5656940271d9384765dc0d790",
+      "target_sha256": "ebe4a1d3b164c13aa2375329a9392367af5d22c5656940271d9384765dc0d790"
+    },
+    {
+      "source_path": "output-Learning/20261025__28 自媒体运营Agengt1_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__28 自媒体运营Agengt1_ev/deep-read.md",
+      "source_sha256": "513c26b7225dc3dca33ba01c3d1aee772bb7ae50f268b2717941fcf8ef6f71b0",
+      "target_sha256": "513c26b7225dc3dca33ba01c3d1aee772bb7ae50f268b2717941fcf8ef6f71b0"
+    },
+    {
+      "source_path": "output-Learning/20261025__28 自媒体运营Agengt1_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__28 自媒体运营Agengt1_ev/learning.md",
+      "source_sha256": "c39b925d8fe4bcc5b1ceeabb572604d1f0047c673956592f60c4226f4cdd9378",
+      "target_sha256": "c39b925d8fe4bcc5b1ceeabb572604d1f0047c673956592f60c4226f4cdd9378"
+    },
+    {
+      "source_path": "output-Learning/20261025__29 自媒体运营Agengt2_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__29 自媒体运营Agengt2_ev/deep-read.md",
+      "source_sha256": "00540b0fb58119b0f48769092af01a8d5a52506f11f87050fb62f9a28e3cae76",
+      "target_sha256": "00540b0fb58119b0f48769092af01a8d5a52506f11f87050fb62f9a28e3cae76"
+    },
+    {
+      "source_path": "output-Learning/20261025__29 自媒体运营Agengt2_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__29 自媒体运营Agengt2_ev/learning.md",
+      "source_sha256": "2e4e27cf37f757a15e418846639bb9b50072fef9edbc27794887e259845cee51",
+      "target_sha256": "2e4e27cf37f757a15e418846639bb9b50072fef9edbc27794887e259845cee51"
+    },
+    {
+      "source_path": "output-Learning/20261025__3.16 深圳30k 两轮已经过了__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__3.16 深圳30k 两轮已经过了/deep-read.md",
+      "source_sha256": "72b212f4c64e3f7893724430df00c3898c8694bab9f76ea29d825ea6f7b1de8d",
+      "target_sha256": "72b212f4c64e3f7893724430df00c3898c8694bab9f76ea29d825ea6f7b1de8d"
+    },
+    {
+      "source_path": "output-Learning/20261025__3.16 深圳30k 两轮已经过了__Learning.md",
+      "target_path": "materials/ai-career/20261025__3.16 深圳30k 两轮已经过了/learning.md",
+      "source_sha256": "c1de4d5eecb6ab1d99969394c4c0d080525ce5593559dc77064f639fb4513d2e",
+      "target_sha256": "c1de4d5eecb6ab1d99969394c4c0d080525ce5593559dc77064f639fb4513d2e"
+    },
+    {
+      "source_path": "output-Learning/20261025__3.9 创业无限画布深圳30k(重点看)-裁切__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__3.9 创业无限画布深圳30k(重点看)-裁切/deep-read.md",
+      "source_sha256": "ebcd5e2fdaa531062641fffc2e9ab66e23b51932abb349b7f5dc98461606d94f",
+      "target_sha256": "ebcd5e2fdaa531062641fffc2e9ab66e23b51932abb349b7f5dc98461606d94f"
+    },
+    {
+      "source_path": "output-Learning/20261025__3.9 创业无限画布深圳30k(重点看)-裁切__Learning.md",
+      "target_path": "materials/ai-career/20261025__3.9 创业无限画布深圳30k(重点看)-裁切/learning.md",
+      "source_sha256": "44a99939fe41c285e76ffbf15b429143d5bfdfb254190e0677456a27a3749b6c",
+      "target_sha256": "44a99939fe41c285e76ffbf15b429143d5bfdfb254190e0677456a27a3749b6c"
+    },
+    {
+      "source_path": "output-Learning/20261025__3.9 字节外包-裁切__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__3.9 字节外包-裁切/deep-read.md",
+      "source_sha256": "2555a0179ca1ea32d35d0bea2837c7eff8e288507188589c9bb8bdcb44653d73",
+      "target_sha256": "2555a0179ca1ea32d35d0bea2837c7eff8e288507188589c9bb8bdcb44653d73"
+    },
+    {
+      "source_path": "output-Learning/20261025__3.9 字节外包-裁切__Learning.md",
+      "target_path": "materials/ai-career/20261025__3.9 字节外包-裁切/learning.md",
+      "source_sha256": "0998d5a72e7e99d82986701fcd53665a0e767a4d33f6ffe9780dd15e6fc5c6d0",
+      "target_sha256": "0998d5a72e7e99d82986701fcd53665a0e767a4d33f6ffe9780dd15e6fc5c6d0"
+    },
+    {
+      "source_path": "output-Learning/20261025__3.9 重庆50k-裁切__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__3.9 重庆50k-裁切/deep-read.md",
+      "source_sha256": "2d3ff342f268326ff3a412ee2bf8d668fb49c4b1b4358ff02acee28ec3fe058e",
+      "target_sha256": "2d3ff342f268326ff3a412ee2bf8d668fb49c4b1b4358ff02acee28ec3fe058e"
+    },
+    {
+      "source_path": "output-Learning/20261025__3.9 重庆50k-裁切__Learning.md",
+      "target_path": "materials/ai-career/20261025__3.9 重庆50k-裁切/learning.md",
+      "source_sha256": "1a9222ae7a2361b8dc9dc9e0b60d3ab985e479caa458d73e3efcc1a2eb88ac96",
+      "target_sha256": "1a9222ae7a2361b8dc9dc9e0b60d3ab985e479caa458d73e3efcc1a2eb88ac96"
+    },
+    {
+      "source_path": "output-Learning/20261025__30 自媒体运营Agent 3_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__30 自媒体运营Agent 3_ev/deep-read.md",
+      "source_sha256": "3f3733ffde9502347a16652fcaaa77dd26e613973f65df82802d242493e95cc6",
+      "target_sha256": "3f3733ffde9502347a16652fcaaa77dd26e613973f65df82802d242493e95cc6"
+    },
+    {
+      "source_path": "output-Learning/20261025__30 自媒体运营Agent 3_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__30 自媒体运营Agent 3_ev/learning.md",
+      "source_sha256": "f92d164a7935f0fa3877e7d90f5972a1548cb29c62e79399777e322475d3cee9",
+      "target_sha256": "f92d164a7935f0fa3877e7d90f5972a1548cb29c62e79399777e322475d3cee9"
+    },
+    {
+      "source_path": "output-Learning/20261025__31 自媒体运营Agent 4_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__31 自媒体运营Agent 4_ev/deep-read.md",
+      "source_sha256": "b265d021d78fe34180d019778f9265275e1fa67cc75fc26433711a0ec9b39664",
+      "target_sha256": "b265d021d78fe34180d019778f9265275e1fa67cc75fc26433711a0ec9b39664"
+    },
+    {
+      "source_path": "output-Learning/20261025__31 自媒体运营Agent 4_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__31 自媒体运营Agent 4_ev/learning.md",
+      "source_sha256": "24bc57fc278e038d48ee7b1f9ac894ee7e7e0116f476b712f6c7d9187722062f",
+      "target_sha256": "24bc57fc278e038d48ee7b1f9ac894ee7e7e0116f476b712f6c7d9187722062f"
+    },
+    {
+      "source_path": "output-Learning/20261025__32 自媒体运营Agent 5_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__32 自媒体运营Agent 5_ev/deep-read.md",
+      "source_sha256": "4e4660f678fb7581b8cdc58dfe79d9e5ab665bbaf2cc9b8253373f634df6864c",
+      "target_sha256": "4e4660f678fb7581b8cdc58dfe79d9e5ab665bbaf2cc9b8253373f634df6864c"
+    },
+    {
+      "source_path": "output-Learning/20261025__32 自媒体运营Agent 5_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__32 自媒体运营Agent 5_ev/learning.md",
+      "source_sha256": "ed9bb64e1559acd7cdd0842c0f52c97709c584b3561c77ebca5f81d0e88ac580",
+      "target_sha256": "ed9bb64e1559acd7cdd0842c0f52c97709c584b3561c77ebca5f81d0e88ac580"
+    },
+    {
+      "source_path": "output-Learning/20261025__33 MCP集群1_ev__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261025__33 MCP集群1_ev/deep-read.md",
+      "source_sha256": "36e7abee8d0de325a53bc2584cffa8608e6ac90b0fa988e6481b1c24fb810faf",
+      "target_sha256": "36e7abee8d0de325a53bc2584cffa8608e6ac90b0fa988e6481b1c24fb810faf"
+    },
+    {
+      "source_path": "output-Learning/20261025__33 MCP集群1_ev__Learning.md",
+      "target_path": "materials/agent-runtime/20261025__33 MCP集群1_ev/learning.md",
+      "source_sha256": "fab72a42d15099ec30e25ee764c8143cb03edac86d3025940e8035f41cdf0de1",
+      "target_sha256": "fab72a42d15099ec30e25ee764c8143cb03edac86d3025940e8035f41cdf0de1"
+    },
+    {
+      "source_path": "output-Learning/20261025__34 MCP集群2_ev__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261025__34 MCP集群2_ev/deep-read.md",
+      "source_sha256": "21b420bf9c8d65e8f03d55320e05019591cfb4e4c3ac9ef9cab61279c3655907",
+      "target_sha256": "21b420bf9c8d65e8f03d55320e05019591cfb4e4c3ac9ef9cab61279c3655907"
+    },
+    {
+      "source_path": "output-Learning/20261025__34 MCP集群2_ev__Learning.md",
+      "target_path": "materials/agent-runtime/20261025__34 MCP集群2_ev/learning.md",
+      "source_sha256": "f4364286a27406c810ebfd338b5ce616e7444f40e5d8c858d8031fe0e5f3f4ec",
+      "target_sha256": "f4364286a27406c810ebfd338b5ce616e7444f40e5d8c858d8031fe0e5f3f4ec"
+    },
+    {
+      "source_path": "output-Learning/20261025__35 Mcp集群3_ev__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261025__35 Mcp集群3_ev/deep-read.md",
+      "source_sha256": "868d89e97b53e5b392a7501f2c225391e651b3eef602bb5a7682d2926bf98959",
+      "target_sha256": "868d89e97b53e5b392a7501f2c225391e651b3eef602bb5a7682d2926bf98959"
+    },
+    {
+      "source_path": "output-Learning/20261025__35 Mcp集群3_ev__Learning.md",
+      "target_path": "materials/agent-runtime/20261025__35 Mcp集群3_ev/learning.md",
+      "source_sha256": "5335e3f329df82ff5a883a24b607aa4269c770d97abe6c88cb832f5a144f1801",
+      "target_sha256": "5335e3f329df82ff5a883a24b607aa4269c770d97abe6c88cb832f5a144f1801"
+    },
+    {
+      "source_path": "output-Learning/20261025__36 MCP集群4_ev__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261025__36 MCP集群4_ev/deep-read.md",
+      "source_sha256": "4147048e5d809a38ccc72675c4ccb420be88263e78e9d0184a1dd83d7eb2553e",
+      "target_sha256": "4147048e5d809a38ccc72675c4ccb420be88263e78e9d0184a1dd83d7eb2553e"
+    },
+    {
+      "source_path": "output-Learning/20261025__36 MCP集群4_ev__Learning.md",
+      "target_path": "materials/agent-runtime/20261025__36 MCP集群4_ev/learning.md",
+      "source_sha256": "fb0ba042d535436ccf4a52d1552adeecaacbe44fe79b543f51983f2840f035f3",
+      "target_sha256": "fb0ba042d535436ccf4a52d1552adeecaacbe44fe79b543f51983f2840f035f3"
+    },
+    {
+      "source_path": "output-Learning/20261025__37 Ai素材管理中心_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__37 Ai素材管理中心_ev/deep-read.md",
+      "source_sha256": "6a44b3b00c5708ce8647a27d13d1cce8c47945b4d97ef1045bf5d980baaf765a",
+      "target_sha256": "6a44b3b00c5708ce8647a27d13d1cce8c47945b4d97ef1045bf5d980baaf765a"
+    },
+    {
+      "source_path": "output-Learning/20261025__37 Ai素材管理中心_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__37 Ai素材管理中心_ev/learning.md",
+      "source_sha256": "884c2b5c285b7e8ae1e6085e9316dd2b216f89fa1713ec6e9ddd8a6b4be72923",
+      "target_sha256": "884c2b5c285b7e8ae1e6085e9316dd2b216f89fa1713ec6e9ddd8a6b4be72923"
+    },
+    {
+      "source_path": "output-Learning/20261025__38 销售考核系统1_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__38 销售考核系统1_ev/deep-read.md",
+      "source_sha256": "9ed1ae2ee0ba7d91663781fde5989fe586a9b482316672314f21c8d118b83ad3",
+      "target_sha256": "9ed1ae2ee0ba7d91663781fde5989fe586a9b482316672314f21c8d118b83ad3"
+    },
+    {
+      "source_path": "output-Learning/20261025__38 销售考核系统1_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__38 销售考核系统1_ev/learning.md",
+      "source_sha256": "51c8cdd418096bf01e9df0f6d8cfd25b9003c0a1f95090433098739b7d45f138",
+      "target_sha256": "51c8cdd418096bf01e9df0f6d8cfd25b9003c0a1f95090433098739b7d45f138"
+    },
+    {
+      "source_path": "output-Learning/20261025__39 销售考核系统2_ev__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261025__39 销售考核系统2_ev/deep-read.md",
+      "source_sha256": "a9ea82cf982c7e05338a5966b4cfc8b3b4edd8a32fa4dd2ca80b57f60a8ae244",
+      "target_sha256": "a9ea82cf982c7e05338a5966b4cfc8b3b4edd8a32fa4dd2ca80b57f60a8ae244"
+    },
+    {
+      "source_path": "output-Learning/20261025__39 销售考核系统2_ev__Learning.md",
+      "target_path": "materials/enterprise-ai/20261025__39 销售考核系统2_ev/learning.md",
+      "source_sha256": "a4708441f5be2e242b56dfaad6aea9efd9d86f670b712ff6c9ef26edab480a3f",
+      "target_sha256": "a4708441f5be2e242b56dfaad6aea9efd9d86f670b712ff6c9ef26edab480a3f"
+    },
+    {
+      "source_path": "output-Learning/20261025__4.22 上海35K实战面试-1面裁切__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__4.22 上海35K实战面试-1面裁切/deep-read.md",
+      "source_sha256": "1fd59ebc83ed7df4af9a331d752a867c8e58e52b20f180d46b2626eb2fa4182e",
+      "target_sha256": "1fd59ebc83ed7df4af9a331d752a867c8e58e52b20f180d46b2626eb2fa4182e"
+    },
+    {
+      "source_path": "output-Learning/20261025__4.22 上海35K实战面试-1面裁切__Learning.md",
+      "target_path": "materials/ai-career/20261025__4.22 上海35K实战面试-1面裁切/learning.md",
+      "source_sha256": "724a46a02c18e1c748315bd01a657e13c621fd107bdf6dc4f1e54c23fd9192d6",
+      "target_sha256": "724a46a02c18e1c748315bd01a657e13c621fd107bdf6dc4f1e54c23fd9192d6"
+    },
+    {
+      "source_path": "output-Learning/20261025__4.23 上海35K实战面试-2面裁切__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__4.23 上海35K实战面试-2面裁切/deep-read.md",
+      "source_sha256": "9e60f39fae4e9ef5311d34ae7518b699fef94d4c28968329868ea061cabfc66c",
+      "target_sha256": "9e60f39fae4e9ef5311d34ae7518b699fef94d4c28968329868ea061cabfc66c"
+    },
+    {
+      "source_path": "output-Learning/20261025__4.23 上海35K实战面试-2面裁切__Learning.md",
+      "target_path": "materials/ai-career/20261025__4.23 上海35K实战面试-2面裁切/learning.md",
+      "source_sha256": "633eab59b9b9d5ad4a94905fed06757f5595607af6801f68cc17ad3556d0be84",
+      "target_sha256": "633eab59b9b9d5ad4a94905fed06757f5595607af6801f68cc17ad3556d0be84"
+    },
+    {
+      "source_path": "output-Learning/20261025__40 模型微调1_ev__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__40 模型微调1_ev/deep-read.md",
+      "source_sha256": "a9e9b98b33151f0cc8e94f44f11a9a48b24b719c5a562bf5a987c056c70aaafa",
+      "target_sha256": "a9e9b98b33151f0cc8e94f44f11a9a48b24b719c5a562bf5a987c056c70aaafa"
+    },
+    {
+      "source_path": "output-Learning/20261025__40 模型微调1_ev__Learning.md",
+      "target_path": "materials/model-platform/20261025__40 模型微调1_ev/learning.md",
+      "source_sha256": "2da29bd88ec46b6b74cba488fdc638cd57c7db7e3b8d5d9f7109bd2567d6f06e",
+      "target_sha256": "2da29bd88ec46b6b74cba488fdc638cd57c7db7e3b8d5d9f7109bd2567d6f06e"
+    },
+    {
+      "source_path": "output-Learning/20261025__41 模型微调2_ev__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__41 模型微调2_ev/deep-read.md",
+      "source_sha256": "25f65ee63b624a7fa19b8df425e3bbba398a20c4194290ee3944a561ba81fadc",
+      "target_sha256": "25f65ee63b624a7fa19b8df425e3bbba398a20c4194290ee3944a561ba81fadc"
+    },
+    {
+      "source_path": "output-Learning/20261025__41 模型微调2_ev__Learning.md",
+      "target_path": "materials/model-platform/20261025__41 模型微调2_ev/learning.md",
+      "source_sha256": "057cb7bb30b987e12a01a8369a90e5c3b415640011e7fddac20f13d05d402ce1",
+      "target_sha256": "057cb7bb30b987e12a01a8369a90e5c3b415640011e7fddac20f13d05d402ce1"
+    },
+    {
+      "source_path": "output-Learning/20261025__42 模型微调3_ev__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__42 模型微调3_ev/deep-read.md",
+      "source_sha256": "91bd2c6f25e0eb53b54971bb5230695e7387503fd968b3cbc727b382bdb349cd",
+      "target_sha256": "91bd2c6f25e0eb53b54971bb5230695e7387503fd968b3cbc727b382bdb349cd"
+    },
+    {
+      "source_path": "output-Learning/20261025__42 模型微调3_ev__Learning.md",
+      "target_path": "materials/model-platform/20261025__42 模型微调3_ev/learning.md",
+      "source_sha256": "70707a9d10e0a358674378be05c17e97d7cd880849a728b2eb1adde9e664eec0",
+      "target_sha256": "70707a9d10e0a358674378be05c17e97d7cd880849a728b2eb1adde9e664eec0"
+    },
+    {
+      "source_path": "output-Learning/20261025__43 模型微调4_ev__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__43 模型微调4_ev/deep-read.md",
+      "source_sha256": "e68c86c41ba54a83729cd111be17b0625f7a14b354f0d3844b1cc9964e37f183",
+      "target_sha256": "e68c86c41ba54a83729cd111be17b0625f7a14b354f0d3844b1cc9964e37f183"
+    },
+    {
+      "source_path": "output-Learning/20261025__43 模型微调4_ev__Learning.md",
+      "target_path": "materials/model-platform/20261025__43 模型微调4_ev/learning.md",
+      "source_sha256": "9cb85a24719d5a9698d4cbadb8c1d154052a85555ec7c65487e8f1a536261f29",
+      "target_sha256": "9cb85a24719d5a9698d4cbadb8c1d154052a85555ec7c65487e8f1a536261f29"
+    },
+    {
+      "source_path": "output-Learning/20261025__44 模型微调5_ev__DeepRead.md",
+      "target_path": "materials/model-platform/20261025__44 模型微调5_ev/deep-read.md",
+      "source_sha256": "36270df59798a6cf26555fe84e0fa3c0557eeb3a0b3f7d655baf651c3731059b",
+      "target_sha256": "36270df59798a6cf26555fe84e0fa3c0557eeb3a0b3f7d655baf651c3731059b"
+    },
+    {
+      "source_path": "output-Learning/20261025__44 模型微调5_ev__Learning.md",
+      "target_path": "materials/model-platform/20261025__44 模型微调5_ev/learning.md",
+      "source_sha256": "ec600592a660277c6f028f88bb1a511bb585624ce82e2b9e1771c6e0c91e1068",
+      "target_sha256": "ec600592a660277c6f028f88bb1a511bb585624ce82e2b9e1771c6e0c91e1068"
+    },
+    {
+      "source_path": "output-Learning/20261025__7.17 30k杭州阿里技术支持__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__7.17 30k杭州阿里技术支持/deep-read.md",
+      "source_sha256": "f0f7a623d054fb72113e400fc3770a7405d21019dd843c5d1da2b23805b00a79",
+      "target_sha256": "f0f7a623d054fb72113e400fc3770a7405d21019dd843c5d1da2b23805b00a79"
+    },
+    {
+      "source_path": "output-Learning/20261025__7.17 30k杭州阿里技术支持__Learning.md",
+      "target_path": "materials/ai-career/20261025__7.17 30k杭州阿里技术支持/learning.md",
+      "source_sha256": "b8ba30a3c0445bb96dc1fa9bf70d2fc4ef89144845fd68f138396cbc87edd6bf",
+      "target_sha256": "b8ba30a3c0445bb96dc1fa9bf70d2fc4ef89144845fd68f138396cbc87edd6bf"
+    },
+    {
+      "source_path": "output-Learning/20261025__7.20 西安35k Ai agent__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__7.20 西安35k Ai agent/deep-read.md",
+      "source_sha256": "385b2a1d82c74260980efa8808485e1bee1e7dab3bff44ced3f002cc6cf190c3",
+      "target_sha256": "385b2a1d82c74260980efa8808485e1bee1e7dab3bff44ced3f002cc6cf190c3"
+    },
+    {
+      "source_path": "output-Learning/20261025__7.20 西安35k Ai agent__Learning.md",
+      "target_path": "materials/ai-career/20261025__7.20 西安35k Ai agent/learning.md",
+      "source_sha256": "4b06884437762c02c27612ba3cdcfe3e58f7c105d9877ef53a649f47c9c13316",
+      "target_sha256": "4b06884437762c02c27612ba3cdcfe3e58f7c105d9877ef53a649f47c9c13316"
+    },
+    {
+      "source_path": "output-Learning/20261026__10 2.9 面试辅导01__DeepRead.md",
+      "target_path": "materials/ai-career/20261026__10 2.9 面试辅导01/deep-read.md",
+      "source_sha256": "3b6916d5276974df9f343d4ffb3a29967f8ed6720ef78371259cbc7fdcd5e9e5",
+      "target_sha256": "3b6916d5276974df9f343d4ffb3a29967f8ed6720ef78371259cbc7fdcd5e9e5"
+    },
+    {
+      "source_path": "output-Learning/20261026__10 2.9 面试辅导01__Learning.md",
+      "target_path": "materials/ai-career/20261026__10 2.9 面试辅导01/learning.md",
+      "source_sha256": "b47aeb4d13009bedfe164d0fd66374fcedf89d84a7e1c11ab035759733dd43b3",
+      "target_sha256": "b47aeb4d13009bedfe164d0fd66374fcedf89d84a7e1c11ab035759733dd43b3"
+    },
+    {
+      "source_path": "output-Learning/20261026__11 2.9 面试辅导02__DeepRead.md",
+      "target_path": "materials/ai-career/20261026__11 2.9 面试辅导02/deep-read.md",
+      "source_sha256": "1197fd317c297e2efe902036bb905d5acbc2aa8eeee0e2713a15eeac1cb39f74",
+      "target_sha256": "1197fd317c297e2efe902036bb905d5acbc2aa8eeee0e2713a15eeac1cb39f74"
+    },
+    {
+      "source_path": "output-Learning/20261026__11 2.9 面试辅导02__Learning.md",
+      "target_path": "materials/ai-career/20261026__11 2.9 面试辅导02/learning.md",
+      "source_sha256": "2c98ad9b7029bc566986c83f0e80782b81af8c220defebdbd1419ced2fb3895e",
+      "target_sha256": "2c98ad9b7029bc566986c83f0e80782b81af8c220defebdbd1419ced2fb3895e"
+    },
+    {
+      "source_path": "output-Learning/20261026__12 2.9面试辅导03__DeepRead.md",
+      "target_path": "materials/ai-career/20261026__12 2.9面试辅导03/deep-read.md",
+      "source_sha256": "b83fca4bc89dc67d68a3bbfe990e0a74079812b041249017e88302543504f51c",
+      "target_sha256": "b83fca4bc89dc67d68a3bbfe990e0a74079812b041249017e88302543504f51c"
+    },
+    {
+      "source_path": "output-Learning/20261026__12 2.9面试辅导03__Learning.md",
+      "target_path": "materials/ai-career/20261026__12 2.9面试辅导03/learning.md",
+      "source_sha256": "a53ebd8394c5d0c63db977f309d1f774c351b5f9ad3bc50f1dfaf5b43881440e",
+      "target_sha256": "a53ebd8394c5d0c63db977f309d1f774c351b5f9ad3bc50f1dfaf5b43881440e"
+    },
+    {
+      "source_path": "output-Learning/20261026__13 3.2 评测集解析__DeepRead.md",
+      "target_path": "materials/enterprise-ai/20261026__13 3.2 评测集解析/deep-read.md",
+      "source_sha256": "60beb07c9752638cc0eacdc8a37650145eadc74255b8ad39cc639113afd8ec0c",
+      "target_sha256": "60beb07c9752638cc0eacdc8a37650145eadc74255b8ad39cc639113afd8ec0c"
+    },
+    {
+      "source_path": "output-Learning/20261026__13 3.2 评测集解析__Learning.md",
+      "target_path": "materials/enterprise-ai/20261026__13 3.2 评测集解析/learning.md",
+      "source_sha256": "dc94c18ca206d96607ddf4ab33d488cd640ccd10d8b1cb6a5897ac17d23e481a",
+      "target_sha256": "dc94c18ca206d96607ddf4ab33d488cd640ccd10d8b1cb6a5897ac17d23e481a"
+    },
+    {
+      "source_path": "output-Learning/20261026__14 3.2 面试题解读__DeepRead.md",
+      "target_path": "materials/ai-career/20261026__14 3.2 面试题解读/deep-read.md",
+      "source_sha256": "a7a986cf5862d860f61a648c2a429e5423dff1f3d366756b5712813410488ac4",
+      "target_sha256": "a7a986cf5862d860f61a648c2a429e5423dff1f3d366756b5712813410488ac4"
+    },
+    {
+      "source_path": "output-Learning/20261026__14 3.2 面试题解读__Learning.md",
+      "target_path": "materials/ai-career/20261026__14 3.2 面试题解读/learning.md",
+      "source_sha256": "16f333418f1fe5f1944b97b0405338b2aa5aa5be2879869db08290bb8df5bd9c",
+      "target_sha256": "16f333418f1fe5f1944b97b0405338b2aa5aa5be2879869db08290bb8df5bd9c"
+    },
+    {
+      "source_path": "output-Learning/20261026__16 3.4 如何用Ai写定制化的业务简历 02__DeepRead.md",
+      "target_path": "materials/ai-career/20261026__16 3.4 如何用Ai写定制化的业务简历 02/deep-read.md",
+      "source_sha256": "b8d15cbcd7e8ad1605a54a0c2a24931d12df06f479072e351545ea2dff1219fd",
+      "target_sha256": "b8d15cbcd7e8ad1605a54a0c2a24931d12df06f479072e351545ea2dff1219fd"
+    },
+    {
+      "source_path": "output-Learning/20261026__16 3.4 如何用Ai写定制化的业务简历 02__Learning.md",
+      "target_path": "materials/ai-career/20261026__16 3.4 如何用Ai写定制化的业务简历 02/learning.md",
+      "source_sha256": "290ea1281b27cabf26385aa1fd975e3d35073e60adfef2e6d1edbe3c7717b6c1",
+      "target_sha256": "290ea1281b27cabf26385aa1fd975e3d35073e60adfef2e6d1edbe3c7717b6c1"
+    },
+    {
+      "source_path": "output-Learning/PROCESSING_INDEX.md",
+      "target_path": "materials/_migration/output-Learning-PROCESSING_INDEX.md",
+      "source_sha256": "e87103b24ccb728dbf3da63c15bd56159f64624fd6eba82464ff37c0c2826b47",
+      "target_sha256": "e87103b24ccb728dbf3da63c15bd56159f64624fd6eba82464ff37c0c2826b47"
+    }
+  ]
+}
