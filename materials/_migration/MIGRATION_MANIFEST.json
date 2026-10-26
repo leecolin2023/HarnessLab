@@ -2,7 +2,7 @@
   "source_repo": "leecolin2023/ingest2md",
   "source_commit": "a24457fa3479b5410c8dc93fa66cffbe4fd98fee",
   "target": "harness",
-  "count": 168,
+  "count": 170,
   "files": [
     {
       "source_path": "output-Refinement/20261016__Agent 意图识别怎么做？面试必会的 4 种方案.md",
@@ -18,7 +18,7 @@
     },
     {
       "source_path": "output-Refinement/20261016__什么是Jev意图识别？ #ai #ai应用开发 #大模型开发 #懂王ai.md",
-      "target_path": "materials/model-platform/20261016__什么是Jev意图识别？ #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
+      "target_path": "materials/agent-runtime/20261016__什么是Jev意图识别？ #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
       "source_sha256": "0f7732caf134d6d47196d4966711344f1f92388326a6daad3a0b1720127262c0",
       "target_sha256": "3096777fd98a1064481f7c650e59a7ebb54ddf8f85ffa36a707f059d79aa3a7d"
     },
@@ -66,7 +66,7 @@
     },
     {
       "source_path": "output-Refinement/20261016__面试官只要敢问你意图识别，按我这么说，20k到手！ #ai #ai应用开发 #大模型开发 #懂王ai.md",
-      "target_path": "materials/model-platform/20261016__面试官只要敢问你意图识别，按我这么说，20k到手！ #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
+      "target_path": "materials/agent-runtime/20261016__面试官只要敢问你意图识别，按我这么说，20k到手！ #ai #ai应用开发 #大模型开发 #懂王ai/refinement.md",
       "source_sha256": "6385f2f9aa62f87a840fec8df93d17895a625de7faea334a984d49b83f6e1c02",
       "target_sha256": "27c41194dad64aeda5139d0c3d084f1cc6acb53cc5c43dcff93bfe784dcb9a4a"
     },
@@ -549,6 +549,18 @@
       "target_path": "materials/ai-career/20261025__2.26 武汉边缘面试官18k/learning.md",
       "source_sha256": "a57d58a33feef089476b7d95c78daa4775ae5afcd7ded17530aea9cd52ac6a37",
       "target_sha256": "a57d58a33feef089476b7d95c78daa4775ae5afcd7ded17530aea9cd52ac6a37"
+    },
+    {
+      "source_path": "output-Learning/20261025__2.26 深信服18k （重点看）__DeepRead.md",
+      "target_path": "materials/ai-career/20261025__2.26 深信服18k （重点看）/deep-read.md",
+      "source_sha256": "31329e229e5cef40a32a2797f37c66614562983bed5d8209c17d9e2a04716f2f",
+      "target_sha256": "31329e229e5cef40a32a2797f37c66614562983bed5d8209c17d9e2a04716f2f"
+    },
+    {
+      "source_path": "output-Learning/20261025__2.26 深信服18k （重点看）__Learning.md",
+      "target_path": "materials/ai-career/20261025__2.26 深信服18k （重点看）/learning.md",
+      "source_sha256": "abf01a810e72072e461eed842b62d1907c1ce2422289bafaef183a1ad353979c",
+      "target_sha256": "abf01a810e72072e461eed842b62d1907c1ce2422289bafaef183a1ad353979c"
     },
     {
       "source_path": "output-Learning/20261025__20 评测集3_ev__DeepRead.md",
