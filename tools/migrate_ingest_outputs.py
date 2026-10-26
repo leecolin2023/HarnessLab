@@ -34,6 +34,8 @@ def classify(name: str) -> tuple[str, str]:
     # Technical depth takes precedence over a video's incidental "interview" label.
     if any(s in low for s in RAG):
         return "harness", "rag"
+    if "意图识别" in low:
+        return "harness", "agent-runtime"
     if any(s in low for s in MODEL):
         return "harness", "model-platform"
     if any(s in low for s in ENTERPRISE):
@@ -41,7 +43,7 @@ def classify(name: str) -> tuple[str, str]:
     # Job-market examples with a named city / salary go to the AI career archive.
     if any(s.lower() in low for s in ("看看行情", "武汉", "深圳30k", "上海35k",
                                      "重庆50k", "杭州阿里技术支持", "西安35k",
-                                     "字节外包", "求职", "简历", "直播答疑")):
+                                     "字节外包", "深信服18k", "求职", "简历", "直播答疑")):
         return "harness", "ai-career"
     if any(s in low for s in AGENT):
         return "harness", "agent-runtime"
@@ -111,6 +113,26 @@ def main() -> None:
             "source_sha256": hashlib.sha256(raw).hexdigest(),
             "target_sha256": hashlib.sha256(content.encode("utf-8")).hexdigest(),
         })
+    # Prune only files recorded in the previous manifest, and only when their
+    # digest still matches. Never delete user-edited material.
+    manifest_path = (
+        dest_root / "materials" / "_migration" / "MIGRATION_MANIFEST.json"
+        if args.target == "harness" else dest_root / "MIGRATION_MANIFEST.json"
+    )
+    if manifest_path.exists():
+        previous = json.loads(manifest_path.read_text(encoding="utf-8"))
+        new_paths = set(used)
+        for item in previous.get("files", []):
+            stale = item["target_path"]
+            if stale not in new_paths:
+                file_path = (dest_root / stale).resolve()
+                if not file_path.is_relative_to(dest_root):
+                    raise RuntimeError("Invalid prior manifest path")
+                if file_path.exists():
+                    digest = hashlib.sha256(file_path.read_bytes()).hexdigest()
+                    if digest != item["target_sha256"]:
+                        raise RuntimeError(f"Refusing to delete edited file: {stale}")
+                    file_path.unlink()
     if args.target == "archive":
         (dest_root / "inbox").mkdir(exist_ok=True)
         (dest_root / "inbox" / ".gitkeep").touch()
