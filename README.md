@@ -4,6 +4,10 @@
 
 目标：研究从零搭建企业 Agent 技术团队所需要的核心工程能力。
 
+## 学习材料归档
+
+由 ingest2md 采集并经过 Refinement、Deep Read 或 Learning 处理的材料统一归档到 [materials/](./materials/README.md)，按 RAG、模型平台、Agent、企业 AI 应用和 AI 求职分类。该目录与正式研究文章区分，保留原始来源追溯。
+
 ## 研究方向
 
 - Model Platform：推理服务、模型网关、鉴权与性能。
