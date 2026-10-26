@@ -2,7 +2,7 @@
   "source_repo": "leecolin2023/ingest2md",
   "source_commit": "a24457fa3479b5410c8dc93fa66cffbe4fd98fee",
   "target": "harness",
-  "count": 180,
+  "count": 186,
   "files": [
     {
       "source_path": "output-Refinement/20261016__Agent 意图识别怎么做？面试必会的 4 种方案.md",
@@ -1093,6 +1093,48 @@
       "source_sha256": "328104484ac0913306133590fc29db7aba76abfb2463b858e388290efe67c3f5",
       "target_sha256": "328104484ac0913306133590fc29db7aba76abfb2463b858e388290efe67c3f5",
       "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__22 Agent集群第二课__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261026__22 Agent集群第二课/deep-read.md",
+      "source_sha256": "d012c07cac1b0ae5df4bb71368a7dd53ba2b620df60a204c8fcbed3c46c552f4",
+      "target_sha256": "d012c07cac1b0ae5df4bb71368a7dd53ba2b620df60a204c8fcbed3c46c552f4",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__22 Agent集群第二课__Learning.md",
+      "target_path": "materials/agent-runtime/20261026__22 Agent集群第二课/learning.md",
+      "source_sha256": "a76be36e11075b3b875fe56805c45646ee1ffbc36616a2df24022e9b41699800",
+      "target_sha256": "a76be36e11075b3b875fe56805c45646ee1ffbc36616a2df24022e9b41699800",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__23 3.30 简历辅导__DeepRead.md",
+      "target_path": "materials/ai-career/20261026__23 3.30 简历辅导/deep-read.md",
+      "source_sha256": "c987ef872b65e5f4ffe7ddd7cdc4d59dfcd1607fe09c281af4c3f184610e94dd",
+      "target_sha256": "c987ef872b65e5f4ffe7ddd7cdc4d59dfcd1607fe09c281af4c3f184610e94dd",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__23 3.30 简历辅导__Learning.md",
+      "target_path": "materials/ai-career/20261026__23 3.30 简历辅导/learning.md",
+      "source_sha256": "5976d10f173ff8b7faf8af5d96894b9b47cf9d61df6b608996ea5d12ccdd8bc1",
+      "target_sha256": "5976d10f173ff8b7faf8af5d96894b9b47cf9d61df6b608996ea5d12ccdd8bc1",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__24 4.1 企业真题解析1__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261026__24 4.1 企业真题解析1/deep-read.md",
+      "source_sha256": "0e8284e3f4632b34bedec9f15321122b7a7408fc1dbed5923ad4af61255eda75",
+      "target_sha256": "0e8284e3f4632b34bedec9f15321122b7a7408fc1dbed5923ad4af61255eda75",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__24 4.1 企业真题解析1__Learning.md",
+      "target_path": "materials/agent-runtime/20261026__24 4.1 企业真题解析1/learning.md",
+      "source_sha256": "35faf904cf058fabd14626badd1e9dcc2c7a88123305c060eff38e4e75b9a2a6",
+      "target_sha256": "35faf904cf058fabd14626badd1e9dcc2c7a88123305c060eff38e4e75b9a2a6",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
     }
   ],
   "incremental_imports": [
@@ -1102,6 +1144,13 @@
       "source_prefix": "output-Learning/",
       "target": "leecolin2023/HarnessLab",
       "note": "Five newly generated Deep Read + Learning pairs; source_commit stored on each new file entry"
+    },
+    {
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704",
+      "count": 6,
+      "source_prefix": "output-Learning/",
+      "target": "leecolin2023/HarnessLab",
+      "note": "Agent/MCP, AI career coaching, and AI coding/task lifecycle materials"
     }
   ]
 }
