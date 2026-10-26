@@ -1,4 +1,5 @@
 name: One-time migration of ingest2md AI learning materials
+# Re-run after classification and safe pruning corrections
 on:
   push:
     paths:
