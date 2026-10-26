@@ -4,13 +4,13 @@
 
 ## 按主题浏览
 
-| 目录 | 内容 | 本次迁入文件 |
+| 目录 | 内容 | 累计归档文件 |
 | --- | --- | ---: |
-| [model-platform](./model-platform/) | LLM 原理、推理引擎、模型性能与微调 | 30 |
-| [rag](./rag/) | 检索、BM25、向量、Reranker、知识构建与相关评测 | 32 |
-| [agent-runtime](./agent-runtime/) | Agent、LangChain、MCP、Skills、意图识别 | 27 |
+| [model-platform](./model-platform/) | LLM 原理、推理引擎、模型性能与微调 | 34 |
+| [rag](./rag/) | 检索、BM25、向量、Reranker、知识构建与相关评测 | 34 |
+| [agent-runtime](./agent-runtime/) | Agent、LangChain、MCP、Skills、意图识别 | 29 |
 | [enterprise-ai](./enterprise-ai/) | AI 客服、销售、数据与业务系统的场景应用 | 34 |
-| [ai-career](./ai-career/) | AI 岗位面试、项目表达、简历及招聘市场案例 | 45 |
+| [ai-career](./ai-career/) | AI 岗位面试、项目表达、简历及招聘市场案例 | 47 |
 | [_migration](./_migration/) | 历史 README、处理索引、完整迁移映射清单 | 2 + 清单 |
 
 ## 材料规则

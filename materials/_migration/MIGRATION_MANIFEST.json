@@ -2,7 +2,7 @@
   "source_repo": "leecolin2023/ingest2md",
   "source_commit": "a24457fa3479b5410c8dc93fa66cffbe4fd98fee",
   "target": "harness",
-  "count": 170,
+  "count": 180,
   "files": [
     {
       "source_path": "output-Refinement/20261016__Agent 意图识别怎么做？面试必会的 4 种方案.md",
@@ -1023,6 +1023,85 @@
       "target_path": "materials/_migration/output-Learning-PROCESSING_INDEX.md",
       "source_sha256": "e87103b24ccb728dbf3da63c15bd56159f64624fd6eba82464ff37c0c2826b47",
       "target_sha256": "e87103b24ccb728dbf3da63c15bd56159f64624fd6eba82464ff37c0c2826b47"
+    },
+    {
+      "source_path": "output-Learning/20261026__15 3.4 如何用Ai写自己定制化业务的简历01__DeepRead.md",
+      "target_path": "materials/ai-career/20261026__15 3.4 如何用Ai写自己定制化业务的简历01/deep-read.md",
+      "source_sha256": "27ff85be248408c94367e5c686662ed5bad47a44bb0f7aab45ab9814bd9ba7ef",
+      "target_sha256": "27ff85be248408c94367e5c686662ed5bad47a44bb0f7aab45ab9814bd9ba7ef",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__15 3.4 如何用Ai写自己定制化业务的简历01__Learning.md",
+      "target_path": "materials/ai-career/20261026__15 3.4 如何用Ai写自己定制化业务的简历01/learning.md",
+      "source_sha256": "4f61665c6df911b9e5282f9e307de11368c201daa9567340f1c8ac83b0bd4ad2",
+      "target_sha256": "4f61665c6df911b9e5282f9e307de11368c201daa9567340f1c8ac83b0bd4ad2",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__17 3.8 字节面试题赏析__DeepRead.md",
+      "target_path": "materials/model-platform/20261026__17 3.8 字节面试题赏析/deep-read.md",
+      "source_sha256": "90b1b80f4b93dea3ea32f23322d4df9a482b0c1fdba7a08a79b33e945d918b0e",
+      "target_sha256": "90b1b80f4b93dea3ea32f23322d4df9a482b0c1fdba7a08a79b33e945d918b0e",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__17 3.8 字节面试题赏析__Learning.md",
+      "target_path": "materials/model-platform/20261026__17 3.8 字节面试题赏析/learning.md",
+      "source_sha256": "877bd39758a195892f534bccedc7725abd0849609b0c5eaa767b82a4d082b647",
+      "target_sha256": "877bd39758a195892f534bccedc7725abd0849609b0c5eaa767b82a4d082b647",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__19 3.16 鸭哥26k真题解析 01__DeepRead.md",
+      "target_path": "materials/rag/20261026__19 3.16 鸭哥26k真题解析 01/deep-read.md",
+      "source_sha256": "ffd52f04b3082033ee5acab7c3230f52765a0d89c9ea81e65205e27989f8e894",
+      "target_sha256": "ffd52f04b3082033ee5acab7c3230f52765a0d89c9ea81e65205e27989f8e894",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__19 3.16 鸭哥26k真题解析 01__Learning.md",
+      "target_path": "materials/rag/20261026__19 3.16 鸭哥26k真题解析 01/learning.md",
+      "source_sha256": "68097768af91c6a7b0c5cb7afeec45f69900bb73742c441b00da5bc71e1b73ad",
+      "target_sha256": "68097768af91c6a7b0c5cb7afeec45f69900bb73742c441b00da5bc71e1b73ad",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__20 3.16 鸭哥26k真题解析 02__DeepRead.md",
+      "target_path": "materials/agent-runtime/20261026__20 3.16 鸭哥26k真题解析 02/deep-read.md",
+      "source_sha256": "7471be809ba640eaeb1e65d974f64f219de60fd11e1aaf3852c336b9d763faa6",
+      "target_sha256": "7471be809ba640eaeb1e65d974f64f219de60fd11e1aaf3852c336b9d763faa6",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__20 3.16 鸭哥26k真题解析 02__Learning.md",
+      "target_path": "materials/agent-runtime/20261026__20 3.16 鸭哥26k真题解析 02/learning.md",
+      "source_sha256": "9f14344ec4d945c9f2de346b8574a6ae1df91e500b6e100706f342d279b5f3f4",
+      "target_sha256": "9f14344ec4d945c9f2de346b8574a6ae1df91e500b6e100706f342d279b5f3f4",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__21 2期新同学与面试题解读__DeepRead.md",
+      "target_path": "materials/model-platform/20261026__21 2期新同学与面试题解读/deep-read.md",
+      "source_sha256": "b8999a8079f4aeb7bafe143b2c3826daf070c0f9f5a7108ed92f345108f4f677",
+      "target_sha256": "b8999a8079f4aeb7bafe143b2c3826daf070c0f9f5a7108ed92f345108f4f677",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    },
+    {
+      "source_path": "output-Learning/20261026__21 2期新同学与面试题解读__Learning.md",
+      "target_path": "materials/model-platform/20261026__21 2期新同学与面试题解读/learning.md",
+      "source_sha256": "328104484ac0913306133590fc29db7aba76abfb2463b858e388290efe67c3f5",
+      "target_sha256": "328104484ac0913306133590fc29db7aba76abfb2463b858e388290efe67c3f5",
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704"
+    }
+  ],
+  "incremental_imports": [
+    {
+      "source_commit": "cd9868d7c11b1d2a8fdcdb20edba2df813a04704",
+      "count": 10,
+      "source_prefix": "output-Learning/",
+      "target": "leecolin2023/HarnessLab",
+      "note": "Five newly generated Deep Read + Learning pairs; source_commit stored on each new file entry"
     }
   ]
 }
