@@ -130,3 +130,7 @@ Agent Runtime：目标 → 模型判断 → 工具执行 → 观察结果 → �
 ```
 
 模型完成一次推理，只产生了下一步决策所需的输出；Agent 完成任务，还需要外部动作真正执行、状态正确更新，以及最终结果通过验证。
+
+## 六、延伸阅读：长任务为什么需要上下文管理？
+
+在理解 Agent Loop 和 Runtime 之后，进一步阅读 [《Harness 中的上下文管理：哪些信息值得反复交给模型？》](./01-harness-context-management.md)。文章沿着 Qwen 服务故障排查，解释历史截断、Compaction、工具结果清理、按需检索、Checkpoint、长期记忆与 Prompt Caching 的分工，以及各自适合保留什么信息。
