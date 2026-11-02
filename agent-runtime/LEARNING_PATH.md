@@ -583,7 +583,7 @@ labs/deepseek-harness/jd-research-agent/
 - [DeepSeek Harness Python SDK 入门](https://deepseek-harness.github.io/deepseek-harness/guide/python-sdk)（`sdk-minimal`、隔离路径、工具与权限边界）
 - [DeepSeek Harness Python SDK 参考](https://github.com/deepseek-ai/deepseek-harness/blob/master/python/sdk/README.md)（Session 恢复与 SDK 行为）
 - [DeepSeek Harness 架构参考](https://deepseek-harness.github.io/deepseek-harness/reference/)（Cordis、Agent Loop、Tools、Session、Prompt、LLM）
-- [Google Cloud Tech：Modern AI Agents 原教程中文整理索引](../materials/agent-runtime/20261030__Modern%20AI%20Agents%20-%20From%20Theory%20to%20Production/README.md)（Google 教学线索；请注意此相对路径在正式仓库层级需通过仓库根目录跳转）
+- [Google Cloud Tech：Modern AI Agents 原教程中文整理索引](../materials/agent-runtime/20261030__Modern%20AI%20Agents%20-%20From%20Theory%20to%20Production/README.md)（用于借鉴应用教学顺序）
 - [SenseWright System Learning V0.7.0](https://github.com/leecolin2023/SenseWright/blob/main/skills/system-learning-v0.7.0/SKILL.md)
 
 > 维护约定：本路线描述“学什么、为什么、怎样验收”，不替代每个阶段实际代码、运行日志与评测报告。随着 SDK 变化，优先更新 `labs/deepseek-harness/` 的版本化实验方法；只有通用机制判断发生实质变化时才改动根目录原理文章。
