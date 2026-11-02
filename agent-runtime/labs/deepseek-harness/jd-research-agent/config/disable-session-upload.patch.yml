@@ -1,5 +1,0 @@
-# Suppress extra Session-log events attached to DeepSeek model requests.
-# Regular model prompt content still reaches the configured model provider.
-- id: session-log-deepseek
-  config:
-    enabled: false

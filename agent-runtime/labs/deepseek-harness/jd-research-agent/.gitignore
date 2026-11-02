@@ -1,8 +1,0 @@
-# Raw Session data, outputs, secrets, runtime files
-.local/
-.env
-.env.*
-__pycache__/
-*.py[cod]
-.venv/
-.pytest_cache/
