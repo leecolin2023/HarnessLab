@@ -46,38 +46,32 @@
 
 ---
 
-## 二、仓库组织：原理在外层，具体实现放进 labs/
+## 二、仓库职责：HarnessLab 讲原理，job-agent 做实践
 
-保留现有 `agent-runtime/README.md` 和 `agent-runtime/01-harness-context-management.md`，不为重新编号而破坏已有内容或链接。未来新增原理文章直接放在 `agent-runtime/` 根目录；具体应用统一放入 `labs/`。
+从阶段 0 起，我们将**可运行 Agent 代码**与**学习文档**放在不同仓库，避免 SDK 改版时两边产生重复实现：
 
 ```text
 HarnessLab/
 └── agent-runtime/
-    ├── README.md                         # 现有：什么是 Agent，为什么需要 Runtime？
-    ├── LEARNING_PATH.md                  # 本文：教学与原理互相推进的总路线
-    ├── 01-harness-context-management.md  # 现有：上下文管理原理
-    │
-    ├── <后续原理文章>.md                  # Agent Loop、工具、Workflow、State……
-    │
-    └── labs/                              # 具体应用与框架实验，不承载通用理论
-        ├── README.md                     # 实践区组织原则
-        └── deepseek-harness/
-            └── jd-research-agent/
-                └── README.md             # 首个实践案例、阶段与成果约定
+    ├── README.md                         # Agent 与 Runtime 基础原理
+    ├── LEARNING_PATH.md                  # 教学与原理互动的完整路线
+    ├── 00-deepseek-harness-sdk-learning.md # 阶段 0 的教学、观察与验收
+    ├── 01-harness-context-management.md  # 上下文管理原理
+    └── <后续通用原理文章>.md
 
-# 以后按需要新增，不预先建空目录：
-# labs/deepseek-harness/<其他Agent项目>/
-# labs/agentscope/<具体Agent项目>/
-# labs/<其他Harness或SDK>/<具体Agent项目>/
+job-agent/
+├── README.md                    # 工程说明与启动入口
+├── docker/                      # 真实隔离环境
+├── config/                      # SDK 配置与 Profile 补丁
+├── scripts/                     # 运行、诊断命令
+├── src/                         # Agent 及 Session 分析工具
+├── tests/                       # 工程测试和实验验证
+└── .github/workflows/           # CI
 ```
 
-**分层原则：**
+分工原则：**HarnessLab** 解释普遍机制、教学过程及如何判断结果；**[job-agent](https://github.com/leecolin2023/job-agent)** 维护实现、可执行脚本、版本化配置、脱敏实验数据和测试。学习文档可链接实现，但不再维护一份复制代码。未来其他 Agent 或框架可分别建工程仓库，共同引用 HarnessLab 通用原理。
 
-- **根目录回答“为什么、如何工作、在什么条件下有效”。** 例如工具调用不依赖 DeepSeek 的特定 API；Context 与 State 的区别也不是某框架独有的。
-- **`labs/` 回答“如何使用某个 SDK 把能力做出来、实际上看到了什么”。** 可以包含代码、配置、数据样本、执行轨迹、实验脚本、评测与阶段记录。
-- **同一结论只维护一个知识主干。** 通用机制写在根目录，实验文档链接回原理；原理文章引用已经完成的实验，不把未运行的实验当证据。
-- **既允许一个框架承载多个应用，也允许同一个应用跨框架实现。** JD Research Agent 是首个案例，不是整个 Agent Runtime 的唯一场景。
-- 现有 `materials/agent-runtime/` 属于外部资料的整理归档，不与正式原理、实践项目混在一起。
+现有 `materials/agent-runtime/` 仍为外部资料归档，不用于存放实验代码。
 
 ### 根目录的目标知识版图
 
@@ -487,39 +481,17 @@ DeepSeek Harness Python SDK 官方说明，`resume_session` 恢复持久化历�
 
 ## 六、每个实践阶段如何留下可复用的证据？
 
-每阶段至少明确五件事：
+每阶段至少明确五项信息：
 
-1. **任务与版本**：用户要求是什么；使用了哪份数据、模型、SDK、Profile、插件和代码版本。
-2. **实际动作**：输入、执行命令或代码、工具列表、被调用的工具及参数。
-3. **观察到的事实**：模型响应、工具结果、真实文件、Session 或日志；区分“已经运行”和“计划运行”。
-4. **机制解释**：用通用原理解释观察到的行为，必要时定位 DeepSeek Harness 对应源码、事件或配置。
-5. **效果与边界**：这次实验真正说明了什么；尚未测出的行为、失败条件以及下一步改进是什么。
+1. **任务与版本**：输入、固定样本、模型、SDK、Profile 和代码版本。
+2. **实际动作**：工具调用、执行命令、脚本入口及对应的 job-agent 提交。
+3. **观察到的事实**：模型响应、工具结果、文件、Session 日志与真实失败事件。
+4. **机制解释**：用通用原理说明因果关系，必要时定位 DeepSeek Harness 对应源码。
+5. **效果与边界**：实验说明了什么，尚有哪些未验证的情况。
 
-建议实验文件命名：
+**证据与工程材料放在 [job-agent](https://github.com/leecolin2023/job-agent)**；**可迁移的机制解释放在 HarnessLab**。不要未经审查向公开仓库提交原始 Session 日志、凭据或内部数据。离线测试通过不能替代真实模型和工具运行验证。
 
-```text
-labs/deepseek-harness/jd-research-agent/
-├── README.md                       # 项目目标、阶段与操作入口
-├── PHASE0_LEARNING.md              # 阶段 0 学习文档：已有
-├── src/                            # 阶段 0 已有 SDK 调用与 Session 分析器
-├── config/                         # 已有禁用额外 Session 日志上传的 Patch
-├── docker/                         # 已有隔离运行镜像
-├── scripts/                        # 已有 Docker 命令入口
-├── tests/                          # 已有不依赖模型 API 的测试
-├── fixtures/                       # 小型脱敏样本与固定测试输入
-├── experiments/
-│   └── <实验编号>/
-│       ├── README.md               # 问题、假设与结论边界
-│       ├── runs.jsonl              # 脱敏后的运行记录
-│       └── evaluation.md           # 可复核的结果
-└── outputs/                        # 默认忽略或只保存脱敏示例
-```
-
-其中 `PHASE0_LEARNING.md`、`src/`、`config/`、`docker/`、`scripts/`、`tests/` 已作为阶段 0 工程提交；`fixtures/`、`experiments/`、`outputs/` 等尚属于后续约定。阶段 0 的离线代码检查通过，不代表真实 API 调用或 Session 实测完成。Session 原始日志、密钥、内部岗位信息与模型请求数据不得未经审查直接提交公开仓库。
-
-**学习文档不是运行记录。** 可以在没有真实实验时解释 Agent Loop 的机制，但不能把“预期调用两次工具”写成“已观察到调用两次工具”。阶段是否完成，以可复核产物为准。
-
----
+当前阶段 0 的 SDK、Docker、脚本、Session 分析器、测试及 CI 已全部迁到 job-agent；完整学习文档为 [阶段 0：SDK 与 Session](./00-deepseek-harness-sdk-learning.md)。
 
 ## 七、读源码时应从哪一层进入？
 
@@ -564,7 +536,9 @@ labs/deepseek-harness/jd-research-agent/
 
 ## 当前阶段 0 的实践入口
 
-已建立 [DeepSeek Harness 阶段 0 实验：隔离 SDK 调用与 Session 观察](./labs/deepseek-harness/jd-research-agent/PHASE0_LEARNING.md)。该实验提供 Docker 运行入口、Profile 安全补丁、SDK 调用脚本、Session 结构分析工具和离线单元测试；2026-11-02 的 [GitHub Actions 离线检查](https://github.com/leecolin2023/HarnessLab/actions/runs/41428301371) 已通过，但尚未进行真实模型调用。实验完成以后，再根据真实事件写 Agent Loop 研究文章。
+阅读 [DeepSeek Harness 阶段 0 学习文档](./00-deepseek-harness-sdk-learning.md)，理解 SDK、Runtime、工具执行和 Session 的关系。
+
+然后在独立 [job-agent 工程仓库](https://github.com/leecolin2023/job-agent) 运行 `scripts/run-docker.sh`。迁移后的 [GitHub Actions 离线检查](https://github.com/leecolin2023/job-agent/actions/runs/41429175849) 已通过，但未实际调用模型或生成真实的 Session 轨迹。只有出现可核查的真实工具执行事件后，才将阶段 0 标记为实验通过。
 
 ---
 
@@ -596,4 +570,4 @@ labs/deepseek-harness/jd-research-agent/
 - [Google Cloud Tech：Modern AI Agents 原教程中文整理索引](../materials/agent-runtime/20261030__Modern%20AI%20Agents%20-%20From%20Theory%20to%20Production/README.md)（用于借鉴应用教学顺序）
 - [SenseWright System Learning V0.7.0](https://github.com/leecolin2023/SenseWright/blob/main/skills/system-learning-v0.7.0/SKILL.md)
 
-> 维护约定：本路线描述“学什么、为什么、怎样验收”，不替代每个阶段实际代码、运行日志与评测报告。随着 SDK 变化，优先更新 `labs/deepseek-harness/` 的版本化实验方法；只有通用机制判断发生实质变化时才改动根目录原理文章。
+> 维护约定：本路线描述“学什么、为什么、怎样验收”，不替代每个阶段实际代码、运行日志与评测报告。随着 SDK 变化，优先更新 [job-agent](https://github.com/leecolin2023/job-agent) 的版本化实现；只有通用机制发生实质变化时才修改 HarnessLab 原理文章。
