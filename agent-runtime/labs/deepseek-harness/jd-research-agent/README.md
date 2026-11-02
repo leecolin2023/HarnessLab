@@ -2,9 +2,12 @@
 
 > 目的：先使用 DeepSeek Harness Python SDK 构建一个可以运行的岗位研究 Agent，再根据真实执行轨迹理解 Agent Loop、Tool Calling、Workflow、Context、Session、恢复、安全与评测。
 >
-> 状态：**项目规划已建立；尚未写入执行代码，亦未完成实测。**
+> 状态：**阶段 0 的 Docker 隔离启动脚本、最小 SDK 调用、Session 结构分析器、离线单元测试和学习文档已入库；当前运行环境缺少 Docker 守护进程及模型 API Key，尚未完成真实 SDK/模型实测。**
 
 ## 学习入口
+
+- **[实验 00：隔离运行 SDK、观察 Agent Loop 与 Session 日志](./PHASE0_LEARNING.md)** — 本阶段具体操作与原理互动教学
+- [Docker 运行入口](./scripts/run-docker.sh) · [SDK 调用代码](./src/run_phase0.py) · [Session 观察工具](./src/session_report.py) · [禁用附加日志上传的补丁](./config/disable-session-upload.patch.yml)
 
 - [完整学习路线：从应用到运行机制](../../../LEARNING_PATH.md)
 - [Agent Runtime：什么是 Agent，为什么需要 Runtime？](../../../README.md)
@@ -40,24 +43,33 @@
 
 以上所有阶段的**完整教学内容、原理追问、实验设计和验收规则**都在上级 `LEARNING_PATH.md` 中，本文件只维护本案例自身的进度及运行入口，避免重复。
 
-## 开发时逐步加入的目录
+## 当前阶段 0 已建立的目录与文件
 
 ```text
 jd-research-agent/
 ├── README.md
-├── src/                    # 程序入口、任务与受控工具
-├── configs/                # 可提交的非敏感配置示例
-├── fixtures/               # 脱敏、固定的完整 JD 示例
-├── experiments/            # 各阶段假设、运行记录和评测
-└── outputs/                # 本地结果；必须检查后才可公开
+├── PHASE0_LEARNING.md                # 阶段 0 完整教程：实践、观察、原理、验收
+├── docker/Dockerfile                 # Python 3.12、DeepSeek Harness SDK 和匹配 runtime
+├── config/
+│   └── disable-session-upload.patch.yml
+├── scripts/run-docker.sh            # check / test / build / run / inspect
+├── src/
+│   ├── run_phase0.py                # 真实 SDK 运行入口
+│   └── session_report.py            # 仅分析 Session 事件结构
+├── tests/test_phase0.py             # 离线 Fake SDK 与日志分析测试
+├── .gitignore
+└── .local/                           # 只在真实运行后本地生成，不入库
+    ├── workspace/
+    ├── dsh-home/
+    └── results/
 ```
 
-上述子目录**尚未创建**；只有开始相应工作时才建立。真正执行前需要准备忽略规则，防止凭据、Session 原始日志或含敏感信息的结果进入公开 Git。
+未来阶段需要完整 JD 样本、工具实现、实验评测时，再按需新增 `fixtures/`、`experiments/` 等目录。本次没有创建这些空目录。**本阶段的完整教程见 `PHASE0_LEARNING.md`。**
 
-## 第一轮实际任务：只完成阶段 0—1
+## 第一轮实际任务：先完成阶段 0，再进入阶段 1
 
-1. 准备一台容器或虚拟机等**真实隔离环境**，其可访问文件、凭据与网络范围可控。仅指定 `cwd` 不等于沙箱。
-2. 按官方文档安装 `deepseek-harness-sdk`，记录 SDK 与运行时版本，选择与 API 端点匹配的模型；使用 `sdk-minimal`，不要假定它默认包含 MCP 或多 Agent 组件。
+1. 按 [实验 00](./PHASE0_LEARNING.md) 在 Linux + Docker 中执行 `bash scripts/run-docker.sh check`、`test`、`build`、`run`、`inspect`。仅指定 `cwd` 不等于沙箱。
+2. 用 Docker 镜像安装匹配的 `deepseek-harness-sdk` 与 Runtime，记录版本、模型 ID 和容器隔离措施；`sdk-minimal` 不等于多 Agent 产品配置。
 3. 在隔离环境内先执行一项无需真实 JD 的只读演示任务，观察返回内容与 `dsh_home/sessions/` 的 JSONL。
 4. 提供 5～10 条脱敏、完整的 JD 样本（含稳定 ID），让 Agent 在一次工作任务中输出一个真实存在的 `report.md`。
 5. 检查报告是否引用了对应样本、是否误把“加分”写成“必备”；记录模型实际访问过的文件和工具调用。
