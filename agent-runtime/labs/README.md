@@ -34,6 +34,8 @@ agent-runtime/
 
 **[DeepSeek Harness · JD Research Agent](./deepseek-harness/jd-research-agent/README.md)**
 
+已启动 [阶段 0：隔离执行 SDK 与 Session 日志观察](./deepseek-harness/jd-research-agent/PHASE0_LEARNING.md)，包含 Docker 运行脚本与离线检查。
+
 从受控本地 SDK 任务开始，逐步引入工具、任务规划、校验、MCP、上下文、恢复与评测。后续加入其他框架（例如 AgentScope）时，可以重新实现相同任务并对照 Runtime 机制，而不是复制根目录的知识文章。
 
-> 当前仅建立学习路线与项目说明；尚未提交应用代码、自动化测试或实测结果。
+> 当前阶段 0 的实现、学习文档和自动化离线测试已提交，并且 GitHub Actions 离线检查已通过；由于尚缺真实容器运行与模型 API 访问，**没有声称完成 Agent 实测**。
