@@ -500,8 +500,12 @@ DeepSeek Harness Python SDK 官方说明，`resume_session` 恢复持久化历�
 ```text
 labs/deepseek-harness/jd-research-agent/
 ├── README.md                       # 项目目标、阶段与操作入口
-├── src/                            # 开始写代码时再创建
-├── configs/                        # 非敏感示例配置；密钥永不入库
+├── PHASE0_LEARNING.md              # 阶段 0 学习文档：已有
+├── src/                            # 阶段 0 已有 SDK 调用与 Session 分析器
+├── config/                         # 已有禁用额外 Session 日志上传的 Patch
+├── docker/                         # 已有隔离运行镜像
+├── scripts/                        # 已有 Docker 命令入口
+├── tests/                          # 已有不依赖模型 API 的测试
 ├── fixtures/                       # 小型脱敏样本与固定测试输入
 ├── experiments/
 │   └── <实验编号>/
@@ -511,7 +515,7 @@ labs/deepseek-harness/jd-research-agent/
 └── outputs/                        # 默认忽略或只保存脱敏示例
 ```
 
-上述未创建的目录仅为**未来约定**，不是声称本次已搭建代码或运行实验。Session 原始日志、密钥、内部岗位信息与模型请求数据不得未经审查直接提交公开仓库。
+其中 `PHASE0_LEARNING.md`、`src/`、`config/`、`docker/`、`scripts/`、`tests/` 已作为阶段 0 工程提交；`fixtures/`、`experiments/`、`outputs/` 等尚属于后续约定。阶段 0 的离线代码检查通过，不代表真实 API 调用或 Session 实测完成。Session 原始日志、密钥、内部岗位信息与模型请求数据不得未经审查直接提交公开仓库。
 
 **学习文档不是运行记录。** 可以在没有真实实验时解释 Agent Loop 的机制，但不能把“预期调用两次工具”写成“已观察到调用两次工具”。阶段是否完成，以可复核产物为准。
 
@@ -555,6 +559,12 @@ labs/deepseek-harness/jd-research-agent/
 - 先区分执行引擎与服务平台，再考虑共享的鉴权、审计和运营能力。
 
 这样每次增加复杂度，都能清楚回答：**它解决了上一版的哪个实际问题，代价是什么，证据在哪里。**
+
+---
+
+## 当前阶段 0 的实践入口
+
+已建立 [DeepSeek Harness 阶段 0 实验：隔离 SDK 调用与 Session 观察](./labs/deepseek-harness/jd-research-agent/PHASE0_LEARNING.md)。该实验提供 Docker 运行入口、Profile 安全补丁、SDK 调用脚本、Session 结构分析工具和离线单元测试；2026-11-02 的 [GitHub Actions 离线检查](https://github.com/leecolin2023/HarnessLab/actions/runs/41428301371) 已通过，但尚未进行真实模型调用。实验完成以后，再根据真实事件写 Agent Loop 研究文章。
 
 ---
 
