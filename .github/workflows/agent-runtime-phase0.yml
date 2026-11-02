@@ -1,0 +1,32 @@
+name: Agent Runtime phase-0 offline checks
+
+on:
+  push:
+    paths:
+      - "agent-runtime/labs/deepseek-harness/jd-research-agent/**"
+      - ".github/workflows/agent-runtime-phase0.yml"
+  pull_request:
+    paths:
+      - "agent-runtime/labs/deepseek-harness/jd-research-agent/**"
+      - ".github/workflows/agent-runtime-phase0.yml"
+  workflow_dispatch:
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Shell syntax and Python compilation
+        run: |
+          cd agent-runtime/labs/deepseek-harness/jd-research-agent
+          bash -n scripts/run-docker.sh
+          python -m compileall -q src tests
+      - name: Offline tests (no model API key)
+        run: |
+          cd agent-runtime/labs/deepseek-harness/jd-research-agent
+          python -m unittest discover -s tests -v
