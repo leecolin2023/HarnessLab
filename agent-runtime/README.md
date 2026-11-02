@@ -1,5 +1,7 @@
 # 什么是 Agent，为什么需要 Agent Runtime？
 
+> **学习入口**：本篇保留为 Agent / Runtime 基础原理文章。完整的“先构建应用，再通过实验理解机制”路线见 [Agent Runtime 学习路线](./LEARNING_PATH.md)；具体实践放在 [Labs](./labs/README.md)，首个案例为 [DeepSeek Harness · JD Research Agent](./labs/deepseek-harness/jd-research-agent/README.md)。
+
 ## 一、为什么需要 Agent？
 
 ### 1. 大语言模型已经能够回答问题，为什么还需要 Agent？
