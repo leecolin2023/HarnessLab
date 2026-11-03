@@ -37,7 +37,7 @@
 
 这里的“问题驱动”不是强迫每个术语都先编一个悬念，而是在需要做工程选择时追问：原来怎样做、为什么遇到限制、系统加入了什么机制、机制改变了什么、代价与边界在哪里。
 
-**学习文档必须与现有代码建立双向对应。** 原理文章提出一个能力时，项目解读不能停留在“这个框架很强”，而要回答：①应用源码有无实现？②如果由 SDK/Runtime 提供，实际装配了哪个组件、代码入口在哪里？③是否完成真实运行验证？④没有实现时，是否属于基础循环必需，还是只有复杂任务才需要的增强机制？一旦发现原理文章把可选功能写成了每个 Agent 默认自带的能力，应先修正原理，再继续设计工程实验。例如 [job-agent 第一篇文章](./job-agent/01-project-architecture-and-code.md) 先对照基本执行循环（模型决策、工具执行、反馈、继续或结束），再对照复杂任务的增强机制（显式规划、计划修订、业务验证、人工审批）。
+**学习文档必须与现有代码建立双向对应。** 原理文章提出一个能力时，项目解读不能停留在“这个框架很强”，而要回答：①应用源码有无实现？②如果由 SDK/Runtime 提供，实际装配了哪个组件、代码入口在哪里？③是否完成真实运行验证？④没有实现时，是否属于基础循环必需，还是只有复杂任务才需要的增强机制？一旦发现原理文章把可选功能写成了每个 Agent 默认自带的能力，应先修正原理，再继续设计工程实验。例如 [job-agent 第一篇文章](https://github.com/leecolin2023/job-agent/blob/main/docs/01-project-architecture-and-code.md) 先对照基本执行循环（模型决策、工具执行、反馈、继续或结束），再对照复杂任务的增强机制（显式规划、计划修订、业务验证、人工审批）。
 
 **本路线的真正交付有两种：**
 
@@ -59,7 +59,7 @@ HarnessLab/
     ├── LEARNING_PATH.md                  # 教学与原理互动的完整路线
     ├── job-agent/
     │   ├── README.md                      # 项目学习目录
-    │   └── 01-project-architecture-and-code.md  # 现有工程架构与核心代码
+    │   └── 01-project-architecture-and-code.md  # 旧链接的迁移提示
     ├── 01-agent-loop-execution-mechanism.md  # Agent Loop 的运行机制
     ├── 01-harness-context-management.md     # 历史文件名：实际对应 04 Context
     └── <后续通用原理文章>.md
@@ -71,10 +71,11 @@ job-agent/
 ├── scripts/                     # 运行、诊断命令
 ├── src/                         # Agent 及 Session 分析工具
 ├── tests/                       # 工程测试和实验验证
+├── docs/                        # 项目架构与逐行代码解读
 └── .github/workflows/           # CI
 ```
 
-分工原则：**HarnessLab** 解释普遍机制、教学过程及如何判断结果；**[job-agent](https://github.com/leecolin2023/job-agent)** 维护实现、可执行脚本、版本化配置、脱敏实验数据和测试。学习文档可链接实现，但不再维护一份复制代码。未来其他 Agent 或框架可分别建工程仓库，共同引用 HarnessLab 通用原理。
+分工原则：**HarnessLab** 解释普遍机制、教学过程及原理验证方法；**[job-agent](https://github.com/leecolin2023/job-agent)** 维护实现、可执行脚本、版本化配置、测试、实验数据及逐行代码解读。两边互相引用，但不在 HarnessLab 保存一份重复的源码解读。未来其他 Agent 或框架可分别建工程仓库，共同引用 HarnessLab 通用原理。
 
 现有 `materials/agent-runtime/` 仍为外部资料归档，不用于存放实验代码。
 
@@ -147,7 +148,7 @@ job-agent/
 
 ### 阶段 0｜认识 DeepSeek Harness，运行第一个受控任务
 
-**阅读顺序：** 首先阅读 [job-agent 基本执行循环与复杂任务机制的代码对照](./job-agent/01-project-architecture-and-code.md)，分清“已有代码、Runtime 内置、尚未实现”；再在隔离环境执行实验。阶段 0 不要求独立 Planner 或业务 Checker，因为它首先研究的是最小 Tool Calling 循环。
+**阅读顺序：** 首先阅读 [job-agent 基本执行循环与复杂任务机制的代码对照](https://github.com/leecolin2023/job-agent/blob/main/docs/01-project-architecture-and-code.md)，分清“已有代码、Runtime 内置、尚未实现”；再在隔离环境执行实验。阶段 0 不要求独立 Planner 或业务 Checker，因为它首先研究的是最小 Tool Calling 循环。
 
 **先要完成的事**
 
@@ -500,7 +501,7 @@ DeepSeek Harness Python SDK 官方说明，`resume_session` 恢复持久化历�
 
 **证据与工程材料放在 [job-agent](https://github.com/leecolin2023/job-agent)**；**可迁移的机制解释放在 HarnessLab**。不要未经审查向公开仓库提交原始 Session 日志、凭据或内部数据。离线测试通过不能替代真实模型和工具运行验证。
 
-当前阶段 0 的 SDK、Docker、脚本、Session 分析器、测试及 CI 已全部迁到 job-agent；首篇项目解读为 [job-agent：项目架构与核心代码](./job-agent/01-project-architecture-and-code.md)。
+当前阶段 0 的 SDK、Docker、脚本、Session 分析器、测试及 CI 已全部迁到 job-agent；首篇项目解读为 [job-agent：项目架构与核心代码](https://github.com/leecolin2023/job-agent/blob/main/docs/01-project-architecture-and-code.md)。
 
 ## 七、读源码时应从哪一层进入？
 
@@ -545,7 +546,7 @@ DeepSeek Harness Python SDK 官方说明，`resume_session` 恢复持久化历�
 
 ## 当前阶段 0 的实践入口
 
-先阅读 [job-agent 项目整体架构与核心代码](./job-agent/01-project-architecture-and-code.md)，理解工程现有的部署脚本、Python SDK 调用、Session 分析器以及它们与 DSH Runtime 的关系。本文解读的是实际代码，不把未执行的模型调用写成实测。
+先阅读 [job-agent 项目整体架构与核心代码](https://github.com/leecolin2023/job-agent/blob/main/docs/01-project-architecture-and-code.md)，理解工程现有的部署脚本、Python SDK 调用、Session 分析器以及它们与 DSH Runtime 的关系。本文解读的是实际代码，不把未执行的模型调用写成实测。
 
 然后在独立 [job-agent 工程仓库](https://github.com/leecolin2023/job-agent) 运行 `scripts/run-docker.sh`。迁移后的 [GitHub Actions 离线检查](https://github.com/leecolin2023/job-agent/actions/runs/41429175849) 已通过，但未实际调用模型或生成真实的 Session 轨迹。只有出现可核查的真实工具执行事件后，才将阶段 0 标记为实验通过。
 
