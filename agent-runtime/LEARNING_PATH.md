@@ -55,7 +55,9 @@ HarnessLab/
 └── agent-runtime/
     ├── README.md                         # Agent 与 Runtime 基础原理
     ├── LEARNING_PATH.md                  # 教学与原理互动的完整路线
-    ├── 00-deepseek-harness-sdk-learning.md # 阶段 0 的教学、观察与验收
+    ├── job-agent/
+    │   ├── README.md                      # 项目学习目录
+    │   └── 01-project-architecture-and-code.md  # 现有工程架构与核心代码
     ├── 01-harness-context-management.md  # 上下文管理原理
     └── <后续通用原理文章>.md
 
@@ -491,7 +493,7 @@ DeepSeek Harness Python SDK 官方说明，`resume_session` 恢复持久化历�
 
 **证据与工程材料放在 [job-agent](https://github.com/leecolin2023/job-agent)**；**可迁移的机制解释放在 HarnessLab**。不要未经审查向公开仓库提交原始 Session 日志、凭据或内部数据。离线测试通过不能替代真实模型和工具运行验证。
 
-当前阶段 0 的 SDK、Docker、脚本、Session 分析器、测试及 CI 已全部迁到 job-agent；完整学习文档为 [阶段 0：SDK 与 Session](./00-deepseek-harness-sdk-learning.md)。
+当前阶段 0 的 SDK、Docker、脚本、Session 分析器、测试及 CI 已全部迁到 job-agent；首篇项目解读为 [job-agent：项目架构与核心代码](./job-agent/01-project-architecture-and-code.md)。
 
 ## 七、读源码时应从哪一层进入？
 
@@ -536,7 +538,7 @@ DeepSeek Harness Python SDK 官方说明，`resume_session` 恢复持久化历�
 
 ## 当前阶段 0 的实践入口
 
-阅读 [DeepSeek Harness 阶段 0 学习文档](./00-deepseek-harness-sdk-learning.md)，理解 SDK、Runtime、工具执行和 Session 的关系。
+先阅读 [job-agent 项目整体架构与核心代码](./job-agent/01-project-architecture-and-code.md)，理解工程现有的部署脚本、Python SDK 调用、Session 分析器以及它们与 DSH Runtime 的关系。本文解读的是实际代码，不把未执行的模型调用写成实测。
 
 然后在独立 [job-agent 工程仓库](https://github.com/leecolin2023/job-agent) 运行 `scripts/run-docker.sh`。迁移后的 [GitHub Actions 离线检查](https://github.com/leecolin2023/job-agent/actions/runs/41429175849) 已通过，但未实际调用模型或生成真实的 Session 轨迹。只有出现可核查的真实工具执行事件后，才将阶段 0 标记为实验通过。
 
