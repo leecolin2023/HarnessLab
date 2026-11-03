@@ -6,7 +6,7 @@
 >
 > **证据边界**：下文区分 **源码确认**、**机制示例**、**尚待真实运行验证**。截至本次编写，从公开仓库能够核查应用代码与 DeepSeek Harness Runtime 源码，但**尚没有可公开核验的真实模型调用及完整 Session 轨迹**。示例事件序列不能当作已完成实验。
 
-## 一、一次 \`harness.run()\` 究竟包含多少次“运行”？
+## 一、一次 `harness.run()` 究竟包含多少次“运行”？
 
 先看 job-agent 的应用入口。它给 SDK 传入一个任务，得到最终结果：
 
@@ -23,15 +23,15 @@ with DeepSeekHarness(
     result = harness.run(args.prompt, session_id=args.session_id)
 ~~~
 
-这段代码里只写了一次 \`run()\`，但它没有告诉我们内部实际调用了几次模型、执行了几个工具。
+这段代码里只写了一次 `run()`，但它没有告诉我们内部实际调用了几次模型、执行了几个工具。
 
 为避免把不同层次混在一起，先区分几个概念。
 
 | 层次 | 它表示什么 | 是否必然一一对应？ |
 | --- | --- | --- |
 | **工作任务** | 用户要求完成的结果，例如生成一份带证据的岗位报告 | 可能跨多次调用和会话 |
-| **SDK 的 \`run()\`** | 应用向 Harness 发起一次运行并等待返回 | 不等于单次模型请求 |
-| **Session** | 关联一段持久化交互历史及运行事件的身份 | 不等于一次 \`run()\` |
+| **SDK 的 `run()`** | 应用向 Harness 发起一次运行并等待返回 | 不等于单次模型请求 |
+| **Session** | 关联一段持久化交互历史及运行事件的身份 | 不等于一次 `run()` |
 | **Turn** | Runtime 处理一轮已接收输入的边界 | 一个 Turn 可以包含多个 Step |
 | **Step** | Runtime 中一次内部执行步骤的边界 | 可能因请求重试包含多次模型尝试 |
 | **模型请求** | 向模型服务发送的一次推理请求 | 不一定产生工具调用 |
@@ -39,13 +39,13 @@ with DeepSeekHarness(
 
 这个区别不是术语游戏。
 
-例如，模型第一次请求执行 \`pwd\`，工具返回目录；第二次模型请求执行 \`ls -la .\`；工具返回文件列表；第三次模型给出最终回答。应用端仍可能只看到一次 \`harness.run()\`。
+例如，模型第一次请求执行 `pwd`，工具返回目录；第二次模型请求执行 `ls -la .`；工具返回文件列表；第三次模型给出最终回答。应用端仍可能只看到一次 `harness.run()`。
 
 **一个 SDK 调用不等于一次模型推理；一个 Step 也不能机械等同于一次模型请求。**
 
 ### DeepSeek Harness 怎样组织 Turn 和 Step？
 
-在本次核查的源码中，[ReactLoopAgent](https://github.com/deepseek-ai/deepseek-harness/blob/ce7073d51254c26cd63b22a60835b8f948deb447/packages/core/agent-loop/src/agent.ts) 的 \`turn()\` 先写入 \`turn/start\`，再通过内部循环创建 \`step/start\` 和 \`step/end\`，最后写入带结束原因的 \`turn/end\`。
+在本次核查的源码中，[ReactLoopAgent](https://github.com/deepseek-ai/deepseek-harness/blob/ce7073d51254c26cd63b22a60835b8f948deb447/packages/core/agent-loop/src/agent.ts) 的 `turn()` 先写入 `turn/start`，再通过内部循环创建 `step/start` 和 `step/end`，最后写入带结束原因的 `turn/end`。
 
 它还会根据是否存在下一步输入，判断是否需要开始新的 Turn。
 
@@ -69,16 +69,16 @@ with DeepSeekHarness(
 
 - 用户任务或演示 Prompt；
 - 模型、Profile 和请求参数；
-- \`workspace\`、\`dsh_home\`、\`session_id\`；
+- `workspace`、`dsh_home`、`session_id`；
 - 执行环境和配置补丁。
 
 它没有自己实现模型—工具循环，而是把工作交给 DeepSeek Harness。
 
-当前默认演示任务要求在隔离目录执行 \`pwd\` 和 \`ls -la .\`，**尚未实现读取完整 JD、分析技术要求和生成业务报告**。
+当前默认演示任务要求在隔离目录执行 `pwd` 和 `ls -la .`，**尚未实现读取完整 JD、分析技术要求和生成业务报告**。
 
 ### 2. Runtime 在发送模型请求前准备什么？
 
-对照 \`ReactLoopAgent\` 的 \`preStep()\`、\`step()\` 和 \`buildRequest()\` 可以看到几个关键环节：
+对照 `ReactLoopAgent` 的 `preStep()`、`step()` 和 `buildRequest()` 可以看到几个关键环节：
 
 1. **确定模型选择**：当前使用哪个 provider、model。
 2. **解析可用工具**：为当前 Step 准备工具集及其说明。
@@ -131,9 +131,9 @@ Runtime：确定当前 Turn / Step
 
 ### 1. 模型返回了普通回答，没有工具调用
 
-在本次核查的 DSH \`step()\` 源码中，Runtime 从 Assistant 消息中筛选类型为 \`tool-call\` 的内容块。
+在本次核查的 DSH `step()` 源码中，Runtime 从 Assistant 消息中筛选类型为 `tool-call` 的内容块。
 
-若没有工具调用，当前 Step 返回 \`completed\`。
+若没有工具调用，当前 Step 返回 `completed`。
 
 这表示**当前模型—工具执行步骤不再需要追加工具操作**；之后是否还有新的输入、Turn 或业务验收，仍由更外层机制决定。
 
@@ -164,13 +164,13 @@ return "continue_to_next_step"
 
 **模型产生的是工具调用请求，实际工具执行发生在 Runtime 调用 Tool Executor 之后。**
 
-另外，一次 Assistant 响应可能包含多个 \`tool-call\`。执行器可以按自身能力和配置组织工具批次；不能默认每次只调用一个工具，也不能默认所有调用必然并行。
+另外，一次 Assistant 响应可能包含多个 `tool-call`。执行器可以按自身能力和配置组织工具批次；不能默认每次只调用一个工具，也不能默认所有调用必然并行。
 
 ### 3. 模型请求失败或被中断
 
 正常回答和工具调用不是唯二的结果。
 
-源码还存在模型流异常、请求错误处理、取消以及 \`max-tokens\` 等分支。
+源码还存在模型流异常、请求错误处理、取消以及 `max-tokens` 等分支。
 
 例如，在某些模型请求错误场景，DSH 会经过请求错误处理钩子判断是否重试；没有得到重试决定时，则进入错误路径。
 
@@ -186,7 +186,7 @@ return "continue_to_next_step"
 
 不要假设“响应里出现文字”就意味着任务结束。
 
-在当前 DSH \`step()\` 中，是否进入工具路径取决于 Assistant 消息中是否存在 \`tool-call\` 内容块，而不只是是否包含文字。
+在当前 DSH `step()` 中，是否进入工具路径取决于 Assistant 消息中是否存在 `tool-call` 内容块，而不只是是否包含文字。
 
 这也是为什么**解析模型响应的结构**，比仅仅阅读模型生成的最终文本更重要。
 
@@ -196,7 +196,7 @@ return "continue_to_next_step"
 
 ### 1. 模型发出调用请求，与工具真正执行有什么区别？
 
-当前 job-agent 的演示任务想执行 \`pwd\`。
+当前 job-agent 的演示任务想执行 `pwd`。
 
 在抽象层面，至少存在三个不同事实：
 
@@ -210,7 +210,7 @@ return "continue_to_next_step"
 
 第一个只是模型意图；第二个才是真实动作；第三个才是 Agent 可以继续利用的观察结果。
 
-DSH 的 \`sdk-minimal\` Profile 使用 Runtime 的工具体系；job-agent 的 Python 包装层没有自行实现 Bash 执行器。
+DSH 的 `sdk-minimal` Profile 使用 Runtime 的工具体系；job-agent 的 Python 包装层没有自行实现 Bash 执行器。
 
 ### 2. 工具结果怎样关联到原来的调用？
 
@@ -218,11 +218,11 @@ Runtime 必须让后续模型请求能够读到工具返回的信息，并能够
 
 在本次核查的 DSH 源码中，Assistant 响应写入 Session；工具执行体系处理调用和结果；后续模型请求通过 Session 派生可见消息。
 
-源码中还存在 \`ToolCallRecovery\`：当某个 Step 异常退出时，尝试补记可恢复的待处理工具结果，避免工具调用与结果的记录失配。
+源码中还存在 `ToolCallRecovery`：当某个 Step 异常退出时，尝试补记可恢复的待处理工具结果，避免工具调用与结果的记录失配。
 
 因此，反馈至少承担两个职责：
 
-- **提供新信息**：例如 \`pwd\` 实际返回哪个路径；
+- **提供新信息**：例如 `pwd` 实际返回哪个路径；
 - **维持调用因果关系**：这段结果来自哪个已经发出的工具调用。
 
 这并不意味着任何工具执行错误都会自动修复。Runtime 保留错误信息、模型选择替代行动和应用完成错误恢复，是不同层次的事情。
@@ -259,7 +259,7 @@ Assistant：根据 A 的真实结果决定是否调用 B
 
 ### 1. 结束一次 Step、一次 Turn、一次任务，有什么区别？
 
-对照 DSH 的 \`turn()\` 和 \`step()\` 可以看到：
+对照 DSH 的 `turn()` 和 `step()` 可以看到：
 
 - 一个 **Step** 可以因为没有工具调用、工具批次要求结束或触发限制而退出。
 - 一个 **Turn** 会记录自己的结束原因，例如完成、限制、阻塞、中止或错误。
@@ -272,19 +272,19 @@ Assistant：根据 A 的真实结果决定是否调用 B
 | --- | --- | --- |
 | 模型没有再提出工具调用 | 当前 Step 可以结束 | 不能 |
 | 工具执行成功 | 一个实际操作完成 | 不能 |
-| Turn 以 \`completed\` 结束 | 当前运行边界正常完成 | 不能 |
-| 触发 \`max-tokens\` | 达到输出限制，需按相应原因处理 | 不能 |
+| Turn 以 `completed` 结束 | 当前运行边界正常完成 | 不能 |
+| 触发 `max-tokens` | 达到输出限制，需按相应原因处理 | 不能 |
 | 模型或工具报错 | 转入错误处理或终止 | 不能 |
 | 用户取消 / 执行被阻塞 | 中止或暂停进一步行动 | 不能 |
 | 最终文件存在且内容通过业务核查 | 有支持任务成功的独立证据 | 仍应按验收范围判断 |
 
-当前 job-agent 的 [src/run_phase0.py](https://github.com/leecolin2023/job-agent/blob/e96a30892d3c202df3f270f81324cb8e7ad23482/src/run_phase0.py) 检查 \`result.finish_reason\` 是否属于 \`None\` 或 \`completed\`。即使脚本返回码为 0，这也**不证明**指定工具执行成功，更不证明后续 JD 统计业务结果正确。
+当前 job-agent 的 [src/run_phase0.py](https://github.com/leecolin2023/job-agent/blob/e96a30892d3c202df3f270f81324cb8e7ad23482/src/run_phase0.py) 检查 `result.finish_reason` 是否属于 `None` 或 `completed`。即使脚本返回码为 0，这也**不证明**指定工具执行成功，更不证明后续 JD 统计业务结果正确。
 
 ### 2. 一次最小任务的轨迹应该怎样读？
 
 先使用 job-agent 已有的最小 Prompt：
 
-> 在隔离工作区执行 \`pwd\`，再执行 \`ls -la .\`，根据实际返回结果说明看到了什么。
+> 在隔离工作区执行 `pwd`，再执行 `ls -la .`，根据实际返回结果说明看到了什么。
 
 下面是一条**教学用的预期逻辑轨迹，尚非真实 Session 记录**：
 
@@ -306,7 +306,7 @@ SDK：返回 RunResult
 
 ### 3. 应该核查哪些 Session 证据？
 
-DSH 源码中可以定位 \`turn/start\`、\`step/start\`、\`assistant/message\`、\`step/end\`、\`turn/end\`，以及在部分恢复路径记录的 \`tool/result\` 等事件。具体 Session 事件类型和数据结构应以实际运行版本为准。
+DSH 源码中可以定位 `turn/start`、`step/start`、`assistant/message`、`step/end`、`turn/end`，以及在部分恢复路径记录的 `tool/result` 等事件。具体 Session 事件类型和数据结构应以实际运行版本为准。
 
 建议按以下顺序阅读轨迹：
 
@@ -318,19 +318,19 @@ DSH 源码中可以定位 \`turn/start\`、\`step/start\`、\`assistant/message\
 6. 查清 Turn 的最终结束原因；
 7. 另行检查最终产物，而不是只相信模型自述。
 
-**注意当前工具的能力边界**：job-agent 的 \`src/session_report.py\` 只汇总 JSONL 事件类型与数量，不输出完整事件内容。它能说明“出现了哪些事件”，却不能单独证明“某个工具调用及其返回如何改变了后续行动”。要完成因果追踪，还需要在安全隔离环境中对本地原始事件做有权限、脱敏的定向检查。
+**注意当前工具的能力边界**：job-agent 的 `src/session_report.py` 只汇总 JSONL 事件类型与数量，不输出完整事件内容。它能说明“出现了哪些事件”，却不能单独证明“某个工具调用及其返回如何改变了后续行动”。要完成因果追踪，还需要在安全隔离环境中对本地原始事件做有权限、脱敏的定向检查。
 
 ### 4. 怎样完成第一轮真正的实验？
 
 本篇对应学习路线的阶段 1、2，建议依次完成：
 
-**第一步：运行现有最小实验。** 按 [job-agent README](https://github.com/leecolin2023/job-agent) 的指引，在隔离 Docker 环境内运行阶段 0。记录 SDK、Runtime、Profile、模型版本及 Session ID。当前 \`sdk-minimal\` 存在高权限 Shell 风险，**单独设置 \`cwd\` 不是沙箱**；不可挂载真实银行数据、敏感凭据或正式代码工作区。
+**第一步：运行现有最小实验。** 按 [job-agent README](https://github.com/leecolin2023/job-agent) 的指引，在隔离 Docker 环境内运行阶段 0。记录 SDK、Runtime、Profile、模型版本及 Session ID。当前 `sdk-minimal` 存在高权限 Shell 风险，**单独设置 `cwd` 不是沙箱**；不可挂载真实银行数据、敏感凭据或正式代码工作区。
 
 **第二步：读取实际 Session。** 将模型响应、工具请求、工具结果、后续 Step、最终结束原因按时间顺序对齐。区分源码能证明的路径与这次真实发生的事件。
 
 **第三步：构造一个可控变化。** 在固定的脱敏样本中分别让工具“正常返回内容”和“返回找不到记录”，观察后续行动是否真的发生变化。只有对照结果支持时，才能声称 Agent 对反馈作出了调整。
 
-**第四步：进入 JD 报告任务。** 在有限的演示 JD 上读取文件并生成 \`report.md\`，独立核对文件真实存在、职位 ID 可回查。这里的验收是业务证据，不是 Loop 事件本身。
+**第四步：进入 JD 报告任务。** 在有限的演示 JD 上读取文件并生成 `report.md`，独立核对文件真实存在、职位 ID 可回查。这里的验收是业务证据，不是 Loop 事件本身。
 
 **第五步：对照源码定位原因。** 如果轨迹与预期不符，先判断是应用 Prompt/配置、Runtime 调度、工具执行，还是结果验收出了问题，再决定下一步研究哪一层。
 
