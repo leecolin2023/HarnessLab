@@ -1,8 +1,8 @@
 # 01｜SDK Minimal Phase 0：项目架构与逐行代码解读
 
-> 本文研究对象：[HarnessLab 内的 SDK Minimal Phase 0 实验](./README.md)（原始代码来自 job-agent（后续业务项目），迁移前基准提交 `70326a48b85ef813642f8e5298f44465fa98166e`；实际代码现以本目录为准）。  
-> 本文属于 **HarnessLab 的 Agent Runtime 最小可运行实验源码解读**，随本目录代码一起维护。招聘职位检索及 JD 研究属于独立的 [SDK Phase 0 实验](./README.md) 业务工程。  
-> 阅读目标：先把 [Agent Runtime 的基本执行循环与复杂任务增强机制](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/README.md#二为了完成工作任务agent-需要具备哪些能力) 对应到当前 本实验的应用代码和 DeepSeek Harness 实现，再逐段理解工程架构、核心函数与执行过程。
+> 本文研究对象：[HarnessLab 内的 SDK Minimal Phase 0 实验](./README.md)（原始代码从 job-agent 仓库迁移，迁移前基准提交 `70326a48b85ef813642f8e5298f44465fa98166e`；实际代码现以本目录为准）。  
+> 本文属于 **HarnessLab 的 Agent Runtime 最小可运行实验源码解读**，随本目录代码一起维护。招聘职位检索和 JD 研究属于独立的 [job-agent 业务仓库](https://github.com/leecolin2023/job-agent)，不属于本实验。  
+> 阅读目标：先把 [Agent Runtime 的基本执行循环与复杂任务增强机制](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/README.md#二为了完成工作任务agent-需要具备哪些能力) 对应到本实验的应用代码和 DeepSeek Harness 实现，再逐段理解工程架构、核心函数与执行过程。
 >
 > **事实边界：** 已逐文件阅读这个提交中的应用代码、Docker、配置、测试和 CI；仓库已有 GitHub Actions 离线检查通过的记录，但没有从仓库中获得真实的模型调用和完整 Session 执行轨迹。因此下面的代码行为分为**源码确认的流程**与**仍待实测的 Runtime 行为**，绝不把预期结果当成已观察到的事实。
 
@@ -11,7 +11,7 @@
 
 ---
 
-## 一、先回答一个问题：job-agent（后续业务项目） 究竟是什么项目？
+## 一、先回答一个问题：SDK Phase 0 究竟是什么实验？
 
 假设现在让你打开 [SDK Phase 0 实验](./README.md)，不看项目名称，单看代码，你会发现一个事实：它没有实现自己的 Agent Loop，也没有直接调用任何 job-rag 检索工具。
 
@@ -26,12 +26,9 @@
 
 因此，当前版本最准确的定位是：
 
-> **job-agent（后续业务项目） 是一个用于学习、验证和逐步扩展 Agent Runtime 能力的应用实验项目。第一版是 DeepSeek Harness 的最小运行与观测样例，而不是已经完成的招聘岗位分析系统。**
+> **这个实验用于学习、验证和观察 Agent Runtime 的基本机制：它是 DeepSeek Harness 的最小执行样例，而不是招聘岗位研究业务系统。**
 
-名称中的两个词要拆开理解：
-
-- **job** 表示后续计划解决招聘岗位研究问题，例如分析 RAG 相关职位要求；现阶段尚未接入职位库。
-- **agent** 表示它选择通过现成 Agent Harness 执行任务，而不是在自己的 Python 代码中重新实现模型与工具的循环。
+这个实验的命名也说明了范围：**SDK Minimal** 指选用 DeepSeek Harness 的轻量 SDK Profile；**Phase 0** 指实验的第一阶段，只验证模型调用、工具调用接口与会话记录。不包含招聘业务代码，也不需要重新实现 Agent Loop。
 
 这不是“代码太少所以没有 Agent”。更恰当的理解是：**Agent 的一部分运行能力被封装在依赖中，本实验只编写自己的应用入口与运行约束。**
 
@@ -93,7 +90,7 @@
 
 **最关键的边界：**
 
-- **本实验自己的负责“如何启动、传什么参数、保存什么、怎样观察”。**
+- **本实验的 Python 入口与 Docker 脚本负责“如何启动、传什么参数、保存什么、怎样观察”。**
 - **DeepSeek Harness 负责“模型怎样与工具交替执行，以及 Session 如何被管理”。**
 - **模型 API 负责“根据输入生成文本或者工具调用意图”。**
 - **Docker 限制这个高权限执行器可以接触到哪些宿主资源。**
@@ -209,7 +206,7 @@ const result = await this.loopCtx.tools.execute({
 - **模型**提出工具调用意图。
 - **DSH Runtime** 负责识别、分发和调用工具。
 - **Bash 工具**在容器内真正执行命令。
-- **job-agent（后续业务项目）** 负责启动 SDK、选择 Profile、提供隔离环境，**没有另写一份工具执行器**。
+- **本实验的 Python 入口与 Docker 运行器** 负责启动 SDK、选择 Profile、提供隔离环境，**没有另写一份工具执行器**。
 
 有一个必须保留的边界：`sdk-minimal` 采用 `danger-full-access`，所以把 `cwd` 设为某个工作目录并不代表 Shell 只能访问该目录。Docker 挂载、用户权限及隔离策略才是这里的关键限制。
 
@@ -229,7 +226,7 @@ const result = await this.loopCtx.tools.execute({
 
 DSH 的 `ReactLoopAgent` 维护 Turn 和 Step 的执行过程。模型响应没有工具调用时，当前 Step 可进入 `completed`；如果有工具调用，执行结果通常会推动下一个 Step；出错、取消或触发限制也可能结束。
 
-而 本实验应用只拿到最终的 `RunResult`：
+而本实验的 Python 入口只拿到最终的 `RunResult`：
 
 ```python
 result.finish_reason
@@ -251,7 +248,7 @@ return 0
 把这四个环节连起来，就得到当前项目的核心运行路径：
 
 ```text
-job-agent（后续业务项目） Python → harness.run(prompt)
+run_phase0.py → harness.run(prompt)
                         ↓
                 DSH Agent Loop
                         ↓
@@ -270,7 +267,7 @@ job-agent（后续业务项目） Python → harness.run(prompt)
                         ↓
                    SDK RunResult
                         ↓
-             job-agent（后续业务项目） 输出结果摘要
+             run_phase0.py 输出结果摘要
 ```
 
 图中 DSH 内部行为依据官方源码和 Profile 配置；**仓库尚没有真实模型调用和工具事件样本，不能把这张逻辑图当作已经实测的轨迹。**
@@ -279,7 +276,7 @@ job-agent（后续业务项目） Python → harness.run(prompt)
 
 基本执行循环讲清楚后，再问一个新的问题：如果目标不只是查看当前目录，而是**分析数百份 JD、找到涉及 RAG 的职位、统计必备和加分技术，并形成有原文证据的报告**，当前架构还缺少什么？
 
-| 复杂任务机制 | 解决的问题 | 当前 job-agent（后续业务项目） / DSH Profile 状态 |
+| 复杂任务机制 | 解决的问题 | 当前 Phase 0 实验 / DSH Profile 状态 |
 | --- | --- | --- |
 | **显式任务规划** | 面对大目标，先明确样本范围、检索、筛选、统计与报告步骤 | **未实现**：`DEFAULT_PROMPT` 已直接规定两条命令；应用没有 Planner；`sdk-minimal` 没有装配 Plan Mode |
 | **计划修订** | 数据或执行结果变化后更新待办、依赖和进度 | **未实现**：已有反馈通道，但没有独立的计划对象、完成状态或修订器 |
@@ -305,7 +302,7 @@ DEFAULT_PROMPT = (
 
 这不代表整个 DeepSeek Harness 没有规划功能。官方 [Plan Mode 插件](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/plan/plan-mode/README.md) 支持先探索、提交计划供用户审批等流程；完整 `sdk` Profile 的 SDK 命令路由也支持 `/plan`。**框架有功能和当前 Profile 启用了功能，是两件不同的事情。** 仅在当前项目中发送 `/plan` 文本，不能断言启用了官方 Plan Mode。
 
-因此，当前 job-agent（后续业务项目） 还没有显式任务规划；它仍可依赖基本循环完成简单操作。未来分析 JD 时，可以再决定采用应用层 Planner、扩展 DSH 插件，还是保留动态行动决策而不维护完整计划。
+因此，当前 Phase 0 实验还没有显式任务规划；它仍可依赖基本循环完成简单操作。未来分析 JD 时，可以再决定采用应用层 Planner、扩展 DSH 插件，还是保留动态行动决策而不维护完整计划。
 
 #### 2.2 计划修订：和“看过工具结果后决定下一步”有什么区别？
 
@@ -313,7 +310,7 @@ DEFAULT_PROMPT = (
 
 而在数百份 JD 分析中，假设已经制定“检索 500 条 → 全文分类 → 汇总 → 校验”的计划，执行过程中发现岗位 ID 重复严重，就可能要改变样本范围、更新进度和重新计算分母。
 
-后者不只是选择一条新命令，而是**显式更新计划、任务状态与完成条件**。目前 job-agent（后续业务项目） 没有相应 State 或 Plan 数据结构。
+后者不只是选择一条新命令，而是**显式更新计划、任务状态与完成条件**。当前实验没有相应 State 或 Plan 数据结构。
 
 #### 2.3 业务验证：为什么 `finish_reason` 和离线 CI 都不够？
 
@@ -703,7 +700,7 @@ SDK 返回 RunResult，Python 打印回答
 两份材料的目的不同：
 
 - **JSONL** 保存 Runtime 的历史事件，适合追查具体过程；可能包含原始提示词、工具参数和工具结果。
-- **结果 JSON** 是 本实验自己的生成的执行摘要，只有时间、版本、结束原因和事件数量等元信息；不包含完整因果链。
+- **结果 JSON** 是本实验的 Python 入口生成的执行摘要，只有时间、版本、结束原因和事件数量等元信息；不包含完整因果链。
 
 `.gitignore` 排除了 `.local/`，所以运行时数据预期留在宿主本地，而不是自动提交到 GitHub。`.dockerignore` 额外排除这些内容，防止误放入 Docker 构建上下文。
 
@@ -783,7 +780,7 @@ class FakeHarness:
 
 ### 9.3 GitHub Actions 为什么绿了也不能代表 Agent 成功？
 
-[`.github/workflows/phase0-offline.yml`](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/labs/sdk-minimal-phase0/.github/workflows/phase0-offline.yml) 执行三类检查：
+[`.github/workflows/agent-runtime-phase0-offline.yml`](https://github.com/leecolin2023/HarnessLab/blob/main/.github/workflows/agent-runtime-phase0-offline.yml) 执行三类检查：
 
 ```bash
 bash -n scripts/run-docker.sh
@@ -793,7 +790,7 @@ python -m unittest discover -s tests -v
 
 这只是 Bash 语法、Python 语法和离线单元测试。它**没有执行 `docker build`、`docker run`、`harness.run()`，也没有真实模型请求**。
 
-[已有成功的离线 CI 记录](https://github.com/leecolin2023/job-agent（后续业务项目）/actions/runs/41429202897) 是代码质量的一条证据，但不是 Agent 能够完成任务的证据。
+[已有成功的离线 CI 记录](https://github.com/leecolin2023/job-agent/actions/runs/41429202897) 是代码质量的一条证据，但不是 Agent 能够完成任务的证据。
 
 这里要建立一个以后一直使用的判断规则：
 
@@ -906,7 +903,7 @@ Docker 支持 `DSH_SDK_VERSION`，但默认没有锁版本；模型通过端点�
 
 > 本实验当前是一个基于 DeepSeek Harness 的最小 Agent 实验工程。Bash 脚本准备 Docker 容器和三种不同的宿主目录；Python 入口检查参数，再通过 `DeepSeekHarness` 启动 Runtime 并提交一个简单任务。模型调用、Agent Loop 和 Bash 工具执行主要由 DSH Runtime 负责；运行结束后，Python 取得 `RunResult`，Runtime 把 Session 历史写成 JSONL。另一个 Python 脚本只分析 JSONL 的事件结构。离线测试检查的是应用包装代码，不代表已经完成真实的模型或工具调用。后续必须拿到可核对的 Trace，才能真正研究 Agent Loop，然后再接入 job-rag 的岗位研究场景。
 
-从这里再去读 DeepSeek Harness 的 Agent Loop、Tool Calling、Context、Session 和插件源码，你才不会把“框架内部提供的能力”和“job-agent（后续业务项目） 已经自己实现的功能”混淆。
+从这里再去读 DeepSeek Harness 的 Agent Loop、Tool Calling、Context、Session 和插件源码，你才不会把“框架内部提供的能力”和“本实验已经自行实现的功能”混淆。
 
 ---
 
@@ -1066,18 +1063,18 @@ Shell 中 `case "$ACTION"` 的分支是确定性程序，不是 Agent 自主规�
 | `config/disable-session-upload.patch.yml:1–5` | 将 `session-log-deepseek` 插件设置为 `enabled: false`；正常模型请求并未被禁止 |
 | `tests/test_phase0.py:1–40` | 用构造的 JSONL 检查日志解析和隐藏假敏感字段 |
 | `tests/test_phase0.py:41–129` | 用 `FakeHarness` 测试 Python 参数和输出，**不调用真实模型或 Bash** |
-| `.github/workflows/phase0-offline.yml:1–20` | 代码变更或手动触发离线工作流；docs 改动不在自动触发路径 |
-| `.github/workflows/phase0-offline.yml:22–38` | 执行 Bash/Python 语法检查与单元测试，没有真实 Docker 或 API 运行 |
+| `.github/workflows/agent-runtime-phase0-offline.yml:1–20` | 代码变更或手动触发离线工作流；docs 改动不在自动触发路径 |
+| `.github/workflows/agent-runtime-phase0-offline.yml:22–38` | 执行 Bash/Python 语法检查与单元测试，没有真实 Docker 或 API 运行 |
 
 **怎样使用这份解读？** 看完一个参数或函数，就点击对应源码检查实际行号。后续项目代码更新时优先修改本仓库的解释；如果要研究“为什么需要 Agent Loop、Plan Mode、State 或权限审批”，再跳转 [HarnessLab 原理文章](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/README.md)。两边互相链接，但不复制一份通用理论。
 
 ## 代码依据与延伸阅读
 
-- [本实验的本次代码基准提交](https://github.com/leecolin2023/job-agent（后续业务项目）/tree/70326a48b85ef813642f8e5298f44465fa98166e)
+- [迁移前的原始代码基准提交](https://github.com/leecolin2023/job-agent/tree/70326a48b85ef813642f8e5298f44465fa98166e)
 - [HarnessLab｜Agent Runtime 基础原理](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/README.md)
 - [HarnessLab｜从应用到机制的学习路线](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/LEARNING_PATH.md)
-- [DeepSeek Harness 官方 Python SDK](https://github.com/deepseek-ai/deepseek-harness/blob/main/python/sdk/README.md)
-- [DeepSeek Harness 官方 sdk-minimal 说明](https://github.com/deepseek-ai/deepseek-harness/blob/main/packages/bundle/sdk-minimal/README.md)
-- [DeepSeek Harness 安全说明](https://github.com/deepseek-ai/deepseek-harness/blob/main/SAFETY.md)
+- [DeepSeek Harness 官方 Python SDK](https://github.com/deepseek-ai/deepseek-harness/blob/master/python/sdk/README.md)
+- [DeepSeek Harness 官方 sdk-minimal 说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/sdk-minimal/README.md)
+- [DeepSeek Harness 安全说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/SAFETY.md)
 
-> 维护原则：代码更新后，以最新的 job-agent（后续业务项目） 提交重新核对本文具体实现；有真实 Session 后再补充实测轨迹，不得把“理论上的 Agent Loop”假冒成项目已经运行出的 Trace。
+> 维护原则：代码更新后，以最新的 HarnessLab 实验源码提交重新核对本文具体实现；有真实 Session 后再补充实测轨迹，不得把“理论上的 Agent Loop”假冒成项目已经运行出的 Trace。
