@@ -60,7 +60,8 @@ HarnessLab/
     ├── job-agent/
     │   ├── README.md                      # 项目学习目录
     │   └── 01-project-architecture-and-code.md  # 现有工程架构与核心代码
-    ├── 01-harness-context-management.md  # 上下文管理原理
+    ├── 01-agent-loop-execution-mechanism.md  # Agent Loop 的运行机制
+    ├── 01-harness-context-management.md     # 历史文件名：实际对应 04 Context
     └── <后续通用原理文章>.md
 
 job-agent/
@@ -79,12 +80,12 @@ job-agent/
 
 ### 根目录的目标知识版图
 
-下表是**主题规划，不是已完成文件清单**。现有 README 与上下文文章暂时保持原路径；后续统一整理命名时再更新索引。
+下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 已形成独立的 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)；其他主题仍按学习与实验进度完善。现有 `01-harness-context-management.md` 实际属于 04 · Context Engineering，为避免破坏已有链接暂保留旧文件名，后续整理命名时统一处理。
 
 | 原理主题 | 要回答的核心问题 | 首个对应实践阶段 |
 | --- | --- | --- |
 | 00 · Agent 与 Runtime | 为什么一次模型回答不等于任务完成？Runtime 执行什么？ | 0、1 |
-| 01 · Agent Loop | 模型、工具和反馈怎样形成持续执行的循环？ | 1、2 |
+| [01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md) | 一个 Agent 任务从启动到结束，Runtime 如何处理模型响应、工具结果和循环控制？ | 1、2 |
 | 02 · Workflow、Planning 与 Multi-Agent | 固定步骤与模型动态决策如何组合？何时拆成多个 Agent？ | 3 |
 | 03 · Tool Calling 与 MCP | 模型提出调用、工具实际执行、MCP 协议分别负责什么？ | 2、4 |
 | 04 · Context Engineering | 每轮调用如何选择、压缩和隔离必要信息？ | 5 |
@@ -94,6 +95,8 @@ job-agent/
 | 08 · 任务验证与结束条件 | 文件生成、工具成功与任务成功有什么不同？ | 3、8 |
 | 09 · 部署与服务化 | 单个本地 Session 怎样演变为可安全服务多个用户的应用？ | 9 |
 | 10 · 端到端评测与优化 | 怎样通过任务结果和轨迹定位问题，而不只评价最终文案？ | 8、9 |
+
+**00 与 01 的内容边界**：00 解释为什么从模型回答扩展到完成工作任务，以及 Agent Loop / Runtime 的总体职责；01 不再重新定义“模型决策 → 工具执行 → 反馈”，而研究 **一次任务实际怎样进入模型调用、按响应分支执行工具、把结果交给下一轮、以及在什么边界结束**。01 应以 [job-agent](https://github.com/leecolin2023/job-agent) 真实 Session 为验证目标；现有源码只能证明执行路径，尚无真实轨迹时不得宣称实验已完成。
 
 原理文章应按照知识依赖和实际实验安排逐篇完善，**不必先写完 00—10 才开始编码**。
 
@@ -196,7 +199,7 @@ with DeepSeekHarness(
 
 记录 Python/SDK 版本、Profile、模型路由、是否出现 Session 日志及实际返回结果。能够在隔离环境复现一次完整调用，才算阶段 0 完成。
 
-**关联原理**：`agent-runtime/README.md`；未来的“Agent Loop”专题。
+**关联原理**：[00 · Agent 与 Runtime](./README.md)；[01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md)（阶段 0 先阅读，阶段 1—2 再用真实轨迹验证）。
 
 ### 阶段 1｜从“一次回答”升级为“交付一个工作结果”
 
@@ -223,7 +226,7 @@ with DeepSeekHarness(
 
 生成的文件真实存在；能指出至少一条输出结论来自哪条 JD；能够描述至少一轮模型决策与执行过程。
 
-**关联原理**：Agent 与 Runtime；Agent Loop；任务验证。
+**关联原理**：[00 · Agent 与 Runtime](./README.md)；[01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md)；08 · 任务验证与结束条件。观察时应区分模型请求、Step、Turn、SDK RunResult 及业务验收。
 
 ### 阶段 2｜通过工具读取岗位数据
 
@@ -253,7 +256,7 @@ with DeepSeekHarness(
 
 每一项统计结果能回查到具体职位；工具错误与“没有岗位匹配”能够区分；对比手工读取和工具调用的执行轨迹。
 
-**关联原理**：Tool Calling、执行反馈与 Agent Loop。
+**关联原理**：[01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md)；03 · Tool Calling 与 MCP。先还原工具请求、实际执行和下一轮模型判断，再深入接口协议。
 
 ### 阶段 3｜增加 Planner、Checker 与结果验证
 
