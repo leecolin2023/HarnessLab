@@ -758,6 +758,8 @@ Agent：动态追查制度关系
 
 ## 延伸阅读
 
+- [01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md)：沿真实 Runtime 的 Turn、Step、模型响应与工具反馈，理解执行分支和终止条件。
+
 - [Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)：理解 Workflow 与 Agent 的区别。
 - [OpenAI — Function Calling](https://developers.openai.com/api/docs/guides/function-calling)：理解模型怎样产生工具调用请求。
 - [LangGraph — Persistence](https://docs.langchain.com/oss/python/langgraph/persistence)：理解 Checkpoint、状态持久化和任务恢复。
