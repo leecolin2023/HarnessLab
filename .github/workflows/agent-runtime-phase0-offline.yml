@@ -1,0 +1,33 @@
+name: HarnessLab Agent Runtime SDK minimal Phase 0 (offline)
+
+on:
+  push:
+    paths:
+      - "agent-runtime/labs/sdk-minimal-phase0/**"
+      - ".github/workflows/agent-runtime-phase0-offline.yml"
+  pull_request:
+    paths:
+      - "agent-runtime/labs/sdk-minimal-phase0/**"
+      - ".github/workflows/agent-runtime-phase0-offline.yml"
+  workflow_dispatch:
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: agent-runtime/labs/sdk-minimal-phase0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Shell syntax and Python compilation
+        run: |
+          bash -n scripts/run-docker.sh
+          python -m compileall -q src tests
+      - name: Offline tests (no model API key)
+        run: |
+          python -m unittest discover -s tests -v

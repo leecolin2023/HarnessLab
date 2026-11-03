@@ -1,0 +1,10 @@
+# Avoid sending session logs, files and credentials as Docker build context.
+.local/
+.git/
+.env
+.env.*
+*.pem
+*.key
+__pycache__/
+.pytest_cache/
+.venv/

@@ -2,7 +2,7 @@
 
 > 本篇承接 [00 · Agent 与 Runtime](./README.md)。00 已经说明 Agent 为什么需要“模型决策 → 工具执行 → 反馈 → 继续或结束”；本篇不再重复这个定义，而是从一个**能够观察的实际任务**出发，解释每一次行动究竟如何发生，以及为什么能接着执行下一步。
 >
-> 贯穿案例是 [job-agent](https://github.com/leecolin2023/job-agent) 当前阶段 0 的最小任务。文章中标为“示意”的输出和运行轨迹用于讲解机制，不是已经获得的真实 Session 日志。应用代码与 DeepSeek Harness 源码可以核对执行路径，但目前尚缺少公开可核验的完整模型调用轨迹。
+> 贯穿案例是 [SDK Phase 0 实验](./labs/sdk-minimal-phase0/README.md) 当前阶段 0 的最小任务。文章中标为“示意”的输出和运行轨迹用于讲解机制，不是已经获得的真实 Session 日志。应用代码与 DeepSeek Harness 源码可以核对执行路径，但目前尚缺少公开可核验的完整模型调用轨迹。
 
 ## 一、向 Agent 发送一句话，它是怎样开始执行任务的？
 
@@ -28,7 +28,7 @@ print(result.final_response)
 
 这里故意省略了模型配置、工作目录等初始化代码，先只关注**“发送一句话 → Harness 接收任务”**这一步。上面的调用并不表示命令已经执行成功；是否执行以及执行了什么，要查看工具记录。
 
-当前 [job-agent 的真实代码](https://github.com/leecolin2023/job-agent/blob/e96a30892d3c202df3f270f81324cb8e7ad23482/src/run_phase0.py) 也是这个调用方式。它先把更完整的任务说明保存为 `DEFAULT_PROMPT`（增加只读限制和不得编造结果等要求），再通过 `args.prompt` 传给 SDK：
+当前 [本实验的真实代码](./labs/sdk-minimal-phase0/src/run_phase0.py) 也是这个调用方式。它先把更完整的任务说明保存为 `DEFAULT_PROMPT`（增加只读限制和不得编造结果等要求），再通过 `args.prompt` 传给 SDK：
 
 ~~~python
 result = harness.run(args.prompt, session_id=args.session_id)
@@ -78,7 +78,7 @@ result = harness.run(args.prompt, session_id=args.session_id)
 
 ### 1. 这个例子中的 Bash 工具是谁提供的？
 
-先回到 job-agent 已有的 Python 代码。启动时有一个容易被忽略的配置：
+先回到 本实验已有的 Python 代码。启动时有一个容易被忽略的配置：
 
 ~~~python
 with DeepSeekHarness(
@@ -188,13 +188,13 @@ ctx.tools.register(defineTool({
 }))
 ~~~
 
-其中，`name`、`description` 和 `parameters` 帮模型理解怎么调用；`execute` 才是真正读取数据的代码。上面是**说明接口关系的片段**，不是当前 job-agent 已经实现的功能，也不是可直接运行的完整插件。
+其中，`name`、`description` 和 `parameters` 帮模型理解怎么调用；`execute` 才是真正读取数据的代码。上面是**说明接口关系的片段**，不是当前 SDK Phase 0 实验 已经实现的功能，也不是可直接运行的完整插件。
 
 完成定义后，还必须让自定义插件被当前 Profile 或配置补丁加载；仅仅编写这个函数并不会使工具自动出现。
 
 另一条路线是接入 MCP Server：由 MCP 客户端发现外部服务器提供的工具，并注册到同一套工具机制中。它解决的是外部工具的接入问题，后续 **03 · Tool Calling 与 MCP** 再展开具体协议与配置。
 
-需要明确：**当前 job-agent 只配置了现成的 `sdk-minimal` 工具，并没有注册上面的 `read_job`，也没有接好 JD 检索 MCP Server。** 不应误认为 Python SDK 的 `run()` 自动提供所有业务工具。
+需要明确：**当前 本实验只配置了现成的 `sdk-minimal` 工具，并没有注册上面的 `read_job`，也没有接好 JD 检索 MCP Server。** 不应误认为 Python SDK 的 `run()` 自动提供所有业务工具。
 
 ### 4. 现在回到第一次模型请求
 
@@ -256,7 +256,7 @@ if tool_calls:
 
 **这段代码中的真正行动是 `tool_executor.execute(...)`，不是模型生成工具请求的那一刻。**
 
-在 job-agent 当前配置下，执行器来自 DeepSeek Harness 的工具体系；job-agent 的 Python 脚本没有自己实现一套 Bash 工具执行代码。
+在 本实验当前配置下，执行器来自 DeepSeek Harness 的工具体系；本实验的 Python 脚本没有自己实现一套 Bash 工具执行代码。
 
 如果一切正常，执行器可能得到这样的结果：
 
@@ -465,12 +465,12 @@ Session：这一段连续交互及其事件记录
 
 由此可以看出，术语不是学习 Agent Loop 的起点。它们是在我们需要**核查多次行动究竟怎样发生**时才有用的定位工具。
 
-## 七、如何用 job-agent 验证这篇文章，而不是只相信示意图？
+## 七、如何用 SDK Phase 0 实验 验证这篇文章，而不是只相信示意图？
 
 当前项目已经提供两个入口：
 
-- [`src/run_phase0.py`](https://github.com/leecolin2023/job-agent/blob/e96a30892d3c202df3f270f81324cb8e7ad23482/src/run_phase0.py)：通过 SDK 运行最小任务，并保存运行元数据。
-- [`src/session_report.py`](https://github.com/leecolin2023/job-agent/blob/e96a30892d3c202df3f270f81324cb8e7ad23482/src/session_report.py)：统计 Session JSONL 的事件种类和数量。
+- [`src/run_phase0.py`](./labs/sdk-minimal-phase0/src/run_phase0.py)：通过 SDK 运行最小任务，并保存运行元数据。
+- [`src/session_report.py`](./labs/sdk-minimal-phase0/src/session_report.py)：统计 Session JSONL 的事件种类和数量。
 
 但这里存在一个重要限制：`session_report.py` 目前只汇总事件类型及数量，**不展示模型的具体工具请求及对应执行结果**。
 
@@ -478,7 +478,7 @@ Session：这一段连续交互及其事件记录
 
 ### 第一轮真正要验证什么？
 
-先在独立容器里运行阶段 0 的示例（具体命令与隔离边界见 [job-agent README](https://github.com/leecolin2023/job-agent)）。
+先在独立容器里运行阶段 0 的示例（具体命令与隔离边界见 [SDK Phase 0 实验 README](./labs/sdk-minimal-phase0/README.md)）。
 
 然后按下面的因果顺序核查：
 
@@ -552,6 +552,6 @@ Session：这一段连续交互及其事件记录
 
 - [00 · Agent 与 Runtime](./README.md)
 - [Agent Runtime 学习路线](./LEARNING_PATH.md)
-- [job-agent 代码架构解读](./job-agent/01-project-architecture-and-code.md)
-- [job-agent 阶段 0 应用入口（固定提交）](https://github.com/leecolin2023/job-agent/blob/e96a30892d3c202df3f270f81324cb8e7ad23482/src/run_phase0.py)
+- [Phase 0 实验代码架构解读](./labs/sdk-minimal-phase0/01-code-walkthrough.md)
+- [SDK Phase 0 应用入口（固定提交）](./labs/sdk-minimal-phase0/src/run_phase0.py)
 - [DeepSeek Harness Agent Loop 源码（固定提交）](https://github.com/deepseek-ai/deepseek-harness/blob/ce7073d51254c26cd63b22a60835b8f948deb447/packages/core/agent-loop/src/agent.ts)

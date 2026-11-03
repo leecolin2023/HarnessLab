@@ -1,10 +1,10 @@
-# job-agent 工程解读入口
+# SDK Phase 0 教学实验迁移说明
 
-从现在起，**本目录只保留跨仓库导航**，不再维护 job-agent 的逐行代码解读；避免工程代码更新后两边产生不同版本。
+此前 `job-agent` 中的 `run_phase0.py`、Docker 启动脚本、Session 统计与测试都属于通用 Agent Runtime 教学实验。现已整体迁入 [HarnessLab SDK Minimal Phase 0](../labs/sdk-minimal-phase0/README.md)。
 
-- **项目架构、源码调用链、逐行代码解读**：[job-agent/docs/01-project-architecture-and-code.md](https://github.com/leecolin2023/job-agent/blob/main/docs/01-project-architecture-and-code.md)。
-- **通用 Agent / Runtime 原理**：[agent-runtime/README.md](../README.md)。
-- **Agent Loop 深入运行机制**：[agent-runtime/01-agent-loop-execution-mechanism.md](../01-agent-loop-execution-mechanism.md)。
-- **学习路线和实验边界**：[agent-runtime/LEARNING_PATH.md](../LEARNING_PATH.md)。
+- [实验源码和运行方式](../labs/sdk-minimal-phase0/README.md)
+- [具体实现与逐行代码解读](../labs/sdk-minimal-phase0/01-code-walkthrough.md)
+- [Agent Loop 通用原理](../01-agent-loop-execution-mechanism.md)
+- [JD Research Agent 业务仓库](https://github.com/leecolin2023/job-agent)
 
-分工原则：**具体代码的“这一行做什么、参数从哪里来、实际调用谁”放 job-agent；“为什么需要这个机制、换框架是否成立”放 HarnessLab。**
+本目录仅保留历史链接导航，不保存另一份重复的代码或原理。

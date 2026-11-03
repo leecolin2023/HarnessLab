@@ -1,6 +1,6 @@
 # 什么是 Agent，为什么需要 Agent Runtime？
 
-> **学习入口**：本篇保留为 Agent / Runtime 基础原理文章。完整学习路线见 [Agent Runtime 学习路线](./LEARNING_PATH.md)，job-agent 项目解读见 [job-agent 项目架构与核心代码解读](https://github.com/leecolin2023/job-agent/blob/main/docs/01-project-architecture-and-code.md)。运行代码、Docker、测试、CI **以及逐行代码解读** 均维护在独立的 [job-agent 工程仓库](https://github.com/leecolin2023/job-agent)。
+> **学习入口**：本篇解释 Agent / Runtime 的通用原理。学习路线见 [Agent Runtime 学习路线](./LEARNING_PATH.md)；最小 SDK 实验与逐行解读见 [SDK Minimal Phase 0](./labs/sdk-minimal-phase0/README.md)。真正的岗位研究业务项目见 [job-agent](https://github.com/leecolin2023/job-agent)。
 
 ## 一、为什么需要 Agent？
 
@@ -337,7 +337,7 @@ while True:
 
 **所以应该先理解最基本的 Agent Loop，再根据任务为什么无法可靠完成，逐步引入规划、计划修订、业务验证和人工审批。** 这才是从最小 Agent 走向复杂工作型 Agent 的自然演进过程。
 
-> **代码对照**：[job-agent 当前的基本执行循环由哪些组件提供，哪些复杂任务机制尚未实现？](https://github.com/leecolin2023/job-agent/blob/main/docs/01-project-architecture-and-code.md) 项目解读会沿着上述两层结构分别分析，避免把“SDK 提供了 Agent Loop”直接写成“应用已经拥有规划和业务验证能力”。
+> **代码对照**：[SDK Minimal Phase 0 如何实现基本执行循环，哪些复杂任务机制尚未实现？](./labs/sdk-minimal-phase0/01-code-walkthrough.md) 实验解读会沿着上述两层结构分别分析，避免把“SDK 提供了 Agent Loop”直接写成“应用已经拥有规划和业务验证能力”。
 
 ---
 
