@@ -4,21 +4,43 @@
 >
 > 贯穿案例是 [job-agent](https://github.com/leecolin2023/job-agent) 当前阶段 0 的最小任务。文章中标为“示意”的输出和运行轨迹用于讲解机制，不是已经获得的真实 Session 日志。应用代码与 DeepSeek Harness 源码可以核对执行路径，但目前尚缺少公开可核验的完整模型调用轨迹。
 
-## 一、程序只调用了一次 `run()`，为什么 Agent 却可能完成多个动作？
+## 一、向 Agent 发送一句话，它是怎样开始执行任务的？
 
-先从一个很小的任务开始：
+假设我们已经启动一个可以使用 Bash 工具的 Agent。现在像平时聊天一样，**只向它发送一句自然语言指令**：
 
 > 请在隔离工作目录中执行 `pwd`，再执行 `ls -la .`，最后根据实际结果告诉我当前目录和里面有哪些文件。
 
-这个任务不需要复杂的任务规划，却有一个明确要求：**不能只凭模型已有的知识猜测目录内容，必须实际执行命令。**
+我们并没有手动编写“先调用哪个函数、再调用哪个函数”的程序。希望 Agent 自己根据这句话执行操作，最后给出真实结果，而不是猜测文件列表。
 
-目前 job-agent 的 [`src/run_phase0.py`](https://github.com/leecolin2023/job-agent/blob/e96a30892d3c202df3f270f81324cb8e7ad23482/src/run_phase0.py) 就以这类任务作为最小实验。Python 应用最终通过类似下面的一行发起运行：
+### 1. 这句话怎样传给 Harness？
+
+最直接的方式，是把它作为字符串传入 DeepSeek Harness Python SDK 的 `run()`：
+
+~~~python
+# 假设 harness 已经初始化，并运行在隔离环境中
+task = "请在隔离工作目录中执行 pwd，再执行 ls -la .，最后根据实际结果告诉我当前目录和里面有哪些文件。"
+
+result = harness.run(task, session_id="lesson-01")
+print(result.final_response)
+~~~
+
+这样，`task` 就是我们交给 Agent 的任务描述；`run(task, ...)` 是应用向 Harness 发起任务执行的入口；`result.final_response` 则是本次运行返回给应用的最终文字。
+
+这里故意省略了模型配置、工作目录等初始化代码，先只关注**“发送一句话 → Harness 接收任务”**这一步。上面的调用并不表示命令已经执行成功；是否执行以及执行了什么，要查看工具记录。
+
+当前 [job-agent 的真实代码](https://github.com/leecolin2023/job-agent/blob/e96a30892d3c202df3f270f81324cb8e7ad23482/src/run_phase0.py) 也是这个调用方式。它先把更完整的任务说明保存为 `DEFAULT_PROMPT`（增加只读限制和不得编造结果等要求），再通过 `args.prompt` 传给 SDK：
 
 ~~~python
 result = harness.run(args.prompt, session_id=args.session_id)
 ~~~
 
-这里出现了第一个值得研究的问题：Python 只调用了一次 `run()`，但任务中至少涉及读取当前路径、列出文件和生成说明三个动作。它们是怎么完成的？
+应用在这之前通过 `DeepSeekHarness(...)` 指定了模型、Profile、工作目录等运行配置。**运行配置决定 Agent 能连接什么环境；自然语言任务决定这一次希望它做什么。** 需要注意，单独设置工作目录 `cwd` 不构成安全沙箱，实际实验仍须在隔离容器或虚拟机中进行。
+
+### 2. 发送一句话之后，为什么会出现多个动作？
+
+现在问题来了：Python 只调用了一次 `run()`，但用户希望 Agent 至少完成读取当前路径、列出文件、根据输出进行说明这几个动作。
+
+**为什么一次 `run()` 能够引发多次模型判断和真实工具执行？是谁在第一次模型返回之后继续推进任务？**
 
 一种可能的执行过程是：
 
