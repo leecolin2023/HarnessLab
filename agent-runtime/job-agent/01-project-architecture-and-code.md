@@ -2,7 +2,7 @@
 
 > 本文研究对象：[job-agent](https://github.com/leecolin2023/job-agent)（基准提交 `70326a48b85ef813642f8e5298f44465fa98166e`）。  
 > 本文属于 HarnessLab 的**代码阅读与机制理解**材料，工程源码继续留在 job-agent，不在这里复制维护。  
-> 阅读目标：能够把 [Agent Runtime 原理中的五种能力](../README.md#二为了完成工作任务agent-需要具备哪些能力) **逐项映射到当前 job-agent 代码及 DeepSeek Harness 的实现**，判断哪些已有、哪些只是框架提供、哪些尚不存在，再理解项目架构和核心代码的完整调用链。
+> 阅读目标：先把 [Agent Runtime 的基本执行循环与复杂任务增强机制](../README.md#二为了完成工作任务agent-需要具备哪些能力) 对应到当前 job-agent 的应用代码和 DeepSeek Harness 实现，再逐段理解工程架构、核心函数与执行过程。
 >
 > **事实边界：** 已逐文件阅读这个提交中的应用代码、Docker、配置、测试和 CI；仓库已有 GitHub Actions 离线检查通过的记录，但没有从仓库中获得真实的模型调用和完整 Session 执行轨迹。因此下面的代码行为分为**源码确认的流程**与**仍待实测的 Runtime 行为**，绝不把预期结果当成已观察到的事实。
 
@@ -143,116 +143,48 @@
 
 ---
 
-## 三、按照五种能力对照现有代码：哪些存在，哪些没有？
+## 三、从最基本的 Agent Loop 到复杂任务增强：如何对应代码？
 
-在阅读 `scripts/run-docker.sh` 和 `src/run_phase0.py` 的细节之前，先与 [Agent Runtime 原理：第二章的五种能力](../README.md#二为了完成工作任务agent-需要具备哪些能力) 对齐。
+上一篇 [Agent Runtime 原理](../README.md#二为了完成工作任务agent-需要具备哪些能力) 已建立了一个顺序：
 
-原理文章提出五个问题：**任务规划、行动决策、工具执行、反馈调整、结果验证**。如果只是找到一个 `DeepSeekHarness` 类名，就宣布“这五种能力已经实现”，我们就无法判断项目到底做到了什么。
+> **先理解模型决策 → 工具执行 → 反馈 → 继续或结束，再研究显式规划、计划修订、业务验证和人工审批等复杂任务机制。**
 
-下面采用统一的判定方法：每项能力都区分 **job-agent 自己编写的逻辑**、**所选 DSH Runtime 组合提供的机制**、**还缺少的部分**以及**可以验证它的证据**。
+读这个项目也应采用同样的顺序。不要先搜索 `Planner` 类名，也不要把项目中没有 Planner 理解为“没有 Agent”。先找出让基本循环运转起来的代码，再看它何时需要更高层的任务控制。
 
-### 先看全景对照
+### 1. 最基本的执行循环：模型决策 → 工具执行 → 反馈 → 继续或结束
 
-| 原理里的能力 | job-agent 自己实现了什么 | DeepSeek Harness `sdk-minimal` 提供什么 | 当前结论 |
-| --- | --- | --- | --- |
-| **1. 任务规划** | 固定 Prompt 指定两条命令，没有计划对象 | 基础 Agent Loop，但此 Profile 没有 Plan Mode 插件 | **没有显式规划机制** |
-| **2. 行动决策** | 把任务交给 `harness.run()`，应用代码不选工具 | 模型生成回答或工具调用，由 Runtime 组织下一步 | **底层具备决策通路，真实决策尚未观测** |
-| **3. 工具执行** | 提供容器、工作目录及执行权限边界 | Bash 工具、Tool Executor 与调用分发 | **有执行机制，实际命令待实测** |
-| **4. 反馈调整** | 记录结果与事件类型，没有自己实现重规划 | 工具返回可进入 Session 和后续模型步骤 | **有反馈通路，未验证调整行为** |
-| **5. 结果验证** | 检查部分配置、`finish_reason` 并保存摘要；离线测试 | Runtime 处理 Step/Turn 结束及错误 | **缺少业务任务成功判定** |
+把 [`src/run_phase0.py`](https://github.com/leecolin2023/job-agent/blob/70326a48b85ef813642f8e5298f44465fa98166e/src/run_phase0.py) 与 [DeepSeek Harness 的 `ReactLoopAgent`](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/src/agent.ts) 放在一起读。
 
-这张表也回答了最容易混淆的三个层次：
+#### 1.1 模型决策：谁决定下一步做什么？
 
-- **代码确实存在**：可以指到仓库里的函数、配置或 DSH 对应实现。
-- **运行机制可用**：Profile 装配了能力，但不表示本次模型实际触发过它。
-- **实测能力有效**：需要真实 Session、工具返回和任务验收结果支持；当前缺少这一层证据。
-
-### 1. 任务规划：当前没有独立实现
-
-先看项目里模型真正收到的 `DEFAULT_PROMPT`：
-
-```python
-DEFAULT_PROMPT = (
-    "这是一个隔离工作区实验。请先使用 bash 工具执行 `pwd`，再执行 `ls -la .`。"
-    "只检查当前目录；不访问上级目录、环境变量或网络，也不修改文件。"
-    "请用中文说明你实际调用的工具及返回结果；工具不可用就如实说明，"
-    "不要编造执行记录。"
-)
-```
-
-这段 Prompt 没有告诉模型“请自己制定完成目标的计划”，恰恰相反，它**已经规定了一个极短的执行顺序**。
-
-下一段只有：
+job-agent 应用只把任务交给 SDK：
 
 ```python
 with DeepSeekHarness(
     provider="deepseek-official",
     model=args.model,
     profile="sdk-minimal",
-    # 其余参数略
+    # 其他参数见完整源码
 ) as harness:
     result = harness.run(args.prompt, session_id=args.session_id)
 ```
 
-在这个入口里找不到以下机制：
+它并没有写 `if need_pwd: execute_pwd()`。模型是否调用工具、调用哪个工具，由 DSH Runtime 组织的模型请求结果决定。
 
-- `create_plan()`、`Planner`、`PlanState` 之类的应用层步骤；
-- “先生成计划、保存计划、再执行计划”的数据流；
-- 计划审批、版本更新、任务依赖或计划完成状态；
-- 把任务分为“调查 → 判断 → 生成报告”的工作流控制器。
-
-那是不是因为这些能力藏在了 `sdk-minimal` 里面？需要进一步核对**实际加载的 DSH Profile**，而不能凭直觉判断。
-
-官方 [sdk-minimal Profile 配置](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/sdk-minimal/cordis.patch.yml) 明确装配了 `@deepseek-ai/dsh-agent-loop`、工具执行器、Session 持久化等组件；**没有装配 `@deepseek-ai/dsh-plan-mode`**。而官方 [Plan Mode 文档](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/plan/plan-mode/README.md) 说明，Plan Mode 是一项可选的专门机制：进入计划模式、生成计划、提交人工审阅，审阅通过后再继续。
-
-还有一个容易忽略的区别：[Python SDK 说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/python/sdk/README.md) 表明，**完整的 `sdk` Profile 可以处理 `/plan`、`/goal` 等命令；`sdk-minimal` 对未支持的斜杠输入会按普通 Prompt 处理**。因此不能在当前项目里输入 `/plan`，就假定已经启动了官方 Plan Mode。
-
-**结论：当前 job-agent 没有“任务规划”作为独立能力。** 但这不影响它成为最小 Agent Loop 实验：对于 `pwd` 和 `ls` 这样的任务，不需要专门先写计划。
-
-未来如果改为“分析 500 份 JD，统计必备技术和加分技术”，才值得比较两种不同实现：
-
-1. **单 Agent 边执行边决定下一步**：没有独立计划产物，适合简单或探索性任务。
-2. **显式 Planner + 进度/检查状态**：先输出检索范围、去重规则、统计口径和待办步骤，再逐步执行，适合需要覆盖率和可复核结论的任务。
-
-那时我们要看 `plan` 文件、结构化 State 或计划事件，而不是只看模型回答“我计划先做 A”。
-
-### 2. 行动决策：发生在模型与 DSH Runtime，不在 Python 入口
-
-项目只有一行关键交接：
-
-```python
-result = harness.run(args.prompt, session_id=args.session_id)
-```
-
-它并没有写：
-
-```python
-if need_pwd:
-    run_pwd()
-if need_ls:
-    run_ls()
-```
-
-也就是说，**job-agent 应用没有使用 Python 条件判断来挑选下一条工具命令**；它把任务交给 SDK。
-
-真正的模型行动决策应当发生在 DSH 内部：Runtime 准备本轮请求的上下文与可用工具，模型生成文本或工具调用，Runtime 根据结果继续执行。DeepSeek Harness 的 [`ReactLoopAgent` 实现](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/src/agent.ts) 可找到具体分支：
+DSH [`ReactLoopAgent.step()` 所在的实现](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/src/agent.ts) 在模型返回 Assistant 消息后，检查其中的工具调用块：
 
 ```ts
 const toolCalls = message.content.filter(block => block.type === 'tool-call')
 if (toolCalls.length === 0) return { kind: 'completed' }
 ```
 
-这不是说模型有一个始终正确的规划器，而是说 **Runtime 将模型的工具调用与模型完成回答区分处理**。
+这就是最基本的**模型决策分支**：没有工具请求可以完成当前步骤；有工具请求则进入执行路径。模型给出怎样的工具请求，仍然需要实际运行才能观察。
 
-如果模型生成了工具调用，这个分支会进入工具执行路径；如果没有，则可以结束当前 Step。实际能否调用模型、会生成什么工具调用，需要记录真实 Session 才能判断。
+顺带注意：`scripts/run-docker.sh` 的 `case "$ACTION"` 只是程序根据用户命令选择 `build/run/inspect`；它与 Agent 自主选择工具无关。
 
-另外 `scripts/run-docker.sh` 中的 `case "$ACTION"` 仅决定执行 Docker 的 `build/run/inspect/test` 哪个命令，它是传统确定性程序的分支，**不是 Agent 自主行动决策**。
+#### 1.2 工具执行：模型要求执行 Bash，谁真正执行？
 
-**可观察证据**：在对应 Session 中找到模型输出的工具调用内容、工具名和参数，并与最后回答对照。若模型从未提出 Tool Call，就不能声称它完成了“根据目标选择工具”的实验。
-
-### 3. 工具执行：项目提供环境，DSH 提供工具及执行器
-
-继续追踪 [同一段 DSH Agent Loop 代码](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/src/agent.ts)，在识别出模型的 `tool-call` 之后执行：
+紧接着上面的分支，DSH 源码调用：
 
 ```ts
 const result = await this.loopCtx.tools.execute({
@@ -265,42 +197,45 @@ const result = await this.loopCtx.tools.execute({
 })
 ```
 
-这里已经从“模型提出调用意图”进入“Runtime 执行工具批次”。真正的 Shell 执行由 Profile 中装配的工具和执行器承担。
+这一步把模型的 `tool-call` 交给 Runtime 的工具执行体系，而不是让模型自己执行命令。
 
-回到 job-agent：
+谁提供具体工具？[`sdk-minimal/cordis.patch.yml`](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/sdk-minimal/cordis.patch.yml) 装配 `dsh-tool-executor-native`、`dsh-tool-bash-persistent`（Linux）等插件。job-agent 的 `DeepSeekHarness(profile="sdk-minimal")` 选择这一组组件，而 [`run-docker.sh`](https://github.com/leecolin2023/job-agent/blob/70326a48b85ef813642f8e5298f44465fa98166e/scripts/run-docker.sh) 决定它在什么 Docker 环境下运行。
 
-- `DeepSeekHarness(profile="sdk-minimal")` 选择加载这个工具组合；
-- `scripts/run-docker.sh` 为工具执行建立一个 Docker 环境；
-- `--mount ... /sandbox/workspace` 提供工作目录；
-- `--env DEEPSEEK_API_KEY` 提供模型凭据（也带来环境变量可被 Shell 访问的安全风险）；
-- `src/run_phase0.py` 没有自写 Bash 工具，也没有 Python 的 `subprocess.run("pwd")`。
+因此角色分工是：
 
-所以这项能力不能写成“job-agent 的 Python 实现了 Tool Executor”。准确表述是：**job-agent 通过 SDK 使用 DSH 现有工具执行机制，并通过 Docker 尽量约束其外部影响范围。**
+- **模型**提出工具调用意图。
+- **DSH Runtime** 负责识别、分发和调用工具。
+- **Bash 工具**在容器内真正执行命令。
+- **job-agent** 负责启动 SDK、选择 Profile、提供隔离环境，**没有另写一份工具执行器**。
 
-**可观察证据**：除了模型请求 `bash` 的事件，还要找到相应执行结果，包括退出状态和命令输出。模型声称“我运行了 pwd”不等于命令真的被执行。
+有一个必须保留的边界：`sdk-minimal` 采用 `danger-full-access`，所以把 `cwd` 设为某个工作目录并不代表 Shell 只能访问该目录。Docker 挂载、用户权限及隔离策略才是这里的关键限制。
 
-### 4. 反馈调整：有工具结果通路，但还没验证自我纠错
+#### 1.3 反馈：工具返回后，为什么还能影响下一次决策？
 
-假设第一次 `pwd` 成功返回 `/sandbox/workspace`，Runtime 把它记录到 Session 中，并继续调用模型；此时模型有机会选择继续执行 `ls`。
+工具完成后，DSH 的工具执行和 Session 机制保存调用及结果，再由 Agent Loop 基于已经形成的历史准备后续模型请求。它不是让 Python 应用先解析一遍 `pwd` 的文本，再手动追加到 Prompt。
 
-但这段“成功返回 → 调用下一工具”只能证明**工具结果进入后续决策**，不必然证明模型自主修正了原计划。因为用户的 Prompt 已经让它按顺序执行这两条命令。
+与此相对，[`src/session_report.py`](https://github.com/leecolin2023/job-agent/blob/70326a48b85ef813642f8e5298f44465fa98166e/src/session_report.py) 只是在运行结束后统计日志事件类型。它用于**观察反馈是否有记录**，不是反馈通路本身。
 
-DSH 的工具调用完成后，[`ReactLoopAgent` 会根据工具结果判断是否结束或继续下一 Step](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/src/agent.ts)；模型可在下一请求中收到已记录的工具反馈。这是反馈循环的基础条件。
+这里要区分：
 
-而 job-agent 自己：
+- **Runtime 具备反馈机制**：工具执行结果可进入 Session 和后续模型上下文。
+- **本次实验确实发生了反馈**：必须从真实 JSONL 找到对应的调用及返回。
+- **模型根据反馈纠正了错误**：要看到下一步行动真的发生改变，不能仅凭两次顺序调用推断。
 
-- **没有**处理工具失败的业务 `retry` / `replan` 策略；
-- **没有**发现“目录不存在”后切换到别的工作方案的规则；
-- **没有**将反馈解析成任务进度 State；
-- 只是通过 SDK 获得 `result.events`，再用 `event_kind()` 统计事件种类。
+#### 1.4 继续或结束：为什么一次 `harness.run()` 可能经历多次模型请求？
 
-因此，“具备反馈通道”应当与“已经实现自主纠错”明确分开。
+DSH 的 `ReactLoopAgent` 维护 Turn 和 Step 的执行过程。模型响应没有工具调用时，当前 Step 可进入 `completed`；如果有工具调用，执行结果通常会推动下一个 Step；出错、取消或触发限制也可能结束。
 
-**如何验证？** 先让同一个只读工具在可控环境中返回不同结果：正常输出、目录为空、工具返回错误。比较后续模型是否真的根据返回结果改变行动。这个实验必须真实运行并保存事件，不能把这里的假设写成当前的实验结论。
+而 job-agent 应用只拿到最终的 `RunResult`：
 
-### 5. 结果验证：只有运行状态检查，没有业务成功判定
+```python
+result.finish_reason
+result.final_response
+result.events
+result.notifications
+```
 
-当前 job-agent 最容易被误当作验证的是：
+它还执行以下检查：
 
 ```python
 if result.finish_reason not in (None, "completed"):
@@ -308,66 +243,100 @@ if result.finish_reason not in (None, "completed"):
 return 0
 ```
 
-它检查的是 SDK 的**结束原因**，不是任务正确性。`None` 甚至也被当作可接受结果。
+**这只是脚本对运行终态的检查，不是“确认两个工具都执行成功”，更不是业务任务通过验证。** 尤其当前代码接受 `finish_reason=None`，故不能用脚本退出码为 0 证明 Agent 已完成目标。
 
-同样，`session_report.py` 只是统计 JSONL 事件类型、行数和解析失败数；`tests/test_phase0.py` 用 `FakeHarness` 验证包装代码，没有验证真实 `bash` 工具调用。
-
-这里必须分清三个“成功”：
-
-| 所说的成功 | 当前源码在哪里体现 | 它无法证明什么 |
-| --- | --- | --- |
-| **运行结束** | `finish_reason` | 不代表要求的两个工具都实际执行 |
-| **日志可读取** | `session_report.summarize()` | 不代表模型工具反馈正确或流程完整 |
-| **业务结果正确** | **目前没有独立检查逻辑** | 例如命令确实执行且最终回答与输出一致 |
-
-所以，用户要求“解释 job-agent 的结果验证”时，正确结论是：**目前只存在运行层与测试层的检查，没有针对 Agent 完成目标的验证器。**
-
-如果阶段 0 的验收要求是“模型确实执行了两条命令”，至少需要验证对应真实工具调用、执行成功的返回以及回答与结果一致；不能只检查 `RunResult` 中有一个最终文本。
-
-### 6. 把五项能力重新放回真实调用链
-
-通过上面的分析，可以将**现有机制**和**尚未实现的增强层**画在同一张图中：
+把这四个环节连起来，就得到当前项目的核心运行路径：
 
 ```text
-                  当前 job-agent
-                     │
-         固定 Prompt：执行 pwd、ls
-                     │
-                     ▼
-              harness.run(...)
-                     │
-                     ▼
-       DSH Runtime 的 Agent Loop
-       ┌─────────────────────────┐
-       │ 准备 Context + Tools    │
-       │           ↓             │
-       │       调用模型          │◄── 行动决策发生在这里
-       │         /    \          │
-       │      回答    Tool Call  │
-       │       │        ↓        │
-       │       │    执行工具     │◄── DSH Tool Executor
-       │       │        ↓        │
-       │       │    工具反馈 ────┼──→ 下一轮模型请求
-       │       ▼                 │
-       │   结束当前运行          │
-       └─────────────────────────┘
-                     │
-                     ▼
-       Python 检查 finish_reason
-                     │
-                     ▼
-         保存结果摘要 / 读取 Session
-
-     [当前没有] 专门的任务计划产物和审批
-     [当前没有] 业务 State 与显式重规划控制器
-     [当前没有] 对最终任务结果的独立 Checker
+job-agent Python → harness.run(prompt)
+                        ↓
+                DSH Agent Loop
+                        ↓
+                 准备模型请求
+                        ↓
+                   模型决策
+                 /         \
+             直接回答       Tool Call
+                │             ↓
+                │        DSH 工具执行
+                │             ↓
+                │        Session 记录结果
+                │             ↓
+                │        下一次模型决策
+                └─────→ 结束 / 中断
+                        ↓
+                   SDK RunResult
+                        ↓
+             job-agent 输出结果摘要
 ```
 
-**为什么这张图比把五项能力顺序画在一起更准确？**
+图中 DSH 内部行为依据官方源码和 Profile 配置；**仓库尚没有真实模型调用和工具事件样本，不能把这张逻辑图当作已经实测的轨迹。**
 
-因为它把 **基础 Agent Loop 的必要结构** 与 **复杂任务才添加的规划/业务验证层** 区分开，同时标出哪个环节属于 job-agent，哪个属于 DSH。
+### 2. 当任务复杂起来：四种增强机制在项目里有没有？
 
-也因此，在当前项目只有最小目录查询任务时，“看不见 Planner”并不是代码漏读，而是**这个版本确实还没有那个机制**。后续要不要加入，应该由岗位研究任务的实际需要决定。
+基本执行循环讲清楚后，再问一个新的问题：如果目标不只是查看当前目录，而是**分析数百份 JD、找到涉及 RAG 的职位、统计必备和加分技术，并形成有原文证据的报告**，当前架构还缺少什么？
+
+| 复杂任务机制 | 解决的问题 | 当前 job-agent / DSH Profile 状态 |
+| --- | --- | --- |
+| **显式任务规划** | 面对大目标，先明确样本范围、检索、筛选、统计与报告步骤 | **未实现**：`DEFAULT_PROMPT` 已直接规定两条命令；应用没有 Planner；`sdk-minimal` 没有装配 Plan Mode |
+| **计划修订** | 数据或执行结果变化后更新待办、依赖和进度 | **未实现**：已有反馈通道，但没有独立的计划对象、完成状态或修订器 |
+| **业务结果验证** | 防止遗漏 JD、错误计数、混淆必备/加分或引用不存在的职位 | **未实现**：仅有运行终态检查和日志结构统计，没有业务 Checker |
+| **人工审批和权限** | 高风险修改、外部发送或敏感数据访问需要有效授权 | **未实现独立业务审批**：项目有 Docker 隔离选项，但没有针对业务操作的审批工作流 |
+
+#### 2.1 显式规划：为什么当前看不到 Planner？
+
+看 [`DEFAULT_PROMPT`](https://github.com/leecolin2023/job-agent/blob/70326a48b85ef813642f8e5298f44465fa98166e/src/run_phase0.py)：
+
+```python
+DEFAULT_PROMPT = (
+    "这是一个隔离工作区实验。请先使用 bash 工具执行 `pwd`，再执行 `ls -la .`。"
+    "只检查当前目录；不访问上级目录、环境变量或网络，也不修改文件。"
+    "请用中文说明你实际调用的工具及返回结果；工具不可用就如实说明，"
+    "不要编造执行记录。"
+)
+```
+
+这里要求的是**按已知顺序执行两项操作**，不是生成一个多步骤计划。
+
+进一步核对官方 [`sdk-minimal Profile`](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/sdk-minimal/cordis.patch.yml)：虽然它挂载了 `agent-loop`、工具和 Session，但并没有挂载 `dsh-plan-mode`。
+
+这不代表整个 DeepSeek Harness 没有规划功能。官方 [Plan Mode 插件](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/plan/plan-mode/README.md) 支持先探索、提交计划供用户审批等流程；完整 `sdk` Profile 的 SDK 命令路由也支持 `/plan`。**框架有功能和当前 Profile 启用了功能，是两件不同的事情。** 仅在当前项目中发送 `/plan` 文本，不能断言启用了官方 Plan Mode。
+
+因此，当前 job-agent 还没有显式任务规划；它仍可依赖基本循环完成简单操作。未来分析 JD 时，可以再决定采用应用层 Planner、扩展 DSH 插件，还是保留动态行动决策而不维护完整计划。
+
+#### 2.2 计划修订：和“看过工具结果后决定下一步”有什么区别？
+
+如果 `pwd` 返回错误，模型可能决定修改下一次工具调用。这属于**基本循环中的反馈决策**。
+
+而在数百份 JD 分析中，假设已经制定“检索 500 条 → 全文分类 → 汇总 → 校验”的计划，执行过程中发现岗位 ID 重复严重，就可能要改变样本范围、更新进度和重新计算分母。
+
+后者不只是选择一条新命令，而是**显式更新计划、任务状态与完成条件**。目前 job-agent 没有相应 State 或 Plan 数据结构。
+
+#### 2.3 业务验证：为什么 `finish_reason` 和离线 CI 都不够？
+
+如果 Agent 最后回答“Python 是 RAG 岗位最常见技能”，需要有统计范围、分母、职位 ID 和可回查的原文支持。
+
+当前代码只检查 `result.finish_reason`，并统计 `result.events` 的数量；离线 `FakeHarness` 测试能验证 Python 包装逻辑，但不能证明统计过程或结论正确。
+
+未来的业务 Checker 至少应验证：检索样本范围固定、岗位按 ID 去重、必备/优先技术分开计数、每项结果保留证据、报告真实存在。**正常结束、工具成功和业务验收，是不同层次。**
+
+#### 2.4 人工审批：为什么 Docker 不是审批系统？
+
+Docker 的 `--read-only`、`--cap-drop=ALL`、挂载目录限制了容器的部分执行范围，但它并不认识“这个用户是否可以更新 JD 数据库”这样的业务规则。
+
+当前项目没实现用户身份、资源权限或人工审批流程；而 API Key 作为容器环境变量传入，Shell 仍有机会读取它。真正接入外部系统前，必须根据工具风险补充适用的授权控制，必要时在高风险调用前请求用户确认。
+
+### 3. 当前实现到哪一步？接下来怎样验证？
+
+| 需要确认的事实 | 已有依据 | 尚缺的证据 |
+| --- | --- | --- |
+| 应用能够调用 SDK | `src/run_phase0.py` 有调用代码，`FakeHarness` 单元测试通过 | 真正 SDK 初始化和模型请求 |
+| DSH 可以做模型决策 / 工具执行 | `agent-loop/src/agent.ts`、`sdk-minimal/cordis.patch.yml` | 本项目真实的 Tool Call 与工具返回 |
+| 工具反馈可以推动下一轮 | DSH Agent Loop 源码 | 本项目一次完整“调用 → 返回 → 后续决策”事件链 |
+| 显式规划 / 计划修订 | 当前没有应用实现或对应 Profile 插件 | 后续需求与新实现 |
+| 业务验证 / 审批 | 当前没有业务 Checker 或审批流程 | 后续实现及独立测试 |
+
+**学习顺序也应保持一致：先在一次真实 Session 中核实最小循环，再研究为何复杂岗位分析任务需要额外的计划、校验和授权机制。** 没有必要一上来设计一个包含所有高级能力的庞大平台。
 
 ---
 
