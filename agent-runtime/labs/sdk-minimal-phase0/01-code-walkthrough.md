@@ -41,7 +41,7 @@
 | 模型 / Profile / Session 参数 | **已传给 SDK，实际模型路由待实测** | `DeepSeekHarness(...)` |
 | Session 事件结构统计 | **已实现，离线测试覆盖** | `src/session_report.py` |
 | 禁止额外附加 Session 日志的配置 | **已声明，实际生效需核查运行版本** | `config/disable-session-upload.patch.yml` |
-| GitHub Actions 离线检查 | **已有成功记录** | `.github/workflows/phase0-offline.yml` |
+| GitHub Actions 离线检查 | **离线检查已配置（不包含真实模型执行）** | `.github/workflows/agent-runtime-phase0-offline.yml` |
 | 真实 DeepSeek 请求与工具调用 | **未获得实测证据** | 尚无真实 Session 样本 |
 | job-rag 检索、完整 JD 解析 | **未实现** | 仓库不存在相应模块 |
 | RAG 技术要求统计、报告生成、结果校验 | **未实现** | 仍是后续业务目标 |
@@ -127,7 +127,7 @@
 | --- | --- | --- |
 | **运行与部署** | `scripts/run-docker.sh`、`docker/Dockerfile`、`config/*.yml` | 解决在哪里运行、用什么版本、拥有哪些权限 |
 | **应用与观测** | `src/run_phase0.py`、`src/session_report.py` | 解决调用什么任务、获得什么结果、怎样读日志 |
-| **质量保障** | `tests/test_phase0.py`、`.github/workflows/phase0-offline.yml` | 解决应用包装代码是否有明显错误，不等同于真实 Agent 评测 |
+| **质量保障** | `tests/test_phase0.py`、`.github/workflows/agent-runtime-phase0-offline.yml` | 解决应用包装代码是否有明显错误，不等同于真实 Agent 评测 |
 
 `README.md` 是工程使用说明，`.gitignore`、`.dockerignore` 是文件边界；它们不属于 Agent 决策链，但关系到项目能否安全和稳定地运行。
 
@@ -139,7 +139,7 @@
 - [SDK 安装镜像](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/labs/sdk-minimal-phase0/docker/Dockerfile)
 - [Session 日志传输补丁](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/labs/sdk-minimal-phase0/config/disable-session-upload.patch.yml)
 - [离线测试](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/labs/sdk-minimal-phase0/tests/test_phase0.py)
-- [CI 配置](https://github.com/leecolin2023/HarnessLab/blob/main/agent-runtime/labs/sdk-minimal-phase0/.github/workflows/phase0-offline.yml)
+- [CI 配置](https://github.com/leecolin2023/HarnessLab/blob/main/.github/workflows/agent-runtime-phase0-offline.yml)
 
 ---
 
@@ -790,7 +790,7 @@ python -m unittest discover -s tests -v
 
 这只是 Bash 语法、Python 语法和离线单元测试。它**没有执行 `docker build`、`docker run`、`harness.run()`，也没有真实模型请求**。
 
-[已有成功的离线 CI 记录](https://github.com/leecolin2023/job-agent/actions/runs/41429202897) 是代码质量的一条证据，但不是 Agent 能够完成任务的证据。
+[迁移前旧仓库成功的离线 CI 记录](https://github.com/leecolin2023/job-agent/actions/runs/41429202897) 是代码质量的一条证据，但不是 Agent 能够完成任务的证据。
 
 这里要建立一个以后一直使用的判断规则：
 
