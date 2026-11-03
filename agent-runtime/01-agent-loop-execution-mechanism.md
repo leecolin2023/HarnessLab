@@ -74,7 +74,133 @@ result = harness.run(args.prompt, session_id=args.session_id)
 
 所以，当我们要求模型**选择真实行动**时，必须先让它知道外部有哪些操作能力可用。
 
-在当前任务中，Runtime 会在构造模型请求时提供与任务有关的信息，其中包括可用工具的说明。这样，模型可以选择提出一个工具调用请求，而不只是生成普通回答。
+但“运行环境提供工具”这句话还不够具体。**工具究竟在哪里定义、怎样交给 Agent，以及模型为什么能看到它？**
+
+### 1. 这个例子中的 Bash 工具是谁提供的？
+
+先回到 job-agent 已有的 Python 代码。启动时有一个容易被忽略的配置：
+
+~~~python
+with DeepSeekHarness(
+    provider="deepseek-official",
+    model=args.model,
+    cwd=str(workspace),
+    dsh_home=str(home),
+    profile="sdk-minimal",
+    patches=(str(patch),),
+) as harness:
+    result = harness.run(args.prompt, session_id=args.session_id)
+~~~
+
+这里最关键的是 **`profile="sdk-minimal"`**。它不是告诉模型“请自行想办法执行 Bash”，而是选择 DeepSeek Harness 已经准备好的一套运行配置。
+
+我们在 [DeepSeek Harness 官方 `sdk-minimal/cordis.patch.yml`](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/sdk-minimal/cordis.patch.yml) 中可以找到相应的插件装配。下面只摘出与 Bash 相关的配置项（省略了其余配置）：
+
+~~~yaml
+- id: terminal-bash
+  name: '@deepseek-ai/dsh-terminal-bash'
+
+- id: tools
+  name: '@deepseek-ai/dsh-tools'
+
+- id: tool-executor-native
+  name: '@deepseek-ai/dsh-tool-executor-native'
+
+- id: agent-loop
+  name: '@deepseek-ai/dsh-agent-loop'
+
+- id: persistent-bash
+  name: '@deepseek-ai/dsh-tool-bash-persistent'
+~~~
+
+这些配置分别解决不同问题：
+
+| 组件 | 在当前任务中的作用 |
+| --- | --- |
+| `dsh-tool-bash-persistent` | **提供并注册 `bash` 工具**：定义它叫什么、接受什么参数，以及执行时怎么操作 Shell |
+| `dsh-tools` | **保存和管理工具定义**：让 Runtime 能查找当前可用的工具 |
+| `dsh-tool-executor-native` | **接收并调度实际工具调用**：根据工具名称找到对应实现并执行 |
+| `dsh-terminal-bash` | **提供 Bash 终端后端**：让命令能真正交给终端执行 |
+| `dsh-agent-loop` | **组织模型与工具的往返循环** |
+
+这就回答了“Bash 从哪里来”：**不是 Python `run()` 自动发明了 Bash，而是 `sdk-minimal` 在启动时装配了 Bash 工具插件。**
+
+在 Linux/macOS 上，该 Profile 使用持久 Bash；在 Windows 上，对应的是 PowerShell。下文继续以 Linux 容器里的 Bash 为例。
+
+### 2. 工具装配好了，模型为什么能知道它存在？
+
+只有 Bash 程序安装在系统里，还不够。
+
+例如，容器里即使装有 `git` 或 `python`，模型也不会自动得到名为 `git`、`python` 的独立工具定义。它需要通过已经公开的 `bash` 工具执行相应命令。
+
+一个能被模型选择的工具，至少需要两方面：
+
+- **面向模型的说明**：工具名称、用途和输入参数，例如 `bash` 接受 `command` 参数。
+- **面向执行器的实现**：真正接收参数并执行命令的代码。
+
+[`dsh-tool-bash-persistent` 官方说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/shell/tool-bash-persistent/README.zh.md) 明确指出，它会注册名为 `bash` 的工具。[`dsh-tools` 官方说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tools/README.zh.md) 则说明，已注册且获准使用的工具，其名称、描述和参数 Schema 会提供给模型。
+
+在当前源码中，Runtime 会先解析本轮可用的工具集合，再据此构造模型请求。
+
+因此，工具从配置到模型的过程是：
+
+~~~text
+Python 选择 profile="sdk-minimal"
+             ↓
+Harness 加载 persistent-bash 工具插件
+             ↓
+插件向工具注册表注册 bash
+             ↓
+Runtime 解析本轮可用工具
+             ↓
+把 bash 的名称、说明和参数 Schema 加入模型请求
+             ↓
+模型才有机会返回 bash 工具调用
+~~~
+
+这里要特别区分：
+
+**注册工具是让系统具有某项能力；把工具 Schema 提供给模型，是让模型知道可以请求这项能力。** 两者都有了，模型才能按接口提出有效的行动请求。
+
+### 3. 如果不是使用内置 Bash，而是提供自己的工具呢？
+
+假设后续 JD Research Agent 需要一个独立的 `read_job` 工具，按职位 ID 读取脱敏的岗位信息，而不是让模型直接运行任意 Shell 命令。
+
+我们就需要自己实现这项功能，并把它注册给 Harness。
+
+DeepSeek Harness 的 [工具注册机制](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tools/README.zh.md) 提供 `defineTool` 和 `ctx.tools.register()`。一个自定义工具的核心结构可以表示为：
+
+~~~typescript
+// 结构示例：需放在正确装配的 Harness 插件中，不能直接粘贴到 Python SDK 执行
+ctx.tools.register(defineTool({
+  name: 'read_job',
+  description: '按职位 ID 读取一条脱敏岗位资料',
+  parameters: {
+    job_id: { type: 'string', required: true },
+  },
+  output: {
+    schema: { type: 'string' },
+    render: (_args, value) => [{ type: 'text', text: value }],
+  },
+  async execute(args) {
+    return readJobFromApprovedDataset(args.job_id) // 示例业务实现
+  },
+}))
+~~~
+
+其中，`name`、`description` 和 `parameters` 帮模型理解怎么调用；`execute` 才是真正读取数据的代码。上面是**说明接口关系的片段**，不是当前 job-agent 已经实现的功能，也不是可直接运行的完整插件。
+
+完成定义后，还必须让自定义插件被当前 Profile 或配置补丁加载；仅仅编写这个函数并不会使工具自动出现。
+
+另一条路线是接入 MCP Server：由 MCP 客户端发现外部服务器提供的工具，并注册到同一套工具机制中。它解决的是外部工具的接入问题，后续 **03 · Tool Calling 与 MCP** 再展开具体协议与配置。
+
+需要明确：**当前 job-agent 只配置了现成的 `sdk-minimal` 工具，并没有注册上面的 `read_job`，也没有接好 JD 检索 MCP Server。** 不应误认为 Python SDK 的 `run()` 自动提供所有业务工具。
+
+### 4. 现在回到第一次模型请求
+
+我们已经知道，`bash` 工具为什么会出现在模型可用的工具集合中。
+
+在当前任务中，Runtime 会在构造模型请求时提供与任务有关的信息，其中包括 Bash 工具的名称、说明及参数 Schema。模型于是能够选择提出一个工具调用请求，而不只是生成普通回答。
 
 第一次模型请求可以简化理解为：
 
@@ -96,9 +222,9 @@ result = harness.run(args.prompt, session_id=args.session_id)
 
 这里有两个重要的区别：
 
-**第一，工具需要由运行环境提供。** 模型不能凭空获得任意系统权限。
+**第一，工具通过 Profile 加载、插件注册和 Runtime 的工具集合装配，才真正成为模型可调用的能力。** 这不等于模型拥有任意系统权限。
 
-**第二，模型知道工具存在，不等于工具已经被执行。** 模型返回的只是下一步想采取的行动。
+**第二，工具出现在模型请求中，不等于工具已经被执行。** 模型返回的只是下一步想采取的行动。
 
 这就引出了下一问：模型已经说要执行 `pwd`，谁来把它变成真实操作？
 
@@ -403,7 +529,7 @@ Session：这一段连续交互及其事件记录
 从一次 `run()` 出发，我们依次解决了六个问题：
 
 1. 为什么一个 SDK 调用可能包含多个模型请求和工具操作？
-2. 模型如何知道自己能提出什么行动？
+2. 运行环境如何装配并注册工具，模型又如何获得工具说明？
 3. 模型提出的工具请求怎样变成真实执行？
 4. 工具结果怎样进入下一次模型判断？
 5. Runtime 根据什么继续或结束循环？
