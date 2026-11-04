@@ -1,5 +1,7 @@
 # 什么是模型服务平台，为什么需要？
 
+> **完整学习路线**：[Qwen 小模型 → DeepSeek V4 Flash-0731 → PaddleOCR-VL-1.5 → 统一模型服务平台](./LEARNING_PATH.md)。本篇解释平台是什么及为什么需要，路线文档则组织实际学习阶段、硬件路径、验收证据与后续专题。
+
 ## 一、模型已经能运行，为什么还需要模型服务？
 
 一套文档识别程序，可以直接在自身进程中加载 OCR 模型，读取图片并得到文字、坐标和置信度：
@@ -236,3 +238,14 @@ Agent Runtime：目标 → 模型判断 → 工具执行 → 环境反馈 → �
 ```
 
 模型成功生成文本，不代表 Agent 已经完成任务。例如，模型可能正确提出“查询制度”，但工具未执行、证据不完整或报告未通过核对。反过来，Agent Loop 也不会自动解决 GPU 显存压力、模型发布或请求限流。
+
+## 九、下一步如何建立完整模型服务能力？
+
+不要把部署三种模型当作三个独立的教程。参照 [模型服务平台完整学习路线](./LEARNING_PATH.md)，先使用 Qwen3-0.6B 和 Qwen3-4B 理解加载、文本推理、API 与并发，再使用 DeepSeek-V4-Flash-0731 的昇腾 W8A8 参考路径研究大型 MoE、多卡量化与调度，之后通过 PaddleOCR-VL-1.5 学习完整 PDF/图片解析 Pipeline 与独立文档服务契约，最终将它们纳入受控 Gateway。
+
+已完成的两篇机制文章按需穿插阅读：
+
+- [01 · vLLM 推理服务机制](./01-vllm-inference-serving.md)：在 Qwen3-4B Serving 与并发压测阶段，对照 Prefill/Decode、KV Cache、PagedAttention、Continuous Batching 等实现。
+- [02 · 模型服务容量规划](./02-model-serving-capacity-planning.md)：在 Qwen 容量和 DeepSeek 八卡阶段，理解 HBM 预算、精度、TP、实例副本与可靠性；原文以 Qwen3.8-27B 为容量案例，不把该模型替换为本路线首轮实验对象。
+
+**当前状态**：这是一条已规划的工程学习路线；现有原理文章不等于 Qwen、DeepSeek 或 OCR 已完成本地部署。只有真实运行记录、性能测试和业务验收才能将阶段标记为完成。
