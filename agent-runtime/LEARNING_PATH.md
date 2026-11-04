@@ -66,6 +66,7 @@ HarnessLab/
 │   ├── 07-permissions-sandbox-human-approval.md
 │   ├── 08-task-verification-and-completion.md
 │   ├── 09-deployment-and-serving.md
+│   ├── 10-end-to-end-evaluation-and-optimization.md
 │   ├── labs/
 │   │   └── sdk-minimal-phase0/
 │   │       ├── README.md                 # Phase 0 实验入口
@@ -90,7 +91,7 @@ job-agent/
 
 ### 根目录的目标知识版图
 
-下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 为 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)，02 为 [Workflow、Planning 与 Multi-Agent 专题](./02-workflow-planning-multi-agent.md)，03 为 [Tool Calling 与 MCP 专题](./03-tool-calling-and-mcp.md)，04 为 [Context Engineering 专题](./04-context-engineering.md)，05 为 [State、Session、Checkpoint 专题](./05-state-session-checkpoint.md)，06 为 [执行控制与故障恢复专题](./06-execution-control-and-failure-recovery.md)，07 为 [权限、Sandbox 与人工审批专题](./07-permissions-sandbox-human-approval.md)，08 为 [任务验证与结束条件专题](./08-task-verification-and-completion.md)，09 为 [部署与服务化专题](./09-deployment-and-serving.md)；其他主题仍按学习与实验进度完善。原有 `01-harness-context-management.md` 保留为网关排障扩展案例及旧链接入口，不再作为 04 的主阅读文件。
+下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 为 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)，02 为 [Workflow、Planning 与 Multi-Agent 专题](./02-workflow-planning-multi-agent.md)，03 为 [Tool Calling 与 MCP 专题](./03-tool-calling-and-mcp.md)，04 为 [Context Engineering 专题](./04-context-engineering.md)，05 为 [State、Session、Checkpoint 专题](./05-state-session-checkpoint.md)，06 为 [执行控制与故障恢复专题](./06-execution-control-and-failure-recovery.md)，07 为 [权限、Sandbox 与人工审批专题](./07-permissions-sandbox-human-approval.md)，08 为 [任务验证与结束条件专题](./08-task-verification-and-completion.md)，09 为 [部署与服务化专题](./09-deployment-and-serving.md)，10 为 [端到端评测与优化专题](./10-end-to-end-evaluation-and-optimization.md)；原理主线 00—10 均已建立阅读入口，但实践实验仍按真实进度继续推进。原有 `01-harness-context-management.md` 保留为网关排障扩展案例及旧链接入口，不再作为 04 的主阅读文件。
 
 | 原理主题 | 要回答的核心问题 | 首个对应实践阶段 |
 | --- | --- | --- |
@@ -104,7 +105,7 @@ job-agent/
 | [07 · 权限、Sandbox 与人工审批](./07-permissions-sandbox-human-approval.md) | 如何限制模型对真实系统的行动权限？ | 7 |
 | [08 · 任务验证与结束条件](./08-task-verification-and-completion.md) | 文件生成、工具成功与任务成功有什么不同？ | 3、8 |
 | [09 · 部署与服务化](./09-deployment-and-serving.md) | 单个本地 Session 怎样演变为可安全服务多个用户的应用？ | 9 |
-| 10 · 端到端评测与优化 | 怎样通过任务结果和轨迹定位问题，而不只评价最终文案？ | 8、9 |
+| [10 · 端到端评测与优化](./10-end-to-end-evaluation-and-optimization.md) | 怎样通过任务结果和轨迹定位问题，而不只评价最终文案？ | 8、9 |
 
 **00 与 01 的内容边界**：00 解释为什么从模型回答扩展到完成工作任务，以及 Agent Loop / Runtime 的总体职责；01 不再重新定义“模型决策 → 工具执行 → 反馈”，而研究 **一次任务实际怎样进入模型调用、按响应分支执行工具、把结果交给下一轮、以及在什么边界结束**。01 应以 [SDK Phase 0 实验](./labs/sdk-minimal-phase0/README.md) 的真实 Session 为验证目标；现有源码只能证明执行路径，尚无真实轨迹时不得宣称实验已完成。
 
@@ -431,7 +432,7 @@ DeepSeek Harness Python SDK 官方说明，`resume_session` 恢复持久化历�
 
 至少能针对一个失败案例给出可追踪的根因和一项有依据的改进；报告不能只给出“模型感觉更好”。样本数量、标签质量和结论适用范围必须如实记录。
 
-**关联原理**：[08 · 任务验证与结束条件](./08-task-verification-and-completion.md)；10 · 端到端评测与优化。08 先明确单次任务何时允许交付，10 再通过固定评测集定位跨样本与运行链路的系统问题。
+**关联原理**：[08 · 任务验证与结束条件](./08-task-verification-and-completion.md)；[10 · 端到端评测与优化](./10-end-to-end-evaluation-and-optimization.md)。08 先明确单次任务何时允许交付，10 再通过固定评测集定位跨样本与运行链路的系统问题。
 
 ### 阶段 9｜将本地应用变成可运行的服务
 
