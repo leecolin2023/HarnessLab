@@ -84,24 +84,24 @@ GPU / 昇腾 NPU / CPU 等实际推理资源
 
 ## 四、现有文章与完整知识版图怎样衔接？
 
-这份路线采用 **00—11 的知识主题**，对应 **阶段 0—12 的实践链**。现有文章保留原位置，其余是后续拟建设的专题，未建立文件的章节不伪装为已完成。
+这份路线采用 **00—11 的知识主题**，对应 **阶段 0—12 的实践链**。**知识文章 00—11 已全部成稿**；具体 Qwen、27B、DeepSeek、OCR 和 Gateway 的实验仍须按真实运行证据逐步验证。现有 01、02 原文保留，03—11 在本次补齐。
 
 | 知识主题 | 必须弄清的问题 | 首个实践阶段 |
 | --- | --- | --- |
 | [00 · 模型服务平台是什么](./README.md) | 模型运行为什么不等于可长期交付的服务？ | 0 |
 | [01 · vLLM 推理服务机制](./01-vllm-inference-serving.md) | Prefill、Decode、KV Cache、PagedAttention 与批处理为什么影响吞吐？ | 2—3 |
 | [02 · 模型服务容量规划](./02-model-serving-capacity-planning.md) | 以 Qwen3.8-27B 为核心案例，学习显存、量化、TP、副本、流量与冗余怎样决定卡数 | **4—5**，6—7 对照 |
-| 03 · 模型工件与运行环境 | 权重、Tokenizer、量化文件、驱动、引擎版本怎样组成可复现配置？ | 0—1 |
-| 04 · 从本地推理到统一模型 API | 如何从一次 `generate()` 变成可调用、可流式、可观测的常驻服务？ | 1—2 |
-| 05 · 单实例并发与推理调度 | 请求增加后，慢在哪里，改 Batch/Context/Cache 为什么有效？ | 3 |
-| 06 · MoE 与多卡推理 | 用 Qwen 27B 的 TP/副本作为对照，理解 DeepSeek 的专家路由、EP/TP/DP、通信与容量 | 5—7 |
-| 07 · 多模态 OCR Serving | 文字识别模型与完整 PDF Pipeline 的执行边界如何划分？ | 8—9 |
-| 08 · 模型 Gateway 与能力路由 | 多个后端如何以稳定 API 接入业务，又不抹平能力差异？ | 10 |
-| 09 · 性能与质量评测 | TTFT、TPOT、P95、吞吐和 OCR 质量怎样构成有效验收？ | 3—11 |
-| 10 · 发布、回滚与资源治理 | 模型更新、限流、鉴权、日志与资源争用怎样长期管理？ | 11 |
-| 11 · 端到端业务调用与工程决策 | 一份文档如何经多模型服务处理，并形成可追踪结果？ | 12 |
+| [03 · 模型工件与运行环境](./03-model-artifacts-and-runtime-environment.md) | 权重、Tokenizer、量化文件、驱动、引擎版本怎样组成可复现配置？ | 0—1 |
+| [04 · 从本地推理到统一模型 API](./04-local-inference-to-model-api.md) | 如何从一次 `generate()` 变成可调用、可流式、可观测的常驻服务？ | 1—2 |
+| [05 · 单实例并发与推理调度](./05-single-instance-concurrency-scheduling.md) | 请求增加后，慢在哪里，改 Batch/Context/Cache 为什么有效？ | 3 |
+| [06 · MoE 与多卡推理](./06-moe-and-multi-device-inference.md) | 用 Qwen 27B 的 TP/副本作为对照，理解 DeepSeek 的专家路由、EP/TP/DP、通信与容量 | 5—7 |
+| [07 · 多模态 OCR Serving](./07-multimodal-ocr-serving.md) | 文字识别模型与完整 PDF Pipeline 的执行边界如何划分？ | 8—9 |
+| [08 · 模型 Gateway 与能力路由](./08-model-gateway-capability-routing.md) | 多个后端如何以稳定 API 接入业务，又不抹平能力差异？ | 10 |
+| [09 · 性能与质量评测](./09-performance-and-quality-evaluation.md) | TTFT、TPOT、P95、吞吐和 OCR 质量怎样构成有效验收？ | 3—11 |
+| [10 · 发布、回滚与资源治理](./10-release-rollback-resource-governance.md) | 模型更新、限流、鉴权、日志与资源争用怎样长期管理？ | 11 |
+| [11 · 端到端业务调用与工程决策](./11-end-to-end-business-inference.md) | 一份文档如何经多模型服务处理，并形成可追踪结果？ | 12 |
 
-这里的 03—11 是**内容规划，不是要求先把十余篇原理文章写完才能动手**。每一阶段先有运行与观察，再根据暴露出的问题写对应的原理解读。
+03—11 现在已有独立正文，**但原理文章完成不意味着对应实验已经执行**。按阶段运行小规模、可复核的实验，再对照文章中已有机制解释，必要时更新文章和技术结论；不必等待整条实践链全部建成才开始测试。
 
 ## 五、实践阶段 0—2：先把 Qwen 小模型从文件变成服务
 
@@ -493,7 +493,16 @@ model-platform/
 ├── README.md
 ├── LEARNING_PATH.md
 ├── 01-vllm-inference-serving.md
-└── 02-model-serving-capacity-planning.md
+├── 02-model-serving-capacity-planning.md
+├── 03-model-artifacts-and-runtime-environment.md
+├── 04-local-inference-to-model-api.md
+├── 05-single-instance-concurrency-scheduling.md
+├── 06-moe-and-multi-device-inference.md
+├── 07-multimodal-ocr-serving.md
+├── 08-model-gateway-capability-routing.md
+├── 09-performance-and-quality-evaluation.md
+├── 10-release-rollback-resource-governance.md
+└── 11-end-to-end-business-inference.md
 ~~~
 
 后续在实验**确实开始时**，再增量建立 `labs/qwen-small-serving/`、`labs/qwen27b-serving/`、`labs/deepseek-flash-0731/`、`labs/ocr-serving/`、`labs/unified-gateway/` 等目录。它们是规划名称，**目前并未创建**。
