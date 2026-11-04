@@ -243,9 +243,31 @@ Agent Runtime：目标 → 模型判断 → 工具执行 → 环境反馈 → �
 
 不要把这些模型拆成互不关联的部署教程。参照 [模型服务平台完整学习路线](./LEARNING_PATH.md)，先用 Qwen3-0.6B / Qwen3-4B 理解模型加载、API 与并发；**再将 Qwen3.8-27B 作为独立的 Dense 多卡 Serving 实验**，验证 BF16/W8A8、TP、实例副本与长上下文；在此基础上使用 DeepSeek-V4-Flash-0731 的昇腾参考方案研究大型 MoE 与专家并行，随后引入 PaddleOCR-VL-1.5 的完整文档解析 Pipeline，最终统一纳入受控 Gateway。
 
-已完成的两篇机制文章按需穿插阅读：
+最先建立的两篇机制文章可在对应实验阶段反复对照：
 
 - [01 · vLLM 推理服务机制](./01-vllm-inference-serving.md)：在 Qwen3-4B Serving 与并发压测阶段，对照 Prefill/Decode、KV Cache、PagedAttention、Continuous Batching 等实现。
 - [02 · 模型服务容量规划](./02-model-serving-capacity-planning.md)：**直接服务于阶段 5 的 Qwen3.8-27B 部署**，围绕 910B4 的 HBM 预算、BF16/W8A8、TP=2/4、模型副本与可靠性建立实验依据，再将方法用于 DeepSeek MoE 对照。
 
 **当前状态**：这是一条已规划的工程学习路线；现有原理文章不等于 Qwen 小模型、Qwen 27B、DeepSeek 或 OCR 已完成本地部署。只有真实运行记录、性能测试和业务验收才能将阶段标记为完成。
+
+
+## 十、完整知识文章目录（00—11）
+
+原理文章已按 [完整学习路线](./LEARNING_PATH.md) 全部建成。**阅读顺序对应概念依赖，不要求全部读完才开始动手**；每一篇都包含贯穿案例、机制说明、关键取舍和后续实验条件。
+
+| 文章 | 解决的核心问题 | 对应模型或阶段 |
+| --- | --- | --- |
+| [00 · 模型服务平台总论](./README.md) | 企业为什么需要对长期运行的模型进行统一治理？ | 总体定位 |
+| [01 · vLLM 推理服务机制](./01-vllm-inference-serving.md) | KV Cache、PagedAttention、Continuous Batching 怎样改善服务效率？ | Qwen Serving / 阶段 2—3 |
+| [02 · 模型服务容量规划](./02-model-serving-capacity-planning.md) | 如何用 HBM、精度、卡数、吞吐决定真实容量？ | Qwen3.8-27B / 阶段 4—5 |
+| [03 · 模型工件与运行环境](./03-model-artifacts-and-runtime-environment.md) | 权重、Tokenizer、量化、驱动和引擎怎样形成可复现部署？ | Qwen 小模型 / 阶段 0—1 |
+| [04 · 从本地推理到统一模型 API](./04-local-inference-to-model-api.md) | 为什么本地生成不等于常驻、流式、可管理的服务？ | Qwen3-4B / 阶段 1—2 |
+| [05 · 单实例并发与推理调度](./05-single-instance-concurrency-scheduling.md) | 负载增加后 Prefill/Decode、Batch 和缓存怎样影响延迟？ | Qwen3-4B / 阶段 3 |
+| [06 · MoE 与多卡推理](./06-moe-and-multi-device-inference.md) | 如何从 Qwen 27B 的 TP/副本走向 DeepSeek 的 EP/通信？ | Qwen27B → DeepSeek / 阶段 5—7 |
+| [07 · 多模态 OCR Serving](./07-multimodal-ocr-serving.md) | 为什么识别图片不等于解析多页 PDF、复杂表格与证据？ | PaddleOCR-VL / 阶段 8—9 |
+| [08 · 模型 Gateway 与能力路由](./08-model-gateway-capability-routing.md) | 多种模型如何统一鉴权、路由和限流又保留 API 差异？ | 统一入口 / 阶段 10 |
+| [09 · 性能与质量评测](./09-performance-and-quality-evaluation.md) | TTFT、TPOT、P95、吞吐、OCR 结构质量如何共同决定验收？ | 跨模型评测 / 阶段 3—11 |
+| [10 · 发布、回滚与资源治理](./10-release-rollback-resource-governance.md) | 如何让可运行模型真正安全上线、监控、灰度与回退？ | 模型治理 / 阶段 11 |
+| [11 · 端到端业务调用与工程决策](./11-end-to-end-business-inference.md) | 一份文档怎样按需选择 OCR/Qwen/DeepSeek 并形成可追踪结果？ | 集成闭环 / 阶段 12 |
+
+建议先完成低成本 Qwen 的基本运行实验，再进入 Qwen3.8-27B 的 TP/量化对照，随后研究 DeepSeek 八卡 MoE 和 PaddleOCR-VL，最后按业务需要统一 Gateway 与验收。对应的 `labs/` 仍按真实环境和实验进度逐步建立；**知识文章齐全不等于部署测试已完成**。
