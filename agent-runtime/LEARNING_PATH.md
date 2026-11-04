@@ -82,13 +82,13 @@ job-agent/
 
 ### 根目录的目标知识版图
 
-下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 已形成独立的 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)；其他主题仍按学习与实验进度完善。现有 `01-harness-context-management.md` 实际属于 04 · Context Engineering，为避免破坏已有链接暂保留旧文件名，后续整理命名时统一处理。
+下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 为 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)，02 为 [Workflow、Planning 与 Multi-Agent 专题](./02-workflow-planning-multi-agent.md)；其他主题仍按学习与实验进度完善。现有 `01-harness-context-management.md` 实际属于 04 · Context Engineering，为避免破坏已有链接暂保留旧文件名，后续整理命名时统一处理。
 
 | 原理主题 | 要回答的核心问题 | 首个对应实践阶段 |
 | --- | --- | --- |
 | 00 · Agent 与 Runtime | 为什么一次模型回答不等于任务完成？Runtime 执行什么？ | 0、1 |
 | [01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md) | 一个 Agent 任务从启动到结束，Runtime 如何处理模型响应、工具结果和循环控制？ | 1、2 |
-| 02 · Workflow、Planning 与 Multi-Agent | 固定步骤与模型动态决策如何组合？何时拆成多个 Agent？ | 3 |
+| [02 · Workflow、Planning 与 Multi-Agent](./02-workflow-planning-multi-agent.md) | 固定步骤与模型动态决策如何组合？何时拆成多个 Agent？ | 3 |
 | 03 · Tool Calling 与 MCP | 模型提出调用、工具实际执行、MCP 协议分别负责什么？ | 2、4 |
 | 04 · Context Engineering | 每轮调用如何选择、压缩和隔离必要信息？ | 5 |
 | 05 · State、Session、Checkpoint | 任务状态、会话历史和恢复点各自保存什么？ | 6 |
@@ -288,7 +288,7 @@ with DeepSeekHarness(
 
 在一批故意包含重复职位、缺失字段、可疑技术归类的样本上，比较无 Checker 和有 Checker 的结果。记录修正是否真的减少可复核错误、是否增加不必要的循环与调用成本。
 
-**关联原理**：Workflow、Planning、Multi-Agent、验证与结束条件。
+**关联原理**：[02 · Workflow、Planning 与 Multi-Agent](./02-workflow-planning-multi-agent.md)；08 · 任务验证与结束条件。先解释固定阶段与模型自主决策如何分工，再用同一批 JD 验证 Checker、Planning 或 Multi-Agent 是否值得增加。
 
 ### 阶段 4｜把岗位能力接到 MCP
 
