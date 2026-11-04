@@ -86,7 +86,7 @@ job-agent/
 
 ### 根目录的目标知识版图
 
-下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 为 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)，02 为 [Workflow、Planning 与 Multi-Agent 专题](./02-workflow-planning-multi-agent.md)，03 为 [Tool Calling 与 MCP 专题](./03-tool-calling-and-mcp.md)，04 为 [Context Engineering 专题](./04-context-engineering.md)，05 为 [State、Session、Checkpoint 专题](./05-state-session-checkpoint.md)；其他主题仍按学习与实验进度完善。原有 `01-harness-context-management.md` 保留为网关排障扩展案例及旧链接入口，不再作为 04 的主阅读文件。
+下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 为 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)，02 为 [Workflow、Planning 与 Multi-Agent 专题](./02-workflow-planning-multi-agent.md)，03 为 [Tool Calling 与 MCP 专题](./03-tool-calling-and-mcp.md)，04 为 [Context Engineering 专题](./04-context-engineering.md)，05 为 [State、Session、Checkpoint 专题](./05-state-session-checkpoint.md)，06 为 [执行控制与故障恢复专题](./06-execution-control-and-failure-recovery.md)；其他主题仍按学习与实验进度完善。原有 `01-harness-context-management.md` 保留为网关排障扩展案例及旧链接入口，不再作为 04 的主阅读文件。
 
 | 原理主题 | 要回答的核心问题 | 首个对应实践阶段 |
 | --- | --- | --- |
@@ -96,7 +96,7 @@ job-agent/
 | [03 · Tool Calling 与 MCP](./03-tool-calling-and-mcp.md) | 模型提出调用、工具实际执行、MCP 协议分别负责什么？ | 2、4 |
 | [04 · Context Engineering](./04-context-engineering.md) | 每轮调用如何选择、压缩和隔离必要信息？ | 5 |
 | [05 · State、Session、Checkpoint](./05-state-session-checkpoint.md) | 任务状态、会话历史和恢复点各自保存什么？ | 6 |
-| 06 · 执行控制与故障恢复 | 超时、重试、幂等、取消和补偿怎样协同？ | 7 |
+| [06 · 执行控制与故障恢复](./06-execution-control-and-failure-recovery.md) | 超时、重试、幂等、取消和补偿怎样协同？ | 7 |
 | 07 · 权限、Sandbox 与人工审批 | 如何限制模型对真实系统的行动权限？ | 7 |
 | 08 · 任务验证与结束条件 | 文件生成、工具成功与任务成功有什么不同？ | 3、8 |
 | 09 · 部署与服务化 | 单个本地 Session 怎样演变为可安全服务多个用户的应用？ | 9 |
@@ -393,7 +393,7 @@ DeepSeek Harness Python SDK 官方说明，`resume_session` 恢复持久化历�
 
 错误能够被识别、记录并按规则停止或恢复；危险操作不能因为模型建议就直接执行；实验能够指出边界由哪一层强制保障，而不是只靠提示词承诺。
 
-**关联原理**：可靠性、安全、人工审批。
+**关联原理**：[06 · 执行控制与故障恢复](./06-execution-control-and-failure-recovery.md)；07 · 权限、Sandbox 与人工审批。先区分只读查询的有界重试与有副作用操作的状态核查，再验证取消、幂等和补偿边界。
 
 ### 阶段 8｜建立端到端评测，而不只评估最后一段回答
 
