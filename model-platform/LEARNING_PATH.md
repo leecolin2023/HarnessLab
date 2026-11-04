@@ -331,3 +331,188 @@ GET /v1/document-parses/{document_job_id}/result
 评测不仅包含 CER/WER 或字段准确率，还应关注表格单元格与行列结构、跨页关联、阅读顺序、页面覆盖和业务字段证据定位。
 
 **验收**：提交固定多页文档后，可查询进度、核查每页结果与失败原因；一份文档的个别页面失败时，系统明确记录，不伪造“全文解析成功”。
+
+
+## 九、实践阶段 9—11：从三项独立服务走向统一模型平台
+
+### 阶段 9｜统一 Gateway：为什么不能只把三个 URL 放进配置？
+
+业务应用需要 `qwen-small`、`deepseek-flash-0731` 和 `document-parse`，却不应该直接知道每台服务器的设备、IP 和部署端口。
+
+Gateway 应承担**模型注册、版本映射、鉴权、授权、路由、限流、审计和可观测性**，并将服务错误、取消与超时以明确契约返回。
+
+例如：
+
+~~~yaml
+# 模型注册表的逻辑示意，不是某款网关可以直接加载的配置
+routes:
+  qwen-small:
+    capability: chat
+    pinned_weight: Qwen/Qwen3-4B
+    backend: qwen-serving
+  deepseek-flash-0731:
+    capability: chat
+    pinned_weight: DeepSeek-V4-Flash-0731-w8a8
+    backend: deepseek-ascend-serving
+  document-parse:
+    capability: document-parse
+    pinned_pipeline: PaddleOCR-VL-1.5
+    backend: paddleocr-serving
+~~~
+
+必须区分**业务模型别名、实际权重版本和部署实例**，避免云 API 别名悄悄变更底层模型而造成评测失真。
+
+文本服务可以优先实现经验证的 OpenAI-compatible Chat Completions 接口，但不强制 OCR 复用文本聊天协议：文档解析通常是文件提交、异步作业、页级结果与表格结构等不同契约。
+
+需要验证：错误码与重试语义、流式行为、模型访问权限、调用配额、路由到的真实模型版本，以及后端不可用时的明确失败。若用已有 API Gateway 或 AI Gateway 能满足需求，就不必自行开发新网关。
+
+**验收**：同一业务调用方在不知道后端地址的情况下，能调用授权的模型能力；拒绝未授权模型、记录实际路由，且 OCR 和文本 API 不会因为“统一入口”而丢失各自所需的结构。
+
+### 阶段 10｜版本发布和容量治理：模型返回 HTTP 200 就能上线吗？
+
+模型更新后可能仍然正常响应，但输出格式、推理速度、工具调用或 OCR 识别准确性已经改变。因此发布至少需要检查：
+
+| 发布关卡 | 需要证明什么 |
+| --- | --- |
+| 工件 | 准确权重、量化文件、Tokenizer、引擎与软件版本 |
+| 运行 | 冷启动、就绪、显存/HBM、通信、超时与错误处理 |
+| API | 模型别名、流式输出、响应字段、OCR 任务契约 |
+| 性能 | 固定请求分布下的 TTFT、TPOT、P95、吞吐、队列和资源 |
+| 质量 | 固定文本问题、条件分类、OCR 文字/表格/版面回归 |
+| 安全 | 模型权限、文档访问、日志脱敏、出站与凭据边界 |
+| 恢复 | 灰度、新旧实例切换、失败回滚、长期运行稳定性 |
+
+对大模型可先在脱敏固定请求上离线验证，再逐步放行受控流量；NPU 资源不足时，先做可回滚的发布演练，而非在没有冗余的前提下宣称生产高可用。
+
+**验收**：有新旧版本的对照记录，能展示一次升级失败后的回滚。性能必须带输入输出长度、并发与版本信息；不能只写“吞吐提升 30%”却没有可比较的负载。
+
+### 阶段 11｜让 OCR、Qwen 与 DeepSeek 串起来，怎样验证整个平台？
+
+选取一份**固定、合法、脱敏、含表格的 PDF 或图像文档**，构造端到端任务：
+
+~~~text
+业务应用提交文档
+       ↓
+PaddleOCR-VL-1.5：页面、版面、文本和表格识别
+       ↓
+程序校验：页码、表格结构、源文件证据和权限
+       ↓
+Qwen 小模型：简单的分类/字段整理（确有必要时）
+       ↓
+程序规则：可确定字段直接校验或计算
+       ↓
+DeepSeek-V4-Flash-0731：复杂条件理解和报告草稿
+       ↓
+业务 Checker：验证结论、原文证据和报告
+       ↓
+统一 Gateway：请求关联、模型版本、耗时、成本和审计
+~~~
+
+这是一条**用于检验平台的可选工作流**，不是说每份文档都需要三个模型。文本输入可绕过 OCR，简单规则不需要调用模型；如果 Qwen 的某项中间处理没有实际收益，也应该允许删除这一环节。
+
+需要回答以下工程问题：
+
+- OCR 漏了一行或错乱了表格，错误怎样传递到最终分析？
+- 一份扫描文档变得模糊后，平台怎样区分 OCR 质量问题与语言模型判断问题？
+- 大型模型占满 NPU 时，OCR 是否会被资源争用拖慢？
+- 同一批文档采用不同路由，模型请求次数、延迟、质量与成本有何变化？
+- 某项服务超时或失败，最终业务是否如实说明未完成，还是输出看似完整的错误结果？
+
+**验收**：不仅要三个服务各自能响应，更要做到最终结构化结果和报告可回查，业务与模型错误能定位到具体服务，版本和成本有记录，出现问题可以回滚。
+
+这一阶段可用普通 Workflow 编排，不需要为了演示模型平台而自研 Agent Runtime。两者的职责边界见 [Agent Runtime 总论](../agent-runtime/README.md)：模型平台负责交付稳定推理与解析服务，Agent Runtime 负责决定任务如何多轮行动、调用工具、维护上下文和判断完成。
+
+## 十、每个阶段怎样留下可复核的证据？
+
+建议为所有模型服务实验建立统一记录契约，避免每个 Lab 都另造一套不可比较的指标。
+
+| 记录 | 为什么必须保留 |
+| --- | --- |
+| 实验 ID、任务假设和运行日期 | 说明本次想验证什么判断 |
+| 模型仓库、revision、权重/量化文件哈希 | 证明实际用了什么模型 |
+| 硬件、驱动、CANN/CUDA、镜像、推理引擎 | 保证环境与软件版本可回溯 |
+| `served_model_name` 到权重的映射 | 防止 API 别名与真实权重混淆 |
+| 输入/输出 Token、图片大小或 PDF 页数分布 | 性能数据有明确负载口径 |
+| Batch、并发、上下文、TP、EP、副本、缓存配置 | 支持解释性能差异 |
+| TTFT、TPOT、P50/P95、吞吐、HBM 峰值及错误 | 定位容量瓶颈与可靠性 |
+| 固定正确性样本、实际输出、人工核查 | 防止为了提升吞吐牺牲业务质量 |
+| 失败、超时、取消、回滚及运行记录 | 证明故障时行为可解释 |
+
+### 文件如何组织？
+
+现在已存在的主要文件为：
+
+~~~text
+model-platform/
+├── README.md
+├── LEARNING_PATH.md
+├── 01-vllm-inference-serving.md
+└── 02-model-serving-capacity-planning.md
+~~~
+
+后续在实验**确实开始时**，再增量建立 `labs/qwen-small-serving/`、`labs/deepseek-flash-0731/`、`labs/ocr-serving/`、`labs/unified-gateway/` 等目录。它们是规划名称，**目前并未创建**。
+
+每个 Lab 至少包含运行配置或代码、输入样本、环境约束、测试和实际运行证据；大型权重、机密文档、私有 API Key 与未脱敏日志不得直接提交公开仓库。
+
+模型 Serving 实验属于 `model-platform/`；Agent 机制实验属于 `agent-runtime/`；真实职位库与岗位研究业务数据继续由 job-rag 等业务仓库负责。
+
+## 十一、应该按什么节奏推进？
+
+| 里程碑 | 形成的真实闭环 | 要理解的核心机制 |
+| --- | --- | --- |
+| **M1：一个模型** | Qwen3-0.6B 推理和 Qwen3-4B Serving | 权重、Tokenizer、API、Prefill/Decode |
+| **M2：一个可测的大模型服务** | Qwen 并发与容量实验；DeepSeek 0731 的八卡兼容审查和有条件实际运行 | KV Cache、量化、TP/EP/DP、吞吐与延迟 |
+| **M3：两类不同服务** | PaddleOCR-VL 完整 Pipeline 与文本 Serving 共存 | 视觉输入、页面队列、结构化输出、OCR 质量 |
+| **M4：一个受控平台** | Gateway、权限、限流、版本发布、回滚及端到端业务实验 | 控制面、数据面、服务治理与质量回归 |
+
+**第一轮优先完成阶段 0—2**：先让低成本 Qwen 小模型有稳定的运行记录，再借助单实例 Serving 验证真正的 API 与并发。
+
+有八卡 NPU 权限后，先完成 DeepSeek 0731 的**软件/权重/硬件兼容矩阵**，再按照官方已验证的部署路线实验。暂时无法实测时明确标注待验证，不能拿官方性能或云 API 结果冒充本机成果。
+
+OCR 可以在固定文档上先验证功能和质量，再决定 CUDA/NPU 的 Serving 组合；最后把三类能力交给 Gateway 治理。
+
+现有 [01 · vLLM 原理](./01-vllm-inference-serving.md) 应在 Qwen 正式 Serving 后反复对照阅读；[02 · 容量规划](./02-model-serving-capacity-planning.md) 则在 Qwen 并发与 DeepSeek 多卡阶段反复使用。它们不是学完后就不再回看的教材。
+
+## 十二、最终应形成怎样的工程判断能力？
+
+学习的结果不是掌握三份启动命令，而是在实际模型服务问题面前能够解释：
+
+**为什么选这版模型和权重？哪些资源决定能否加载？慢在 Prefill、Decode、排队还是设备通信？何时应量化、增大 TP、增加副本或收紧上下文？为什么 OCR 需要独立 Pipeline/API？多模型共同运行时怎样治理权限、限流、监控与发布？**
+
+整条因果链应当连贯：
+
+~~~text
+业务能力和质量要求
+       ↓
+准确权重版本 + 成熟推理框架
+       ↓
+核对目标硬件、驱动和算子支持
+       ↓
+单实例正确性与 API 验证
+       ↓
+固定负载下的性能、显存和稳定性观测
+       ↓
+按瓶颈决定量化、并行、缓存、路由和副本
+       ↓
+加入 OCR 等不同类型的推理服务
+       ↓
+统一认证、监控、发布和回滚
+       ↓
+在真实业务结果中证明平台提供了可靠能力
+~~~
+
+我们研究模型服务平台的价值，是**理解并管理成熟模型/引擎的运行边界、做出可验证的部署与容量判断**；不以重新实现推理引擎、训练模型或自研 GPU/NPU 算子为前置条件。
+
+## 官方资料与版本依据
+
+- [Qwen3 官方仓库](https://github.com/QwenLM/Qwen3)
+- [Qwen3 Dense：vLLM-Ascend 部署](https://docs.vllm.ai/projects/ascend/en/main/tutorials/models/Qwen3-Dense.html)
+- [vLLM 文档](https://docs.vllm.ai/)
+- [vLLM-Ascend 支持矩阵](https://docs.vllm.ai/projects/ascend/en/main/user_guide/support_matrix/supported_models.html)
+- [DeepSeek 官方更新日志：Flash 0731 与云 API 别名](https://api-docs.deepseek.com/updates/)
+- [vLLM DeepSeek V4 Flash 推理配方](https://recipes.vllm.ai/deepseek-ai/DeepSeek-V4-Flash)
+- [DeepSeek V4 Flash：昇腾 A2/A3 官方部署指南](https://docs.vllm.ai/projects/ascend/en/main/tutorials/models/DeepSeek-V4-Flash.html)
+- [PaddleOCR 官方仓库](https://github.com/PaddlePaddle/PaddleOCR)
+- [PaddleOCR-VL 完整 Pipeline](https://www.paddleocr.ai/latest/en/version3.x/pipeline_usage/PaddleOCR-VL.html)
+- [PaddleOCR-VL 昇腾 NPU 部署指南](https://www.paddleocr.ai/v3.5.0/en/version3.x/pipeline_usage/PaddleOCR-VL-Huawei-Ascend-NPU.html)
+- [PaddleOCR-VL 高性能服务参考（NVIDIA）](https://github.com/PaddlePaddle/PaddleOCR/blob/main/deploy/paddleocr_vl_docker/hps/README.md)
