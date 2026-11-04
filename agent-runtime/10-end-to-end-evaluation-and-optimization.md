@@ -388,3 +388,218 @@ Phase 0 已设置关闭额外 Session 日志上传，正常模型请求仍然会
 如果两种方案连输入都不一致，很容易把“额外读到了更多 JD”的收益误判为 Checker 的能力。
 
 有时多项变化确实必须一起部署。可以做整体 A/B 比较，但应将结论限定为“新组合整体改善”，不能声称已经证明每个组件的独立贡献。
+
+
+## 十、模型输出本来就会变化，怎样证明一次优化是真的？
+
+同一份 JD、同样的 Prompt，模型重新执行一次也可能给出不同表述；服务端模型别名、路由、工具和检索索引也可能变化。
+
+所以“今天 B 比 A 好一次”不足以得出普遍结论。
+
+### 1. 先冻结能冻结的条件
+
+至少记录：
+
+- JD CSV 的内容哈希与数据快照；
+- `job_id` 映射、筛选和去重规则版本；
+- Prompt、工具 Schema、检索配置、索引版本；
+- 代码提交与运行环境；
+- 模型路由名、已知的模型版本与输出参数；
+- 生成时实际使用的来源集合；
+- 成功、失败与重试的真实调用记录。
+
+现有 [job-rag 实验](https://github.com/leecolin2023/job-rag/blob/main/experiments/rag_tech_requirements/README.md) 已保存源 CSV 哈希、`manifest`、模型调用记录与结果归档，这些可以直接复用。
+
+但是，**记录模型别名不一定能锁定提供商内部的具体模型版本**，不能把“可记录配置”误写成“完全确定性复现”。
+
+### 2. 在相同案例上做配对比较
+
+例如对四条教学 JD，记录 A、B 是否达到对应标准：
+
+| 案例 | 方案 A | 方案 B | 观察 |
+| --- | --- | --- | --- |
+| JD-001：优先条件 | 错 | 对 | B 修复错误 |
+| JD-002：必备条件 | 对 | 对 | 结果一致 |
+| JD-003：否定表述 | 对 | 错 | B 引入退化 |
+| JD-004：混合条件 | 错 | 错 | 两者都需要改进 |
+
+这张表纯属说明，不是已有的四条真实运行结论。
+
+它能让我们看到**改善了什么、破坏了什么**，而不是被总体平均分掩盖。
+
+### 3. 何时需要重复运行和估计不确定性？
+
+当方案涉及模型自由生成、工具调用路径不固定或外部服务波动时，关键方案应在固定案例上重复执行，观察结果波动。
+
+对足够多的独立案例，可以按职位或完整任务做配对统计、区间估计或分层分析。**不能把同一职位切出来的十个 Chunk 误当成十个独立岗位样本**。
+
+困难案例集很适合暴露错误，但即使指标精确到小数点后两位，也不能把它自动外推成全部市场招聘 JD 的准确率。
+
+## 十一、质量更好但成本翻倍，算不算优化成功？
+
+假设增加 Checker 后，错分明显减少，但每条 JD 又调用模型三次，最终报告的耗时也增长。
+
+能不能接受，取决于业务要求：必须满足的质量和安全约束是什么？减少错误带来的收益是否超过额外开销？
+
+因此建议分两步评价：
+
+**第一步，先看质量底线。** 对不能接受的统计分母错误、无证据结论或越权访问，不能因为更便宜就放行。
+
+**第二步，在合格方案之间比较成本和速度。**
+
+比“每次模型调用消耗多少 Token”更有业务意义的，是：
+
+- 每份**经验证合格**的报告的端到端成本；
+- 合格任务的 P50 / P95 完成时间；
+- 每条已正确处理的 JD 的模型与工具开销；
+- 失败重试、摘要与 Checker 额外调用的比例；
+- 仍需人工复核或返工的工作量。
+
+一个方案模型调用更少，但漏掉的 JD 更多、需要大量人工补救，它的总成本可能反而更高。
+
+此外，Token 使用量不等于供应商实际扣费。若没有可信账单数据，就要把估算和实际费用分开；提供方没有返回的用量也不能凭猜测补造。
+
+**优化的目标不是让所有指标都越低越好，而是在任务合格的前提下，让资源投入有明确回报。**
+
+## 十二、把前九篇串起来：发现故障后先看哪一层？
+
+前面学过的 Agent Loop、Workflow、Tools、Context、State、权限、Checker 和服务化，不应该变成各自孤立的名词。
+
+遇到一项具体失败，可以从实际症状找到优先排查范围：
+
+| 发现的问题 | 先定位到哪里 | 可能的最小改进 |
+| --- | --- | --- |
+| 应纳入职位没进入候选 | 数据、字段解析、检索 | 修正候选规则或召回方式 |
+| 同一职位被计算两次 | 数据归并与 `job_id` | 稳定去重键和快照版本 |
+| 工具取得了原文，模型没看到 | Context、裁剪与工具结果 | 有界返回、按需回查 |
+| “经验优先”被写成必备 | 模型判断、规则口径与 Checker | 明确标签、针对性复核 |
+| 原文确实存在却不支持结论 | 证据验证 | 增加语义支持度检查 |
+| Top-K 被当作全部岗位 | 统计口径、Workflow、汇总 | 分离全量事实与局部例证 |
+| 工具写成功，结果没保存 | State、Checkpoint、幂等 | 持久结果与恢复核查 |
+| Runtime `completed`，报告却不合格 | 验收契约和 Checker | 业务完成状态与运行结束分离 |
+| 两个用户看到相同产物 | 权限、Session 归属、隔离 | 服务端鉴权、独立工作区 |
+| P95 延迟很高 | Worker、模型、工具与重试 | 先分阶段定位耗时，再优化容量 |
+
+表中的“先定位”不是说其他层绝无问题，而是提醒我们不要从最终失败直接跳到“换模型”或“拆多 Agent”。
+
+如果最先偏离的是候选集合不完整，往模型里加入更多复杂推理未必有用；如果模型已经获得正确原文却仍持续错分，检索改造也未必是主要方向。
+
+## 十三、下一步最小实验应该实际产生什么成果？
+
+当前真实业务实验已有固定 CSV、规则路径、模型调用、`review_*.csv`、`manifest` 和归档报告。下一步不需要先把这些全部推倒重来。
+
+更合理的是在已有证据上补齐**人工 Gold、任务级关联与受控对照**。
+
+| 建议的逻辑产物 | 作用 | 是否已有可复用基础 |
+| --- | --- | --- |
+| 评测案例集 | 固定问题、输入范围、候选 JD 与难例类型 | 已有固定 CSV 与基准问题 |
+| 人工裁决 Gold | 判断候选、技术关系、要求标签与原文证据 | 已有空白 `review_*.csv`，需完成裁决 |
+| 运行清单 | 记录数据、代码、规则、模型与 Prompt 版本 | 已有 `manifest` 和哈希 |
+| Agent 运行轨迹 | 关联 Task、Session、请求、工具与职位证据 | 现有 RAG 轨迹可复用，Agent 追踪尚需建设 |
+| 预测结果 | 每条职位或每项任务的实际结构化输出 | 已有部分统计和生成产物 |
+| 验收结果 | 明确通过、失败、待复核及失败原因 | 需要接入独立业务 Checker |
+| 对照报告 | 相同输入下 A/B 的错误、成本与回归变化 | 需要针对具体假设组织 |
+| 回归案例 | 历史明确失败及其最小可复现输入 | 可从本轮人工复核中逐步沉淀 |
+
+这是一组**逻辑职责**，不是要求把现有 job-rag 目录强制改名成新的文件结构。真正用到的原始 JD 与逐次运行记录也应按脱敏和版本要求保存。
+
+### 先做哪一步价值最大？
+
+以一条能找到原文的失败案例开始：
+
+1. 从现有 `review_jobs.csv`、`review_evidence.csv` 或 `review_generation.csv` 中完成一条人工复核。
+2. 找到对应固定 JD 原文、模型输出、检索来源与统计口径。
+3. 写清楚“期望结果是什么，现有系统在哪一步首次偏离”。
+4. 只针对该原因设计一个最小修正，并保留旧实现对照。
+5. 在相同案例上比较，随后观察其他回归案例是否退化。
+6. 真实改善可复核后，再扩大到更有代表性的样本。
+
+例如，第一次确定的问题若是“检索来源被当作全库分母”，优先修改统计来源与验收，而不是先重新跑全部 Embedding。
+
+### 这些工作现在完成了吗？
+
+尚未。
+
+[job-rag 的现有实验](https://github.com/leecolin2023/job-rag/blob/main/experiments/rag_tech_requirements/README.md) 已运行模型链路，提供了复核入口，但人工 Gold 尚未完成；[HarnessLab Phase 0](./labs/sdk-minimal-phase0/README.md) 仅提供 SDK 最小实验与结构化运行观察。
+
+所以本篇可以确认“已有足够的工程材料开展下一步评测”，但**不能宣称 Agent 的端到端准确率、通过率或优化提升已经得到验证**。
+
+## 十四、哪些是 DeepSeek Harness 提供的，哪些需要新 Agent 自己完成？
+
+| 能力 | DeepSeek Harness / 现有工程 | 新 Agent 与评测工程的责任 |
+| --- | --- | --- |
+| 模型与工具循环 | Harness 已有 Agent Loop 和执行器 | 无须重新开发通用 Runtime |
+| Session 执行历史 | 有事件流及 JSONL 持久化 | 将 Task、职位、模型请求、证据与报告关联 |
+| 基础运行信息 | SDK 有 `RunResult`；框架有可选 `session-stats` | 检查实际插件配置和指标口径 |
+| 遥测与诊断导出 | 框架有可选 Session Telemetry | 定义授权、脱敏、必要字段和留存 |
+| 规则/检索/生成实验 | job-rag 已有实际执行与归档 | 明确全量计数与有限来源生成的不同用途 |
+| 可信 Gold | 现有人工审核表是入口，不是已裁决标签 | 逐条核实、保留争议、完成裁决 |
+| 语义与任务质量指标 | Runtime 不会自动产生 JD 语义正确率 | 定义分母、匹配关系、证据标准与业务验收 |
+| A/B 对照及回归 | 可利用既有数据快照与运行记录 | 控制变量、复核改善与退化 |
+| 长期优化 | 框架负责通用执行机制 | 用真实失败推动最小且有效的改造 |
+
+这里继续遵守贯穿全系列的职责边界：
+
+**使用成熟 Harness，重点不是自己重写模型循环或底层评测框架，而是围绕真实任务建立可信数据、可核查证据、可解释决策与持续改进机制。**
+
+## 十五、整个 Agent Runtime 学习体系最终建立了什么能力？
+
+从 00 到 09，我们分别理解了：
+
+- 为什么模型要依靠 Agent Runtime 才能持续调用工具和推进工作；
+- Workflow、Planning、工具与 MCP 怎样决定任务的控制权和能力边界；
+- Context、State、Session、Checkpoint 怎样保存与组织信息；
+- Retry、Sandbox 与审批怎样约束实际行动；
+- Checker 怎样决定业务成果是否能交付；
+- 服务怎样让多个用户持续、安全地管理任务。
+
+这套知识如果只形成技术名词清单，其实还不够。
+
+面对一份错误的 JD 分析报告，我们最终应能够回答：
+
+**从数据到工具、模型、Context、Workflow、Checker 与报告，究竟是哪里第一次出现偏差？证据是什么？应该改动哪一个最小环节？怎样在相同案例上证明改造有效，同时没有引入更大成本或新错误？**
+
+这样才形成完整的学习闭环：
+
+~~~text
+定义真实业务问题与完成条件
+           ↓
+运行 Agent，保留真实产物与执行轨迹
+           ↓
+独立检查候选、语义、证据、运行和任务成果
+           ↓
+定位第一次偏离的环节
+           ↓
+提出最小且可验证的改造假设
+           ↓
+固定样本，对照运行，检查回归和成本
+           ↓
+保留有效修改，再回到真实任务继续观察
+~~~
+
+**优秀的 Agent 工程判断，不是把每个技术组件都做得复杂，而是知道当前问题到底发生在哪里，选择合适的机制，并有证据证明这次修改确实值得保留。**
+
+这正是“端到端评测与优化”要补上的最后一环。
+
+## 参考阅读
+
+- [00 · Agent 与 Runtime](./README.md)
+- [01 · Agent Loop](./01-agent-loop-execution-mechanism.md)
+- [02 · Workflow、Planning 与 Multi-Agent](./02-workflow-planning-multi-agent.md)
+- [03 · Tool Calling 与 MCP](./03-tool-calling-and-mcp.md)
+- [04 · Context Engineering](./04-context-engineering.md)
+- [05 · State、Session、Checkpoint](./05-state-session-checkpoint.md)
+- [06 · 执行控制与故障恢复](./06-execution-control-and-failure-recovery.md)
+- [07 · 权限、Sandbox 与人工审批](./07-permissions-sandbox-human-approval.md)
+- [08 · 任务验证与结束条件](./08-task-verification-and-completion.md)
+- [09 · 部署与服务化](./09-deployment-and-serving.md)
+- [Agent Runtime 学习路线](./LEARNING_PATH.md)
+- [HarnessLab Phase 0](./labs/sdk-minimal-phase0/README.md)
+- [job-rag：RAG 技术要求实验](https://github.com/leecolin2023/job-rag/blob/main/experiments/rag_tech_requirements/README.md)
+- [job-rag：2026-11-01 完整模型链路报告](https://github.com/leecolin2023/job-rag/blob/main/experiments/rag_tech_requirements/results/2026-11-01/models/report.md)
+- [job-rag：历史检索排名实验](https://github.com/leecolin2023/job-rag/blob/main/experiments/README.md)
+- [DeepSeek Harness · Python SDK](https://github.com/deepseek-ai/deepseek-harness/blob/master/python/sdk/README.zh.md)
+- [DeepSeek Harness · Agent Loop](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/README.zh.md)
+- [DeepSeek Harness · Session Stats](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/session/session-stats/README.zh.md)
+- [DeepSeek Harness · Session Telemetry](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/session/session-telemetry/README.zh.md)
+- [DeepSeek Harness · sdk-minimal 配置](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/sdk-minimal/cordis.patch.yml)
