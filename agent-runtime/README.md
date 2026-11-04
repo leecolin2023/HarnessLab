@@ -761,8 +761,9 @@ Agent：动态追查制度关系
 - [01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md)：沿真实 Runtime 的 Turn、Step、模型响应与工具反馈，理解执行分支和终止条件。
 - [02 · Workflow、Planning 与 Multi-Agent](./02-workflow-planning-multi-agent.md)：区分固定流程与模型动态决策，理解何时引入计划、检查和多 Agent。
 - [03 · Tool Calling 与 MCP](./03-tool-calling-and-mcp.md)：从业务工具定义到 MCP Client/Server 的工具发现、调用、返回及权限边界。
+- [04 · Context Engineering](./04-context-engineering.md)：用 JD 研究任务理解 Select、Compress、Isolate 与 DeepSeek Harness 的上下文压缩机制。
 
 - [Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)：理解 Workflow 与 Agent 的区别。
 - [OpenAI — Function Calling](https://developers.openai.com/api/docs/guides/function-calling)：理解模型怎样产生工具调用请求。
 - [LangGraph — Persistence](https://docs.langchain.com/oss/python/langgraph/persistence)：理解 Checkpoint、状态持久化和任务恢复。
-- [Harness 中的上下文管理：哪些信息值得反复交给模型？](./01-harness-context-management.md)：进一步理解长任务的上下文管理机制。
+- [上下文管理旧文：网关排障扩展案例](./01-harness-context-management.md)：通过另一个任务理解长历史、缓存和摘要的取舍。
