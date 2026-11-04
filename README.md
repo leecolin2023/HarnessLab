@@ -10,7 +10,7 @@
 
 ## 研究方向
 
-- Model Platform：推理服务、模型网关、鉴权与性能；[Qwen → DeepSeek Flash → OCR 完整学习路线](./model-platform/LEARNING_PATH.md)。
+- Model Platform：推理服务、模型网关、鉴权与性能；[Qwen 小模型 → Qwen 27B → DeepSeek Flash → OCR 学习路线](./model-platform/LEARNING_PATH.md)。
 - Agent Runtime：Agent Loop、工具、上下文与会话恢复；[SDK Minimal Phase 0 运行实验](./agent-runtime/labs/sdk-minimal-phase0/README.md)。
 - Harnesses：DeepSeek Harness、Pi、Codex 等实现的源码研究与对比。
 - Agent Capabilities：MCP、Skills、RAG、Office 和企业系统集成。
