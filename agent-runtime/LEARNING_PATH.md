@@ -61,6 +61,7 @@ HarnessLab/
 │   ├── 02-workflow-planning-multi-agent.md
 │   ├── 03-tool-calling-and-mcp.md
 │   ├── 04-context-engineering.md          # 主线 04 文章
+│   ├── 05-state-session-checkpoint.md      # 状态、Session 与恢复点
 │   ├── labs/
 │   │   └── sdk-minimal-phase0/
 │   │       ├── README.md                 # Phase 0 实验入口
@@ -85,7 +86,7 @@ job-agent/
 
 ### 根目录的目标知识版图
 
-下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 为 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)，02 为 [Workflow、Planning 与 Multi-Agent 专题](./02-workflow-planning-multi-agent.md)，03 为 [Tool Calling 与 MCP 专题](./03-tool-calling-and-mcp.md)，04 为 [Context Engineering 专题](./04-context-engineering.md)；其他主题仍按学习与实验进度完善。原有 `01-harness-context-management.md` 保留为网关排障扩展案例及旧链接入口，不再作为 04 的主阅读文件。
+下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 为 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)，02 为 [Workflow、Planning 与 Multi-Agent 专题](./02-workflow-planning-multi-agent.md)，03 为 [Tool Calling 与 MCP 专题](./03-tool-calling-and-mcp.md)，04 为 [Context Engineering 专题](./04-context-engineering.md)，05 为 [State、Session、Checkpoint 专题](./05-state-session-checkpoint.md)；其他主题仍按学习与实验进度完善。原有 `01-harness-context-management.md` 保留为网关排障扩展案例及旧链接入口，不再作为 04 的主阅读文件。
 
 | 原理主题 | 要回答的核心问题 | 首个对应实践阶段 |
 | --- | --- | --- |
@@ -94,7 +95,7 @@ job-agent/
 | [02 · Workflow、Planning 与 Multi-Agent](./02-workflow-planning-multi-agent.md) | 固定步骤与模型动态决策如何组合？何时拆成多个 Agent？ | 3 |
 | [03 · Tool Calling 与 MCP](./03-tool-calling-and-mcp.md) | 模型提出调用、工具实际执行、MCP 协议分别负责什么？ | 2、4 |
 | [04 · Context Engineering](./04-context-engineering.md) | 每轮调用如何选择、压缩和隔离必要信息？ | 5 |
-| 05 · State、Session、Checkpoint | 任务状态、会话历史和恢复点各自保存什么？ | 6 |
+| [05 · State、Session、Checkpoint](./05-state-session-checkpoint.md) | 任务状态、会话历史和恢复点各自保存什么？ | 6 |
 | 06 · 执行控制与故障恢复 | 超时、重试、幂等、取消和补偿怎样协同？ | 7 |
 | 07 · 权限、Sandbox 与人工审批 | 如何限制模型对真实系统的行动权限？ | 7 |
 | 08 · 任务验证与结束条件 | 文件生成、工具成功与任务成功有什么不同？ | 3、8 |
@@ -368,7 +369,7 @@ DeepSeek Harness Python SDK 官方说明，`resume_session` 恢复持久化历�
 
 能够示范“新 Session”“继续已有 Session”和“按业务检查点继续任务”的区别；中断后不会因错误恢复机制重复计算或写入。
 
-**关联原理**：State、Session、Checkpoint。
+**关联原理**：[05 · State、Session、Checkpoint](./05-state-session-checkpoint.md)。结合 `resume_session`、Session 持久性屏障与应用层业务 Checkpoint，区分会话恢复和业务安全续跑。
 
 ### 阶段 7｜加入执行控制、安全边界与故障恢复
 
