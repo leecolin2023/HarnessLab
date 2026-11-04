@@ -764,6 +764,7 @@ Agent：动态追查制度关系
 - [04 · Context Engineering](./04-context-engineering.md)：用 JD 研究任务理解 Select、Compress、Isolate 与 DeepSeek Harness 的上下文压缩机制。
 - [05 · State、Session、Checkpoint](./05-state-session-checkpoint.md)：通过中断的 JD 研究任务理解会话历史、业务进度与安全恢复。
 - [06 · 执行控制与故障恢复](./06-execution-control-and-failure-recovery.md)：从只读查询与报告写入的不同失败，理解超时、重试、幂等、取消和补偿。
+- [07 · 权限、Sandbox 与人工审批](./07-permissions-sandbox-human-approval.md)：通过 JD 工具授权和 Phase 0 的真实配置，理解执行权限、隔离与审批的强制边界。
 
 - [Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)：理解 Workflow 与 Agent 的区别。
 - [OpenAI — Function Calling](https://developers.openai.com/api/docs/guides/function-calling)：理解模型怎样产生工具调用请求。
