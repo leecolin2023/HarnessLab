@@ -312,3 +312,255 @@ def check_report(contract, snapshot, job_status, extractions, report):
 
 **工具能连续执行不代表成果能自动自证正确，纠错循环也不能无限延长。**
 
+## 七、哪些情况下可以交付，哪些必须停止或标记待复核？
+
+当所有阶段都完成后，应用需要一个明确的交付决策，而不是等待模型说一句“我已经完成了”。
+
+例如，可以由应用定义以下业务状态：
+
+| 业务状态 | 成立条件示例 | 应向用户说明什么 |
+| --- | --- | --- |
+| `completed` | 所有必需关卡通过，产物与证据可回查 | 报告、范围、统计口径与产物路径 |
+| `needs_review` | 有不能自动裁决的语义争议 | 哪些职位需要复核、为何无法确认 |
+| `blocked` | 数据、授权、外部服务或口径缺失 | 阻塞原因及尚未完成的部分 |
+| `failed` | 核查失败且不能在预算内修复 | 已完成内容、失败位置和证据 |
+| `canceled` | 用户明确取消 | 已保存产物与未处理事项 |
+
+**这些是业务层建议的状态，不是 DeepSeek Harness SDK `finish_reason` 的取值清单。**
+
+比如 Runtime 返回 `completed`，但 Checker 发现报告使用了错误的统计分母，那么业务状态仍不能是 `completed`。
+
+反过来，如果模型因输出 Token 上限结束，此前已经正确保存的部分 JD 提取结果仍然有价值，但不能因此宣称整项报告完成。
+
+### 谁负责宣布真正完成？
+
+最好由**拥有业务契约、数据快照和产物访问权的应用控制器**决定。
+
+~~~python
+# 教学伪代码：不是 DeepSeek Harness 原生的业务完成 API
+run_result = run_research_agent(task)
+
+if run_result.finish_reason != "completed":
+    return mark_unfinished_from_runtime(run_result)
+
+verification = verify_saved_outputs(task.contract)
+
+if verification.passed:
+    return mark_completed(verification)
+
+if verification.requires_review:
+    return mark_needs_review(verification)
+
+if verification.retryable and task.has_remaining_budget:
+    return repair_only_failed_stage(verification)
+
+return mark_failed(verification)
+~~~
+
+实际实现还应考虑进程中断后已有文件、结果未知、工具已执行但成功事件尚未落盘等情况，分别由 05 的 State/Checkpoint 和 06 的故障恢复机制处理。
+
+**模型可以生成候选产物和建议修正，但不能在没有授权的情况下改变验收条件，替自己宣布通过。**
+
+## 八、DeepSeek Harness 有 Goal 功能，是否已经解决了“任务完成”问题？
+
+这个问题容易把两个不同能力混在一起。
+
+DeepSeek Harness 除了普通 Agent Loop，还有独立的 [Goal 能力组](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/goal/README.zh.md)：
+
+- `dsh-goal`：保存一个会话中的长期目标及其 active、paused、blocked、complete 等状态。
+- `dsh-tool-goal`：让模型通过工具操作 Goal。
+- `dsh-goal-round-driver`：满足条件时自动安排后续 Round，让目标在多轮内继续推进。
+
+这些组件主要解决的是**长期目标怎样保存、推进和停止**。
+
+[Goal Round Driver 官方文档](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/goal/goal-round-driver/README.zh.md) 还明确说明：该驱动器**没有独立的结果评估器**。它可以管理轮次上限、继续与停止条件，但并不会自动核验 JD 分母、Milvus 标签和引用证据。
+
+因此，Goal 标记为 `complete`，不直接等于我们这份统计报告通过了业务 Checker。
+
+而且 [`sdk-minimal` Profile 的配置](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/sdk-minimal/cordis.patch.yml) **没有默认装配 `dsh-goal`、`dsh-tool-goal` 与 `dsh-goal-round-driver`**。当前 Phase 0 不应该被描述成已经拥有长期 Goal 调度。
+
+可以把它们区分为：
+
+~~~text
+Agent Loop：本轮模型与工具活动为何结束？
+                ↓
+可选 Goal：长期目标如何记录、继续、暂停和结束？
+                ↓
+业务 Checker：当前实际产物满足了哪些验收要求？
+                ↓
+应用：允许交付、局部修正，还是标记失败？
+~~~
+
+这是一张**层次关系图，不是每一个 Agent 都必须执行的四步流水线**。
+
+对当前 JD Research Agent，我们可以先由外部 Workflow 管理阶段、由 Checker 验证结果。只有确实存在跨多轮自主推进的需要时，再评估可选 Goal 组件的价值。
+
+## 九、要证明任务完成，为什么不能只保存最终回答？
+
+假设 Checker 发现一项错误：
+
+> `report.md` 将 Milvus 统计为 required，但原 JD 写的是“Milvus 经验优先”。
+
+如果只能看到报告里一句“Milvus 是必备技术”，我们不知道错误在哪里产生。
+
+理想情况下，应能沿着以下关系回查：
+
+~~~text
+报告结论：Milvus / required
+             ↓
+结构化结果：JD-001 / Milvus / required
+             ↓
+原文证据：有 Milvus 使用经验者优先
+             ↓
+固定输入快照与分类口径
+             ↓
+模型处理与工具执行记录
+~~~
+
+每一层都是不同的证据：
+
+| 证据 | 主要证明什么 |
+| --- | --- |
+| 快照 ID、字段范围和职位数量 | 分析对象是什么 |
+| 候选职位 ID 与去重清单 | 统计分母能否成立 |
+| 逐职位处理状态 | 是否有遗漏、失败或待复核 |
+| 技术提取记录与标签 | 哪些判断参与了统计 |
+| 原文字段、证据摘录和定位 | 判断是否有原文支持 |
+| `report.md` 及校验结果 | 报告与底层数据是否一致 |
+| Session、工具调用与模型请求轨迹 | 系统怎样产生了这些判断 |
+
+**Session 记录适合解释“怎么执行”，业务数据与原文证据才是判断“结果是否可靠”的重要基础。**
+
+例如 Session 中模型声称“已分析全部候选岗位”，也不等于实际处理状态表已经覆盖全部候选 ID。
+
+注意保留证据并不意味着无限制保存敏感信息：真实业务应依照授权和脱敏要求记录必要内容。本篇始终使用固定、脱敏的教学快照。
+
+## 十、怎样为“任务完成”建立第一个可运行的验证实验？
+
+根据 [学习路线阶段 3 和阶段 8](./LEARNING_PATH.md)，建议先用一份小型、固定、可人工核对的 JD 快照，把**一项研究任务的验收**做扎实，再考虑更完整的端到端评测。
+
+### 1. 最小样本需要覆盖什么？
+
+至少包含这些有区分价值的情况：
+
+- 明确的必备：例如“必须掌握 Python”。
+- 明确的优先：例如“Milvus 使用经验优先”。
+- 技术被提及，但要求性质不明确。
+- 否定表述、条件冲突或字段缺失。
+- 重复 `job_id`、不同版本、证据无法定位。
+- 一条候选岗位没有可抽取的具体技术，但已经真实处理完成。
+
+样本大小不必因“需要完整 RAG 流程”就机械规定为某个数量；最初的目标是能够**人工逐条核对验收规则**，随后再扩大覆盖范围。
+
+对于口径尚无一致答案的样本，应保存争议，而不能为了形成“标准答案”强制给出唯一标签。
+
+### 2. 比较没有 Checker 与有 Checker
+
+~~~text
+方案 A：
+固定快照 → 模型提取 → 汇总 → report.md → 直接交付
+
+方案 B：
+固定快照 → 模型提取 → 分阶段程序校验
+                              ↓
+                    必要的语义复核
+                              ↓
+                      有限次局部修正
+                              ↓
+                    重新校验并决定交付
+~~~
+
+比较两种方案时，需要观察：
+
+1. 基础方案出现了哪些真实错误：错分必备/优先、漏职位、错分母、错误证据等。
+2. Checker 实际发现了多少错误，是否还把正确结果误判为错误。
+3. 修正是否减少了错误，还是引入了新的误改。
+4. 额外增加了多少模型请求、时间与人工复核工作。
+5. 不确定样本是否得到正确标注，而非被强制判定为通过。
+
+这些是未来需要运行的实验，不是本文已经取得的性能结论。
+
+### 3. 为什么不能只比较最终报告的答案？
+
+假设两次运行都输出“Milvus 出现 10 次”。
+
+第一次可能完整分析了所有候选 JD，第二次可能漏处理了若干职位，却恰巧也得到 10。
+
+**相同的最终数字不代表相同的任务完成程度。** 只有查分母、候选 ID、原文证据及处理状态，才能解释这个数字是否可信。
+
+至此，本篇完成了“**单项任务的交付条件怎样定义和验证**”的核心目标。
+
+后续 [10 · 端到端评测与优化](./LEARNING_PATH.md) 再深入跨样本评测、误差归因、任务成功率、运行轨迹与持续改进，不在这里重复完整评测体系。
+
+## 十一、DeepSeek Harness 已经提供什么，新 Agent 又要自己做什么？
+
+| 事情 | DeepSeek Harness / 当前 Phase 0 | 新 JD Agent 的责任 |
+| --- | --- | --- |
+| 结束当前模型—工具循环 | Agent Loop 已实现，SDK 有 `finish_reason` | 不把 Runtime `completed` 当成业务通过 |
+| 工具调用与 Session 记录 | 提供执行流水线、事件与持久化 | 关联任务 ID、职位 ID、快照与业务结果 |
+| 初步运行状态 | Phase 0 已记录会话 ID、事件种类、结束原因等 | 补充报告、处理状态和独立验收记录 |
+| 长期 Goal | 框架有可选插件；`sdk-minimal` 未默认装配 | 按跨轮任务需要决定是否引入 |
+| 固定验收契约 | 不自动提供岗位统计口径 | 明确候选规则、去重、分母及交付要求 |
+| 确定性 Checker | 可由应用直接编写程序 | 检查结构、原文定位、覆盖率与计算 |
+| 语义 Checker | 可以复用模型与工具机制 | 设计证据复核、争议分类和人工升级 |
+| 修正与停止 | Runtime 有基础结束及失败机制 | 按业务验收反馈进行有限修正或明确失败 |
+| 最终完成 | 框架不能自动证明 JD 报告满足业务要求 | 由应用根据实际结果和契约决定交付 |
+
+这张表表达了整个学习路线到 08 的核心边界：
+
+**Harness 已实现模型调用、工具执行和运行结束；我们仍要让 Agent 的业务结果成为可验收的工作成果。**
+
+## 十二、这一篇应该真正理解什么？
+
+最初我们只看到一个事实：`report.md` 已经生成。
+
+沿着任务要求检查后，才发现“文件有了”与“统计做对了”之间隔着几层必要的工作：
+
+~~~text
+用户提出任务
+       ↓
+应用明确数据范围、统计口径与完成条件
+       ↓
+Agent / Workflow 执行研究工作
+       ↓
+程序与必要的语义 Checker 检查阶段产物
+       ↓
+保存可回查的结果、原文证据与验收记录
+       ↓
+对照完成条件
+   ├─ 通过 → 交付报告
+   ├─ 可修正 → 局部修正并有限次复验
+   ├─ 存在争议 → 标记待复核
+   └─ 无法继续 → 如实说明阻塞、失败或取消
+~~~
+
+最重要的三个区别是：
+
+**第一，`finish_reason="completed"` 表示 Runtime 的执行结束，不表示用户要求的工作已经正确完成。**
+
+**第二，Checker 不需要必然成为另一位 Agent。** 能用规则确定的内容由程序核验，需要理解自然语言和证据的部分再引入模型或人工。
+
+**第三，任务完成不能由模型自己宣布。** 它应该由事先约定的任务要求、真实产物和可回查证据共同支持。
+
+对于 JD Research Agent，下一步最有价值的实现不一定是更多智能体，而是：**确认候选筛选和去重口径、保存每条职位的处理状态与证据、增加程序 Checker，并将最终交付与验收结果绑定**。
+
+本篇到此完成。09 将讨论如何将本地应用部署成可服务多用户的系统；10 再进一步研究端到端评测与持续优化。
+
+## 参考阅读
+
+- [00 · Agent 与 Runtime](./README.md)
+- [01 · Agent Loop](./01-agent-loop-execution-mechanism.md)
+- [02 · Workflow、Planning 与 Multi-Agent](./02-workflow-planning-multi-agent.md)
+- [03 · Tool Calling 与 MCP](./03-tool-calling-and-mcp.md)
+- [04 · Context Engineering](./04-context-engineering.md)
+- [05 · State、Session、Checkpoint](./05-state-session-checkpoint.md)
+- [06 · 执行控制与故障恢复](./06-execution-control-and-failure-recovery.md)
+- [07 · 权限、Sandbox 与人工审批](./07-permissions-sandbox-human-approval.md)
+- [Agent Runtime 学习路线](./LEARNING_PATH.md)
+- [Phase 0 Python 入口](./labs/sdk-minimal-phase0/src/run_phase0.py)
+- [DeepSeek Harness · Python SDK `RunResult`](https://github.com/deepseek-ai/deepseek-harness/blob/master/python/sdk/README.zh.md)
+- [DeepSeek Harness · Agent Loop](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/README.zh.md)
+- [DeepSeek Harness · ReactLoopAgent 源码](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/src/agent.ts)
+- [DeepSeek Harness · Goal 能力组](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/goal/README.zh.md)
+- [DeepSeek Harness · Goal Round Driver](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/goal/goal-round-driver/README.zh.md)
+- [DeepSeek Harness · sdk-minimal Profile](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/sdk-minimal/README.zh.md)
