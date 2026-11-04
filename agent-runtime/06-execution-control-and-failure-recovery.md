@@ -198,3 +198,198 @@ operation_key = (task_id, snapshot_hash, rule_version, output_name)
 
 如果报告工具结果未知，安全顺序是：**先查询现有产物和摘要，再判断是否需要再次提交。**
 
+## 六、用户点击“停止”，正在执行的工具会立刻撤销吗？
+
+假设模型正在保存 `report.md`，用户此时点击取消。
+
+这意味着用户不再希望继续新的工作，但不能推断**已发出的请求在远端一定没有生效**。
+
+需要区分：
+
+- **Timeout**：操作超出某个执行阶段的时间预算。
+- **Cancel**：用户或上层系统要求停止后续工作。
+- **Abort**：具体执行组件接到中止信号后，尝试停止其拥有的活动。
+
+取消不是数据库事务的 rollback，也不是一台远程服务器已经撤销操作的证明。
+
+### DeepSeek Harness 采用什么方式？
+
+[`dsh-tools`](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tools/README.zh.md) 采用协作式取消：工具实现能够获得取消信号，应该及时观察该信号。
+
+如果在真正分发工具正文前就取消，Runtime 可报告 `ABORTED_BEFORE_DISPATCH`。对于已经开始的操作，结果可能成为 `ABORTED`，但仍应核实远端是否已经产生副作用。
+
+[原生工具执行器](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tool-executor-native/README.zh.md) 不能强行终止一个忽略取消信号的同进程工具，而是需要等待已启动活动结算。
+
+持久 Bash 的实现另有自身的超时、终止与 Shell 重置机制。它不代表所有未来的数据库、HTTP 或 MCP 工具都会自动取消服务器端的工作。
+
+**业务约束**：取消后不要再由模型自由发起新的补救操作；对于已经开始的写入，应由受控程序查询其最终状态，必要时进入获授权的修正流程。
+
+## 七、操作已经部分成功时，为什么还需要 Compensation？
+
+考虑一项比“保存文件”稍复杂的工作：
+
+~~~text
+生成报告
+    ↓
+写入报告索引
+    ↓
+发送完成通知
+~~~
+
+如果前两个步骤成功，最后的通知失败，怎么办？
+
+我们不能简单说“全部重新执行”。因为再次生成和索引报告可能产生重复；而且通知也有可能已经送达、只是成功响应丢失。
+
+先核对每一步的真实状态，再决定下一项行动。有时可以只重试**具备幂等键的通知步骤**；有时需要将报告标记为“已生成、通知待处理”；有时需要撤回一项尚未公开的中间产物。
+
+如果必须通过新的业务动作来修正已经发生的效果，这叫 **Compensation（补偿）**。
+
+### 它与 Rollback 有什么不同？
+
+数据库事务 rollback 可以在同一事务的提交边界内撤销未提交的修改；但文件、数据库、远程 API 和外部消息通常不能全部纳入一个事务。
+
+例如，已经被外部人员读取的报告，即使后来删除，也不能保证对方没有留下副本。
+
+因此补偿是一项**具有业务语义的后续操作**，不保证完整回到过去。发布了错误报告，可能需要发布更正版本，而不是默默删除。
+
+对只读的 `get_job`，一般不存在需要补偿的副作用。对于需要发送、发布或修改外部系统的工具，补偿规则必须由应用定义，并受对应权限与审批约束。
+
+## 八、Agent 一次并行调用多个工具，失败怎么处理？
+
+例如模型一次请求读取 JD-001、JD-002 和 JD-003。三个只读查询通常可以并行。
+
+但“保存报告”和“发布报告”存在先后依赖：后者必须等前者真正完成并通过校验。
+
+DeepSeek Harness 的 [原生执行器](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tool-executor-native/README.zh.md) 支持并行安全的工具调用重叠执行，独占调用形成执行屏障。[Agent Loop](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/agent-loop/README.zh.md) 允许配置 `maxParallelToolCalls`，当前官方默认值为 10，设为 1 表示串行。
+
+但是**Runtime 支持并发，不等于所有业务操作适合并发**。
+
+~~~text
+可能安全并行：
+  get_job(JD-001)    get_job(JD-002)    get_job(JD-003)
+
+需要业务依赖顺序：
+  validate_report → save_report → publish_report
+~~~
+
+如果并行批次被取消，其中可能有的工具已完成、有的正在执行、有的根本未启动。恢复时必须逐项核查，不能将整个批次简单标记为“全部成功”或“全部失败”。
+
+## 九、当一次调用没有正常返回，如何决定下一步？
+
+现在能够把文章中的问题串起来。一个适合业务控制器采用的判断路径是：
+
+~~~text
+调用没有正常返回
+        ↓
+能够确定工具正文尚未执行吗？
+    ├─ 是 → 根据错误原因修正参数/权限或重新发起
+    └─ 否
+        ↓
+这个操作可能产生外部副作用吗？
+    ├─ 否 → 检查是否临时故障、是否还有重试预算
+    │         ├─ 有条件 → 有界重试
+    │         └─ 无条件 → 记录失败并结束或交人工
+    └─ 是
+        ↓
+查询业务键和外部真实状态
+    ├─ 已完成且正确 → 补记成功，禁止重复提交
+    ├─ 确认未执行 → 按授权与预算决定是否重新提交
+    ├─ 已执行但需修正 → 受控补偿流程
+    └─ 仍无法确认 → 标记未知，停止危险重试
+~~~
+
+这不是 DeepSeek Harness 自带的 JD 业务状态机，而是我们根据工具副作用性质设计的恢复决策。
+
+它强调两点：
+
+**第一，执行控制不能只凭模型产生的文字判断工具状态。**
+
+**第二，失败处理必须知道真实外部操作的性质。** 只读查询和有副作用写入，适合的重试边界本来就不同。
+
+## 十、DeepSeek Harness 已经提供什么，新 Agent 需要实现什么？
+
+| 机制 | DeepSeek Harness / sdk-minimal | 业务 Agent 的职责 |
+| --- | --- | --- |
+| Agent Loop 与工具分发 | 已有运行循环、工具注册与原生执行器 | 定义业务工具的输入、结果与边界 |
+| 模型请求 Retry | `sdk-minimal` 已装配 `dsh-llm-retry` | 依据具体模型路由与预算检查实际重试行为 |
+| 持久 Bash 超时 | 配置了单条命令 300000ms 的超时 | 不误以为所有工具都继承这个超时 |
+| 通用工具超时 | 框架有相应声明和可选策略扩展 | 为自定义工具装配真正的截止时间、远端超时和取消机制 |
+| 取消 | 提供协作式取消信号和结构化错误 | 让工具支持取消，并核查已开始的远端动作 |
+| Session 与恢复 | 有持久事件、写入屏障及未知结果的恢复约定 | 在业务数据层确认操作是否真的发生 |
+| 幂等 | Runtime 能保留调用身份与执行记录 | 设计稳定业务键、唯一约束、事务或安全文件提交 |
+| 补偿 | 可通过工具或工作流执行补偿操作 | 定义哪些效果可以修正、需要什么授权 |
+| 并行执行 | 支持有界并行和独占屏障 | 识别业务依赖，避免不安全并发 |
+| 端到端可靠性 | 不自动理解职位统计和报告正确性 | 验证数据快照、统计分母、原文证据与最终产物 |
+
+这意味着，我们不必自行重写模型请求重试器，也不需要重新开发 Agent Loop。
+
+但**一个框架能处理模型请求重试，不等于它知道“同一份报告是否已经被保存过”**。这正是业务 Agent 需要承担的工程职责。
+
+## 十一、用什么最小实验验证这些机制？
+
+根据 [学习路线阶段 7](./LEARNING_PATH.md)，建议先在**纯脱敏、可丢弃的本地环境**准备两种假工具：
+
+- `get_job`：查询固定快照，只读。
+- `save_report`：按稳定的任务键写入报告，能核查现有产物。
+
+先不接真实招聘网站、生产数据库或外部发送服务。
+
+### 实验 A：只读工具有一次暂时性故障
+
+第一次返回临时服务错误，第二次成功。确认只有被允许的错误才会按预算重试。
+
+再对比参数非法、权限拒绝和正常的 `not_found`，确认系统不会把所有失败都当作“等一会就能成功”。
+
+### 实验 B：实际写入成功，却故意丢掉成功响应
+
+模拟报告已保存、客户端却超时。恢复时查询相同业务键，验证不会产生第二条记录；同一键但内容不同，应当拒绝冲突或走更正流程。
+
+### 实验 C：在不同时间取消工具
+
+分别在分发前、执行中和执行后发送取消。核对工具是否启动、远端是否有副作用，以及未开始的操作有没有被继续执行。
+
+### 实验 D：把一项工具设置成持续失败
+
+明确设置总时长、模型请求次数与工具重试上限，验证失败不会导致 Agent 一直调用模型或工具。
+
+### 怎样留下可回查的证据？
+
+记录操作 ID、业务幂等键、工具名称、参数摘要、开始时间、截止时间、实际重试次数、取消状态、最终工具结果，以及报告文件或结果表的实际内容。
+
+特别要区分**模型请求重试**与**工具执行重试**；单纯统计“调用了多少次”并不能解释恢复是否正确。
+
+以上都是待实现的实验设计。当前 Phase 0 的 FakeHarness 离线测试和 Session 事件种类统计不能替代这些真实的失败注入结果。
+
+## 十二、这篇文章真正要理解什么？
+
+最初的问题只有一个：一次工具调用没有按时返回成功结果，Agent 应该怎么办？
+
+现在我们知道，关键不在于统一设置“失败重试三次”，而在于**先判断操作是否已开始、是否可能已经完成、是否会产生副作用，再选择控制手段**。
+
+- **Timeout**：规定执行或等待的时间上限。
+- **Cancel / Abort**：要求停止后续或正在执行的动作，但不证明外部副作用被撤销。
+- **Retry**：针对适合重新执行的失败，在有限预算内再试。
+- **Idempotency**：重复提交同一业务意图，不应产生重复业务效果。
+- **Resume**：结合真实 State 和 Session，从正确阶段继续，而不是复读最后一个工具调用。
+- **Compensation**：通过新的受控业务动作处理已经产生的部分影响。
+
+它们不是每一个 Agent 必须从头实现的六套框架，而是不同失败条件下的工程控制措施。
+
+对于 JD Research Agent，最先需要落地的是：**只读查询的有界重试、写报告的幂等保护、失败类型的明确区分，以及依据真实产物恢复进度**。
+
+下一篇 07 继续研究一个不同的问题：**即使 Agent 知道应该调用某个工具，它是否有权执行？执行到什么程度？** 这才是工具授权、Sandbox 和人工审批的重点。
+
+## 参考阅读
+
+- [00 · Agent 与 Runtime](./README.md)
+- [01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md)
+- [03 · Tool Calling 与 MCP](./03-tool-calling-and-mcp.md)
+- [05 · State、Session、Checkpoint](./05-state-session-checkpoint.md)
+- [Agent Runtime 学习路线](./LEARNING_PATH.md)
+- [HarnessLab Phase 0 实验](./labs/sdk-minimal-phase0/README.md)
+- [DeepSeek Harness · sdk-minimal 配置](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/bundle/sdk-minimal/cordis.patch.yml)
+- [DeepSeek Harness · 模型请求重试](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/llm/llm-retry/README.zh.md)
+- [DeepSeek Harness · 工具注册与执行控制](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tools/README.zh.md)
+- [DeepSeek Harness · 原生工具执行器](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tool-executor-native/README.zh.md)
+- [DeepSeek Harness · 持久 Bash](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/shell/tool-bash-persistent/README.zh.md)
+- [DeepSeek Harness · Session Checkpoint Policy](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/session/session-checkpoint-policy/README.zh.md)
