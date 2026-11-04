@@ -767,6 +767,7 @@ Agent：动态追查制度关系
 - [07 · 权限、Sandbox 与人工审批](./07-permissions-sandbox-human-approval.md)：通过 JD 工具授权和 Phase 0 的真实配置，理解执行权限、隔离与审批的强制边界。
 - [08 · 任务验证与结束条件](./08-task-verification-and-completion.md)：从 report.md 已生成但结论可能错误出发，解释 Runtime 结束、业务 Checker 与最终验收。
 - [09 · 部署与服务化](./09-deployment-and-serving.md)：区分 HTTP 请求、业务任务、Session 和 Runtime，解释 Queue/Worker、并发隔离与恢复。
+- [10 · 端到端评测与优化](./10-end-to-end-evaluation-and-optimization.md)：结合真实 job-rag 实验，理解 Gold、执行轨迹、故障归因、受控对照及质量—成本权衡。
 
 - [Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)：理解 Workflow 与 Agent 的区别。
 - [OpenAI — Function Calling](https://developers.openai.com/api/docs/guides/function-calling)：理解模型怎样产生工具调用请求。
