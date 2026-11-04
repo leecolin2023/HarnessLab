@@ -41,12 +41,16 @@ get_job(job_id="JD-001")
 假设我们已经写好了一个 Python 函数，它能够查询固定的脱敏职位快照：
 
 ~~~python
-def get_job(job_id: str) -> dict:
-    # 实际程序中：检查 job_id，再从允许的数据快照读取
-    return {
+# 只读演示快照
+JOBS = {
+    "JD-001": {
         "job_id": "JD-001",
         "description": "负责 RAG 系统开发；熟悉 Python；Milvus 经验优先。",
     }
+}
+
+def get_job(job_id: str) -> dict | None:
+    return JOBS.get(job_id)
 ~~~
 
 这个代码只是**查询函数的示意**，还没有接入任何 Agent。模型并不能因为这个函数存在，就自动知道如何调用它。
