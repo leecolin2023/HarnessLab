@@ -82,14 +82,14 @@ job-agent/
 
 ### 根目录的目标知识版图
 
-下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 为 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)，02 为 [Workflow、Planning 与 Multi-Agent 专题](./02-workflow-planning-multi-agent.md)；其他主题仍按学习与实验进度完善。现有 `01-harness-context-management.md` 实际属于 04 · Context Engineering，为避免破坏已有链接暂保留旧文件名，后续整理命名时统一处理。
+下表是**原理知识版图**，其中 00 的入口为 [README.md](./README.md)，01 为 [Agent Loop 运行机制专题](./01-agent-loop-execution-mechanism.md)，02 为 [Workflow、Planning 与 Multi-Agent 专题](./02-workflow-planning-multi-agent.md)，03 为 [Tool Calling 与 MCP 专题](./03-tool-calling-and-mcp.md)；其他主题仍按学习与实验进度完善。现有 `01-harness-context-management.md` 实际属于 04 · Context Engineering，为避免破坏已有链接暂保留旧文件名，后续整理命名时统一处理。
 
 | 原理主题 | 要回答的核心问题 | 首个对应实践阶段 |
 | --- | --- | --- |
 | 00 · Agent 与 Runtime | 为什么一次模型回答不等于任务完成？Runtime 执行什么？ | 0、1 |
 | [01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md) | 一个 Agent 任务从启动到结束，Runtime 如何处理模型响应、工具结果和循环控制？ | 1、2 |
 | [02 · Workflow、Planning 与 Multi-Agent](./02-workflow-planning-multi-agent.md) | 固定步骤与模型动态决策如何组合？何时拆成多个 Agent？ | 3 |
-| 03 · Tool Calling 与 MCP | 模型提出调用、工具实际执行、MCP 协议分别负责什么？ | 2、4 |
+| [03 · Tool Calling 与 MCP](./03-tool-calling-and-mcp.md) | 模型提出调用、工具实际执行、MCP 协议分别负责什么？ | 2、4 |
 | 04 · Context Engineering | 每轮调用如何选择、压缩和隔离必要信息？ | 5 |
 | 05 · State、Session、Checkpoint | 任务状态、会话历史和恢复点各自保存什么？ | 6 |
 | 06 · 执行控制与故障恢复 | 超时、重试、幂等、取消和补偿怎样协同？ | 7 |
@@ -258,7 +258,7 @@ with DeepSeekHarness(
 
 每一项统计结果能回查到具体职位；工具错误与“没有岗位匹配”能够区分；对比手工读取和工具调用的执行轨迹。
 
-**关联原理**：[01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md)；03 · Tool Calling 与 MCP。先还原工具请求、实际执行和下一轮模型判断，再深入接口协议。
+**关联原理**：[01 · Agent Loop 的运行机制](./01-agent-loop-execution-mechanism.md)；[03 · Tool Calling 与 MCP](./03-tool-calling-and-mcp.md)。先理解工具定义、模型请求和实际执行的边界，再形成只读岗位数据接口。
 
 ### 阶段 3｜增加 Planner、Checker 与结果验证
 
@@ -311,7 +311,7 @@ MCP 与 REST API 分别解决哪一层的问题？MCP Client、Server、工具�
 
 相同查询能通过受控本地接口与 MCP 路径拿到可核对的相同职位数据，并正确处理工具不可用、超时与不合法参数。暂不实现写回职位库。
 
-**关联原理**：Tool Calling、MCP、工具权限。
+**关联原理**：[03 · Tool Calling 与 MCP](./03-tool-calling-and-mcp.md)；07 · 权限、Sandbox 与人工审批。重点比较本地工具与 MCP Server 两条路径的工具发现、调用返回及授权边界。
 
 ### 阶段 5｜研究 Context Engineering
 
